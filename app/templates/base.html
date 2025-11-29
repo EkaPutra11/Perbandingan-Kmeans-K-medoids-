@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Arwana Sales Analytics{% endblock %}</title>
+
+    <!-- Bootstrap Offline -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #1f2d3d;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding-top: 20px;
+            color: white;
+        }
+
+        .sidebar h4 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 20px;
+            color: #ffffff;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 12px 20px;
+            color: #cfd4da;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .sidebar a:hover {
+            background-color: #3b4a5a;
+            color: #ffffff;
+        }
+
+        .sidebar .active {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        /* Content */
+        .content {
+            margin-left: 250px;
+            padding: 25px;
+        }
+    </style>
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h4>Arwana App</h4>
+
+        <a href="{{ url_for('main.index') }}" class="{% if active_page=='dashboard' %}active{% endif %}">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('main.upload_file') }}" class="{% if active_page=='upload' %}active{% endif %}">
+            Upload Data
+        </a>
+
+        <a href="{{ url_for('main.preprocessing_kmeans') }}" class="{% if active_page=='kmeans' %}active{% endif %}">
+            Preprocessing KMeans
+        </a>
+
+        <a href="{{ url_for('main.preprocessing_kmedoids') }}" class="{% if active_page=='kmedoids' %}active{% endif %}">
+            Preprocessing KMedoids
+        </a>
+
+        <a href="{{ url_for('main.elbow_page') }}" class="{% if active_page=='elbow' %}active{% endif %}">
+            Elbow Method
+        </a>
+
+        <a href="{{ url_for('main.results') }}" class="{% if active_page=='results' %}active{% endif %}">
+            Hasil Clustering
+        </a>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Bootstrap JS Offline -->
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

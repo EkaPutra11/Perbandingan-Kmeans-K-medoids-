@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Arwana Analytics{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="mb-4">Dashboard</h2>
+
+    <div class="row">
+
+        <!-- Card 1 -->
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h5>Total Data Upload</h5>
+                <p class="text-secondary">Belum ada data</p>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h5>Proses KMeans</h5>
+                <p class="text-secondary">Belum dijalankan</p>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h5>Proses KMedoids</h5>
+                <p class="text-secondary">Belum dijalankan</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

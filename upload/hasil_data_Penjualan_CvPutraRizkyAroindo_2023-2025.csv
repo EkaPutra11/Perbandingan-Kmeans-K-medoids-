@@ -1,0 +1,1359 @@
+Tanggal_Terjual,Kategori,Size,Jumlah_Terjual,Harga_Satuan,Total_Harga,Nama_Penjual,Kota_Tujuan
+2024-05-04,Standard,20 cm,1,2200000,2.200.000,Rosyid,Depok
+2024-05-09,Standard,15 cm,1,1400000,1.400.000,Haddy,Bekasi
+2024-05-11,Standard,15 cm,1,1400000,1.400.000,Ibnu,Bogor
+2024-05-28,Standard,15 cm,1,850000,850.000,Haddy,Jakarta
+2024-06-04,Standard,15 cm,1,1300000,1.300.000,Rosyid,Bogor
+2024-06-08,Standard,15 cm,1,1400000,1.400.000,Ajo,Tangerang
+2024-06-19,Standard,15 cm,1,1300000,1.300.000,Latif,Bekasi
+2024-07-15,Standard,15 cm,1,1400000,1.400.000,Eka,Bekasi
+2024-08-01,Standard,15 cm,1,1400000,1.400.000,Eka,Jakarta
+2024-08-04,Standard,15 cm,1,1400000,1.400.000,Eka,Depok
+2024-05-08,Standard,15 cm,8,1200000,9.600.000,Haddy,Semarang
+2024-06-24,Standard,15 cm,10,1200000,12.000.000,Rosyid,Bogor
+2024-08-11,Standard,15 cm,1,800000,800.000,Ibnu,Bogor
+2024-07-19,Standard,15 cm,1,900000,900.000,Haddy,Depok
+2024-08-28,Standard,15 cm,2,750000,1.500.000,Eka,Depok
+2024-06-13,Standard,15 cm,1,1400000,1.400.000,Ibnu,Bekasi
+2024-06-09,Standard,15 cm,1,800000,800.000,Latif,Jakarta
+2024-05-02,Standard,15 cm,1,1400000,1.400.000,Ajo,Tangerang
+2024-06-22,Standard,20 cm,10,2200000,22.000.000,Ajo,Jakarta
+2024-07-19,Standard,15 cm,1,1300000,1.300.000,Haddy,Depok
+2024-08-07,Standard,15 cm,1,1400000,1.400.000,Ajo,Jakarta
+2024-08-22,Standard,15 cm,1,750000,750.000,Rosyid,Depok
+2024-07-03,Standard,15 cm,1,1300000,1.300.000,Latif,Bogor
+2024-06-09,Standard,20 cm,6,2200000,13.200.000,Rosyid,Depok
+2024-08-28,Standard,15 cm,1,1400000,1.400.000,Ajo,Depok
+2024-01-04,Standard,12 cm,7,1200000,8.400.000,Haddy,Bogor
+2024-01-05,Standard,11 cm,3,1200000,3.600.000,Latif,Palembang
+2024-01-16,Standard,11 cm,5,1200000,6.000.000,Haddy,Bogor
+2024-01-25,Standard,15 cm,2,1400000,2.800.000,Latif,Tangerang
+2024-02-07,Standard,13 cm,6,1200000,7.200.000,Ajo,Yogyakarta
+2024-03-03,Standard,10 cm,3,1200000,3.600.000,Latif,Surabaya
+2024-03-07,Standard,15 cm,1,1400000,1.400.000,Eka,Jakarta
+2024-03-10,Standard,15 cm,5,1200000,6.000.000,Eka,Semarang
+2024-03-13,Standard,15 cm,1,1400000,1.400.000,Eka,Jakarta
+2024-03-13,Standard,20 cm,33,2200000,72.600.000,Haddy,Bogor
+2024-03-21,Standard,11 cm,1,800000,800.000,Rosyid,Bogor
+2024-03-23,Standard,14 cm,5,1200000,6.000.000,Ajo,Bogor
+2024-03-25,Standard,12 cm,1,800000,800.000,Rosyid,Jakarta
+2024-03-27,Standard,10 cm,3,1200000,3.600.000,Rosyid,Bogor
+2024-04-02,Standard,15 cm,3,1400000,4.200.000,Ajo,Palembang
+2024-04-04,Standard,15 cm,1,1400000,1.400.000,Rosyid,Bogor
+2024-04-10,Standard,10 cm,5,1200000,6.000.000,Eka,Bandung
+2024-04-20,Standard,12 cm,5,1200000,6.000.000,Haddy,Depok
+2024-04-23,Standard,15 cm,1,1400000,1.400.000,Ajo,Bekasi
+2024-04-23,Standard,15 cm,7,1400000,9.800.000,Haddy,Yogyakarta
+2024-04-23,Standard,12 cm,1,850000,850.000,Ibnu,Jakarta
+2024-04-30,Standard,11 cm,1,900000,900.000,Latif,Bekasi
+2024-06-09,Standard,11 cm,5,1200000,6.000.000,Rosyid,Bogor
+2024-06-11,Standard,13 cm,3,1200000,3.600.000,Latif,Tangerang
+2024-06-27,Standard,13 cm,7,1200000,8.400.000,Haddy,Bogor
+2024-07-13,Standard,13 cm,7,1200000,8.400.000,Haddy,Yogyakarta
+2024-07-22,Standard,12 cm,4,1200000,4.800.000,Rosyid,Bekasi
+2024-07-29,Standard,11 cm,3,1200000,3.600.000,Rosyid,Medan
+2024-08-20,Standard,12 cm,1,900000,900.000,Latif,Tangerang
+2024-09-03,Standard,15 cm,1,1400000,1.400.000,Eka,Tangerang
+2024-09-08,Standard,11 cm,3,1200000,3.600.000,Haddy,Pontianak
+2024-09-26,Standard,15 cm,1,1300000,1.300.000,Ibnu,Jakarta
+2024-09-26,Standard,15 cm,1,1400000,1.400.000,Latif,Depok
+2024-09-28,Standard,15 cm,1,1300000,1.300.000,Haddy,Tangerang
+2024-10-14,Standard,15 cm,3,1200000,3.600.000,Haddy,Tangerang
+2024-10-16,Standard,15 cm,2,1400000,2.800.000,Rosyid,Jakarta
+2024-10-18,Standard,10 cm,1,850000,850.000,Rosyid,Tangerang
+2024-10-19,Standard,12 cm,5,1200000,6.000.000,Eka,Semarang
+2024-10-19,Standard,11 cm,3,1200000,3.600.000,Latif,Bekasi
+2024-10-20,Standard,13 cm,3,1200000,3.600.000,Rosyid,Bandung
+2024-10-21,Standard,11 cm,5,1200000,6.000.000,Haddy,Tangerang
+2024-11-02,Standard,15 cm,2,1300000,2.600.000,Eka,Bekasi
+2024-11-04,Standard,20 cm,31,2200000,68.200.000,Latif,Bandung
+2024-11-04,Standard,15 cm,1,1400000,1.400.000,Ajo,Bekasi
+2024-11-06,Standard,12 cm,1,750000,750.000,Haddy,Bogor
+2024-11-11,Standard,15 cm,3,1200000,3.600.000,Ibnu,Tangerang
+2024-11-26,Standard,12 cm,5,1200000,6.000.000,Ajo,Yogyakarta
+2024-12-01,Standard,11 cm,3,1200000,3.600.000,Latif,Denpasar
+2024-12-02,Standard,12 cm,4,1200000,4.800.000,Latif,Depok
+2024-12-04,Standard,15 cm,1,1300000,1.300.000,Rosyid,Depok
+2024-12-08,Standard,13 cm,4,1200000,4.800.000,Ibnu,Bekasi
+2024-12-09,Standard,12 cm,3,1200000,3.600.000,Haddy,Depok
+2024-12-09,Standard,12 cm,4,1200000,4.800.000,Eka,Yogyakarta
+2024-12-12,Standard,13 cm,1,800000,800.000,Ibnu,Tangerang
+2024-12-16,Standard,14 cm,4,1200000,4.800.000,Haddy,Bandung
+2024-12-23,Standard,11 cm,1,850000,850.000,Latif,Tangerang
+2024-02-21,Standard,15 cm,17,1200000,20.400.000,Haddy,Jakarta
+2024-05-18,Standard,11 cm,19,1200000,22.800.000,Ibnu,Semarang
+2024-06-01,Standard,13 cm,16,1200000,19.200.000,Latif,Bekasi
+2024-03-29,Standard,15 cm,17,1200000,20.400.000,Ibnu,Tangerang
+2024-02-29,Standard,15 cm,21,1200000,25.200.000,Ajo,Semarang
+2024-05-27,Standard,10 cm,23,1200000,27.600.000,Rosyid,Yogyakarta
+2024-04-19,Standard,15 cm,21,1200000,25.200.000,Eka,Yogyakarta
+2024-05-11,Standard,12 cm,17,1200000,20.400.000,Ajo,Semarang
+2024-02-21,Standard,13 cm,17,1200000,20.400.000,Rosyid,Yogyakarta
+2024-05-22,Standard,14 cm,17,1200000,20.400.000,Rosyid,Tangerang
+2024-05-25,Standard,13 cm,23,1200000,27.600.000,Rosyid,Depok
+2024-06-29,Standard,10 cm,23,1200000,27.600.000,Rosyid,Depok
+2024-02-14,Standard,15 cm,14,1200000,16.800.000,Eka,Jakarta
+2024-03-19,Standard,15 cm,22,1200000,26.400.000,Rosyid,Bekasi
+2024-02-07,Standard,14 cm,20,1200000,24.000.000,Latif,Semarang
+2024-02-02,Standard,13 cm,22,1200000,26.400.000,Haddy,Jakarta
+2024-05-24,Standard,10 cm,24,1200000,28.800.000,Eka,Yogyakarta
+2024-06-15,Standard,14 cm,21,1200000,25.200.000,Rosyid,Yogyakarta
+2024-02-20,Standard,11 cm,24,1200000,28.800.000,Ajo,Yogyakarta
+2024-02-03,Standard,12 cm,19,1200000,22.800.000,Eka,Bogor
+2024-05-23,Standard,13 cm,15,1200000,18.000.000,Ibnu,Semarang
+2024-06-07,Standard,10 cm,21,1200000,25.200.000,Ajo,Yogyakarta
+2024-06-03,Standard,12 cm,17,1200000,20.400.000,Haddy,Depok
+2024-02-05,Standard,14 cm,22,1200000,26.400.000,Latif,Depok
+2024-04-21,Standard,13 cm,17,1200000,20.400.000,Eka,Bogor
+2024-04-09,Standard,13 cm,21,1200000,25.200.000,Latif,Bekasi
+2024-05-28,Standard,10 cm,17,1200000,20.400.000,Rosyid,Semarang
+2024-05-01,Standard,12 cm,21,1200000,25.200.000,Ajo,Yogyakarta
+2024-04-16,Standard,11 cm,18,1200000,21.600.000,Ibnu,Bogor
+2024-06-28,Standard,10 cm,17,1200000,20.400.000,Rosyid,Bekasi
+2024-05-23,Standard,12 cm,25,1200000,30.000.000,Latif,Jakarta
+2024-03-02,Standard,10 cm,24,1200000,28.800.000,Ibnu,Tangerang
+2024-02-18,Standard,15 cm,16,1200000,19.200.000,Rosyid,Bogor
+2024-04-23,Standard,15 cm,16,1200000,19.200.000,Ibnu,Bogor
+2024-03-19,Standard,13 cm,17,1200000,20.400.000,Ajo,Bogor
+2024-04-27,Standard,12 cm,19,1200000,22.800.000,Rosyid,Bekasi
+2024-05-23,Standard,12 cm,19,1200000,22.800.000,Latif,Jakarta
+2024-03-11,Standard,11 cm,23,1200000,27.600.000,Haddy,Bekasi
+2024-05-10,Standard,13 cm,17,1200000,20.400.000,Latif,Bandung
+2024-06-18,Standard,13 cm,17,1200000,20.400.000,Ajo,Semarang
+2024-06-03,Standard,11 cm,21,1200000,25.200.000,Ajo,Jakarta
+2024-03-27,Standard,14 cm,19,1200000,22.800.000,Haddy,Jakarta
+2024-04-20,Standard,11 cm,24,1200000,28.800.000,Rosyid,Semarang
+2024-03-02,Standard,12 cm,17,1200000,20.400.000,Latif,Bandung
+2024-06-15,Standard,10 cm,23,1200000,27.600.000,Eka,Semarang
+2024-06-20,Standard,12 cm,22,1200000,26.400.000,Ajo,Semarang
+2024-02-06,Standard,14 cm,19,1200000,22.800.000,Ajo,Depok
+2024-04-15,Standard,13 cm,17,1200000,20.400.000,Ibnu,Yogyakarta
+2024-07-16,Standard,11 cm,3,750000,2.250.000,Latif,Makassar
+2024-10-03,Standard,11 cm,5,800000,4.000.000,Eka,Semarang
+2024-12-30,Standard,14 cm,3,850000,2.550.000,Rosyid,Yogyakarta
+2024-09-23,Standard,13 cm,6,800000,4.800.000,Latif,Bekasi
+2024-12-17,Standard,10 cm,1,750000,750.000,Latif,Bogor
+2024-10-23,Standard,15 cm,2,800000,1.600.000,Haddy,Tangerang
+2024-08-06,Standard,12 cm,3,750000,2.250.000,Eka,Semarang
+2024-08-04,Standard,12 cm,5,700000,3.500.000,Latif,Semarang
+2024-11-19,Standard,10 cm,5,850000,4.250.000,Ajo,Depok
+2024-10-27,Standard,15 cm,6,900000,5.400.000,Ibnu,Jakarta
+2024-08-02,Standard,10 cm,2,850000,1.700.000,Latif,Jakarta
+2024-07-19,Standard,14 cm,2,750000,1.500.000,Ajo,Tangerang
+2024-07-21,Standard,10 cm,1,850000,850.000,Eka,Bogor
+2024-12-10,Standard,13 cm,2,750000,1.500.000,Ibnu,Depok
+2024-11-10,Standard,12 cm,3,900000,2.700.000,Haddy,Bogor
+2024-11-08,Standard,14 cm,6,750000,4.500.000,Ibnu,Bogor
+2024-12-10,Standard,15 cm,5,800000,4.000.000,Ajo,Semarang
+2024-09-25,Standard,11 cm,3,750000,2.250.000,Haddy,Surabaya
+2024-10-16,Standard,13 cm,5,900000,4.500.000,Ibnu,Yogyakarta
+2024-11-27,Standard,10 cm,3,700000,2.100.000,Latif,Depok
+2024-12-30,Standard,12 cm,5,700000,3.500.000,Rosyid,Bogor
+2024-08-13,Standard,10 cm,4,750000,3.000.000,Eka,Depok
+2024-07-29,Standard,13 cm,3,900000,2.700.000,Eka,Depok
+2024-09-01,Standard,13 cm,5,700000,3.500.000,Rosyid,Yogyakarta
+2024-11-11,Standard,13 cm,1,850000,850.000,Rosyid,Bogor
+2024-11-14,Standard,10 cm,2,900000,1.800.000,Ajo,Tangerang
+2024-11-03,Standard,11 cm,6,750000,4.500.000,Ibnu,Semarang
+2024-12-27,Standard,15 cm,3,900000,2.700.000,Ibnu,Medan
+2024-11-25,Standard,14 cm,1,700000,700.000,Ibnu,Jakarta
+2024-09-18,Standard,14 cm,3,800000,2.400.000,Ibnu,Depok
+2024-07-12,Standard,10 cm,1,850000,850.000,Rosyid,Tangerang
+2024-08-14,Standard,14 cm,6,700000,4.200.000,Ibnu,Bogor
+2024-08-15,Standard,12 cm,4,850000,3.400.000,Haddy,Bandung
+2024-12-24,Standard,11 cm,6,900000,5.400.000,Ajo,Yogyakarta
+2024-07-11,Standard,10 cm,6,750000,4.500.000,Ajo,Bogor
+2024-09-30,Standard,11 cm,4,800000,3.200.000,Rosyid,Tangerang
+2024-11-28,Standard,11 cm,3,800000,2.400.000,Ibnu,Depok
+2024-11-18,Standard,11 cm,2,850000,1.700.000,Eka,Bekasi
+2024-07-22,Standard,10 cm,5,900000,4.500.000,Haddy,Depok
+2024-08-04,Standard,13 cm,6,850000,5.100.000,Eka,Yogyakarta
+2024-08-09,Standard,10 cm,2,750000,1.500.000,Haddy,Depok
+2024-08-05,Standard,14 cm,5,900000,4.500.000,Haddy,Bandung
+2024-12-31,Standard,10 cm,1,750000,750.000,Latif,Bogor
+2024-12-03,Standard,12 cm,5,800000,4.000.000,Ajo,Yogyakarta
+2024-09-27,Standard,11 cm,5,700000,3.500.000,Latif,Yogyakarta
+2024-12-17,Standard,14 cm,5,850000,4.250.000,Eka,Tangerang
+2024-10-31,Standard,10 cm,2,750000,1.500.000,Rosyid,Tangerang
+2024-09-20,Standard,21 cm,3,2200000,6.600.000,Latif,Semarang
+2023-07-06,Standard,14 cm,3,1200000,3.600.000,Eka,Palembang
+2023-06-18,Semi King,33 cm,2,18200000,36.400.000,Rosyid,Jakarta
+2024-02-15,Standard,25 cm,2,2200000,4.400.000,Haddy,Tangerang
+2024-07-07,Semi King,32 cm,3,13600000,40.800.000,Latif,Bandung
+2023-01-07,Standard,31 cm,3,12000000,36.000.000,Latif,Semarang
+2023-01-12,Semi King,33 cm,4,7000000,28.000.000,Latif,Yogyakarta
+2023-08-04,Standard,25 cm,1,2200000,2.200.000,Eka,Depok
+2025-04-24,King,20 cm,3,12000000,36.000.000,Ajo,Tangerang
+2024-04-11,Semi King,39 cm,3,16000000,48.000.000,Ibnu,Denpasar
+2023-06-13,Standard,33 cm,3,4000000,12.000.000,Haddy,Medan
+2024-12-11,Standard,25 cm,2,2200000,4.400.000,Ibnu,Bekasi
+2025-07-30,Standard,20 cm,19,2200000,41.800.000,Ibnu,Bogor
+2024-04-12,Standard,20 cm,1,2200000,2.200.000,Latif,Bekasi
+2025-11-01,Standard,51 cm,3,8500000,25.500.000,Ibnu,Semarang
+2025-03-02,Dayung Setan,32 cm,3,8500000,25.500.000,Ajo,Palembang
+2023-09-09,Standard,25 cm,1,2200000,2.200.000,Haddy,Bogor
+2025-02-01,Semi King,30 cm,2,12800000,25.600.000,Ibnu,Tangerang
+2024-07-30,Standard,25 cm,3,2200000,6.600.000,Rosyid,Bekasi
+2025-02-07,Mata Panda,30 cm,3,12000000,36.000.000,Latif,Jakarta
+2023-07-19,Standard,60 cm,2,8500000,17.000.000,Rosyid,Bogor
+2024-11-18,Standard,45 cm,28,7000000,196.000.000,Eka,Bekasi
+2025-07-08,Standard,41 cm,4,10000000,40.000.000,Rosyid,Depok
+2025-09-07,Standard,11 cm,1,850000,850.000,Latif,Depok
+2025-01-16,Mata Panda,35 cm,3,7000000,21.000.000,Rosyid,Medan
+2024-04-25,Dayung Setan,37 cm,3,10000000,30.000.000,Haddy,Jakarta
+2024-02-12,Standard,35 cm,1,4000000,4.000.000,Ajo,Jakarta
+2023-06-27,Mata Panda,25 cm,3,9500000,28.500.000,Latif,Jakarta
+2023-10-06,King,29 cm,2,7000000,14.000.000,Rosyid,Tangerang
+2023-06-02,King,56 cm,1,16000000,16.000.000,Eka,Jakarta
+2025-03-11,Standard,28 cm,3,8500000,25.500.000,Rosyid,Surabaya
+2023-05-25,Standard,25 cm,1,2200000,2.200.000,Ibnu,Bekasi
+2023-05-10,Standard,20 cm,30,2200000,66.000.000,Latif,Semarang
+2023-07-05,Standard,10 cm,5,1200000,6.000.000,Ibnu,Bogor
+2024-09-16,Standard,12 cm,6,1200000,7.200.000,Latif,Semarang
+2024-01-24,Standard,14 cm,1,750000,750.000,Rosyid,Jakarta
+2024-07-09,Dayung Setan,60 cm,1,13700000,13.700.000,Ibnu,Bogor
+2023-06-23,Dayung Setan,40 cm,3,16000000,48.000.000,Ibnu,Bogor
+2023-09-08,Standard,12 cm,3,1200000,3.600.000,Haddy,Bekasi
+2024-05-31,Semi King,20 cm,3,13400000,40.200.000,Ibnu,Yogyakarta
+2023-06-04,Semi King,35 cm,2,19300000,38.600.000,Ajo,Jakarta
+2023-06-15,Standard,30 cm,30,2200000,66.000.000,Latif,Bandung
+2023-01-19,Standard,15 cm,3,1300000,3.900.000,Latif,Bekasi
+2024-01-03,Standard,21 cm,3,2200000,6.600.000,Haddy,Yogyakarta
+2025-06-29,Dayung Setan,41 cm,4,10000000,40.000.000,Ajo,Bekasi
+2024-04-05,Mata Panda,34 cm,4,9500000,38.000.000,Rosyid,Bandung
+2024-01-05,Standard,14 cm,4,1200000,4.800.000,Ajo,Bogor
+2023-02-21,Dayung Setan,26 cm,3,12000000,36.000.000,Latif,Depok
+2025-04-19,Dayung Setan,25 cm,1,7000000,7.000.000,Rosyid,Jakarta
+2023-12-20,Standard,25 cm,2,2200000,4.400.000,Eka,Bekasi
+2024-10-03,Standard,15 cm,1,1300000,1.300.000,Ajo,Tangerang
+2025-07-20,Standard,12 cm,4,1200000,4.800.000,Rosyid,Bandung
+2023-11-26,King,24 cm,1,10000000,10.000.000,Haddy,Bogor
+2024-02-10,Standard,60 cm,6,7000000,42.000.000,Ajo,Tangerang
+2024-04-15,King,23 cm,2,16000000,32.000.000,Rosyid,Bekasi
+2023-03-20,Standard,10 cm,4,1200000,4.800.000,Rosyid,Bekasi
+2023-12-03,King,32 cm,3,8500000,25.500.000,Eka,Denpasar
+2023-05-03,Standard,22 cm,3,2200000,6.600.000,Haddy,Bekasi
+2023-11-28,Standard,36 cm,1,7000000,7.000.000,Eka,Tangerang
+2024-09-25,Mata Panda,28 cm,3,14000000,42.000.000,Ajo,Yogyakarta
+2025-02-13,Standard,14 cm,6,1200000,7.200.000,Ajo,Tangerang
+2024-07-26,Standard,21 cm,3,2200000,6.600.000,Latif,Depok
+2025-05-23,Standard,12 cm,5,1200000,6.000.000,Rosyid,Tangerang
+2024-01-25,Semi King,25 cm,4,8500000,34.000.000,Rosyid,Tangerang
+2023-01-22,Dayung Setan,28 cm,1,8500000,8.500.000,Eka,Bekasi
+2024-09-10,Standard,41 cm,3,4300000,12.900.000,Haddy,Yogyakarta
+2024-10-04,Standard,25 cm,2,2200000,4.400.000,Haddy,Depok
+2025-10-05,Standard,15 cm,1,1400000,1.400.000,Latif,Tangerang
+2023-04-22,Standard,15 cm,2,1400000,2.800.000,Eka,Bogor
+2025-02-14,Standard,24 cm,4,2200000,8.800.000,Latif,Jakarta
+2024-03-29,Standard,10 cm,1,800000,800.000,Ibnu,Bogor
+2023-11-07,Standard,25 cm,2,2200000,4.400.000,Haddy,Bekasi
+2024-04-16,Standard,10 cm,6,1200000,7.200.000,Haddy,Bandung
+2024-03-25,Mata Panda,22 cm,3,8500000,25.500.000,Latif,Yogyakarta
+2025-12-17,King,23 cm,2,7000000,14.000.000,Latif,Tangerang
+2023-01-25,Standard,21 cm,3,2200000,6.600.000,Haddy,Pontianak
+2025-04-20,Standard,52 cm,3,7000000,21.000.000,Eka,Yogyakarta
+2023-03-15,Standard,15 cm,1,1400000,1.400.000,Latif,Bekasi
+2023-11-26,Standard,35 cm,20,7000000,140.000.000,Ajo,Jakarta
+2025-11-15,Standard,22 cm,3,2200000,6.600.000,Eka,Bandung
+2025-01-21,Standard,11 cm,3,1200000,3.600.000,Latif,Makassar
+2024-09-06,Dayung Setan,25 cm,2,7000000,14.000.000,Rosyid,Depok
+2024-10-12,Semi King,27 cm,3,12200000,36.600.000,Latif,Palembang
+2024-10-30,Standard,12 cm,1,750000,750.000,Eka,Bekasi
+2025-09-06,Standard,15 cm,1,1400000,1.400.000,Latif,Tangerang
+2023-10-14,Semi King,31 cm,3,8500000,25.500.000,Rosyid,Surabaya
+2025-02-13,Standard,15 cm,3,1300000,3.900.000,Ibnu,Bogor
+2024-01-02,Semi King,26 cm,2,12000000,24.000.000,Latif,Bekasi
+2024-09-21,Standard,10 cm,1,850000,850.000,Latif,Bogor
+2023-09-29,Mata Panda,28 cm,2,14000000,28.000.000,Ajo,Tangerang
+2023-03-11,Standard,14 cm,5,1200000,6.000.000,Ajo,Semarang
+2023-12-27,Standard,14 cm,1,700000,700.000,Haddy,Bogor
+2023-02-03,Standard,14 cm,3,1200000,3.600.000,Ajo,Denpasar
+2023-05-10,Standard,25 cm,2,2200000,4.400.000,Ajo,Tangerang
+2024-06-29,Dayung Setan,52 cm,2,12000000,24.000.000,Eka,Bekasi
+2024-04-18,Dayung Setan,20 cm,3,5000000,15.000.000,Haddy,Depok
+2025-02-10,Standard,22 cm,3,2200000,6.600.000,Ibnu,Bandung
+2025-05-13,Standard,56 cm,2,7000000,14.000.000,Haddy,Depok
+2024-02-29,Dayung Setan,55 cm,4,16000000,64.000.000,Ibnu,Bandung
+2025-02-17,Standard,15 cm,1,1400000,1.400.000,Haddy,Bogor
+2024-10-13,Standard,15 cm,1,1400000,1.400.000,Ibnu,Depok
+2025-12-25,King,40 cm,1,8500000,8.500.000,Eka,Depok
+2024-06-09,Standard,60 cm,1,10000000,10.000.000,Haddy,Jakarta
+2025-08-05,Standard,35 cm,13,7000000,91.000.000,Ibnu,Bekasi
+2024-09-02,Standard,30 cm,7,2200000,15.400.000,Ajo,Bogor
+2023-12-09,Standard,20 cm,14,2200000,30.800.000,Latif,Bogor
+2024-03-27,Standard,14 cm,5,1200000,6.000.000,Haddy,Bogor
+2023-08-29,Semi King,34 cm,1,17300000,17.300.000,Rosyid,Tangerang
+2024-09-24,Semi King,51 cm,3,10000000,30.000.000,Haddy,Bandung
+2023-06-25,Standard,25 cm,2,2200000,4.400.000,Ibnu,Jakarta
+2025-08-23,Standard,13 cm,4,1200000,4.800.000,Ibnu,Tangerang
+2023-06-19,Dayung Setan,35 cm,3,8500000,25.500.000,Ibnu,Depok
+2023-11-07,Standard,41 cm,3,12000000,36.000.000,Ibnu,Tangerang
+2023-01-25,Standard,20 cm,14,2200000,30.800.000,Rosyid,Semarang
+2024-03-28,Standard,25 cm,2,2200000,4.400.000,Ajo,Depok
+2023-12-13,Standard,14 cm,1,700000,700.000,Haddy,Bekasi
+2025-07-28,Standard,13 cm,7,1200000,8.400.000,Eka,Jakarta
+2023-07-13,Standard,40 cm,30,7000000,210.000.000,Haddy,Bogor
+2024-01-12,Mata Panda,39 cm,2,12000000,24.000.000,Ibnu,Tangerang
+2024-11-27,Standard,12 cm,3,1200000,3.600.000,Haddy,Semarang
+2025-07-22,Standard,14 cm,3,1200000,3.600.000,Haddy,Makassar
+2023-01-22,Standard,25 cm,3,2200000,6.600.000,Rosyid,Jakarta
+2023-11-10,Standard,55 cm,6,7000000,42.000.000,Haddy,Bekasi
+2023-04-03,Standard,26 cm,1,12000000,12.000.000,Eka,Bekasi
+2024-05-05,King,23 cm,1,16000000,16.000.000,Latif,Bekasi
+2025-04-29,Standard,22 cm,3,2200000,6.600.000,Ibnu,Pontianak
+2023-01-23,Standard,25 cm,9,2200000,19.800.000,Latif,Semarang
+2023-10-04,Standard,25 cm,7,2200000,15.400.000,Haddy,Jakarta
+2023-06-17,Standard,55 cm,2,7000000,14.000.000,Haddy,Jakarta
+2024-07-21,Standard,12 cm,5,1200000,6.000.000,Haddy,Semarang
+2023-05-10,King,39 cm,2,8500000,17.000.000,Eka,Depok
+2023-09-25,Standard,15 cm,2,1400000,2.800.000,Latif,Jakarta
+2023-04-25,Semi King,29 cm,2,10000000,20.000.000,Rosyid,Tangerang
+2023-07-19,King,36 cm,1,14000000,14.000.000,Haddy,Bekasi
+2025-09-13,Semi King,36 cm,1,9500000,9.500.000,Eka,Bekasi
+2024-01-24,Semi King,33 cm,1,17400000,17.400.000,Rosyid,Bekasi
+2025-01-31,Standard,13 cm,6,1200000,7.200.000,Haddy,Tangerang
+2023-04-08,Standard,15 cm,3,1300000,3.900.000,Ajo,Jakarta
+2024-06-21,Standard,30 cm,29,2200000,63.800.000,Rosyid,Jakarta
+2025-09-27,King,24 cm,2,10000000,20.000.000,Haddy,Bekasi
+2025-12-29,Standard,22 cm,3,2200000,6.600.000,Eka,Surabaya
+2025-08-11,Standard,15 cm,1,1400000,1.400.000,Haddy,Depok
+2023-03-18,Semi King,20 cm,3,11500000,34.500.000,Rosyid,Bogor
+2023-04-07,King,25 cm,3,8500000,25.500.000,Haddy,Jakarta
+2025-02-01,Dayung Setan,51 cm,3,14000000,42.000.000,Ibnu,Surabaya
+2025-05-26,Semi King,27 cm,4,14000000,56.000.000,Eka,Tangerang
+2023-08-27,Standard,11 cm,1,850000,850.000,Rosyid,Bekasi
+2023-08-16,Mata Panda,31 cm,1,18900000,18.900.000,Rosyid,Jakarta
+2023-01-15,Mata Panda,52 cm,4,14000000,56.000.000,Haddy,Depok
+2024-08-30,Standard,12 cm,7,1200000,8.400.000,Ajo,Semarang
+2023-07-28,Standard,30 cm,18,2200000,39.600.000,Eka,Jakarta
+2025-05-08,King,29 cm,3,8500000,25.500.000,Haddy,Bogor
+2023-07-01,Standard,51 cm,2,14000000,28.000.000,Ajo,Depok
+2024-01-26,Standard,15 cm,1,1300000,1.300.000,Latif,Bekasi
+2025-06-04,Dayung Setan,30 cm,3,8500000,25.500.000,Rosyid,Makassar
+2024-03-14,Semi King,35 cm,3,9500000,28.500.000,Ajo,Jakarta
+2024-03-08,Standard,15 cm,1,1400000,1.400.000,Latif,Tangerang
+2024-09-28,Mata Panda,27 cm,3,7000000,21.000.000,Haddy,Tangerang
+2025-01-15,King,21 cm,3,14000000,42.000.000,Haddy,Bogor
+2025-01-04,Standard,55 cm,6,7000000,42.000.000,Latif,Tangerang
+2023-07-28,Standard,13 cm,4,1200000,4.800.000,Ibnu,Tangerang
+2023-07-23,Standard,11 cm,1,750000,750.000,Ajo,Jakarta
+2024-03-18,Standard,55 cm,7,7000000,49.000.000,Rosyid,Jakarta
+2023-09-18,Semi King,25 cm,4,16000000,64.000.000,Latif,Semarang
+2023-10-30,Standard,29 cm,1,3500000,3.500.000,Latif,Depok
+2025-10-22,Dayung Setan,24 cm,1,5000000,5.000.000,Haddy,Tangerang
+2025-10-08,Standard,28 cm,2,4200000,8.400.000,Haddy,Jakarta
+2025-11-03,Standard,55 cm,5,7000000,35.000.000,Ajo,Bekasi
+2024-10-06,King,22 cm,2,8500000,17.000.000,Rosyid,Bekasi
+2023-04-16,Standard,11 cm,5,1200000,6.000.000,Ajo,Depok
+2024-10-14,Standard,55 cm,9,7000000,63.000.000,Ibnu,Bekasi
+2025-10-09,Standard,56 cm,2,6000000,12.000.000,Rosyid,Tangerang
+2023-10-15,Standard,15 cm,1,1300000,1.300.000,Ajo,Bekasi
+2023-09-17,Standard,30 cm,3,8000000,24.000.000,Haddy,Tangerang
+2024-01-28,Standard,14 cm,5,1200000,6.000.000,Eka,Jakarta
+2023-09-09,Dayung Setan,22 cm,4,10000000,40.000.000,Ibnu,Jakarta
+2025-07-03,Standard,14 cm,4,1200000,4.800.000,Ajo,Bekasi
+2025-05-09,Dayung Setan,23 cm,1,10000000,10.000.000,Ajo,Depok
+2024-07-03,Standard,14 cm,1,900000,900.000,Haddy,Bekasi
+2023-11-15,Semi King,30 cm,3,14000000,42.000.000,Ajo,Palembang
+2023-04-27,Standard,55 cm,9,7000000,63.000.000,Haddy,Semarang
+2024-05-01,Standard,25 cm,2,2200000,4.400.000,Ibnu,Bogor
+2025-05-01,King,26 cm,1,14100000,14.100.000,Rosyid,Depok
+2023-04-16,Dayung Setan,26 cm,1,8500000,8.500.000,Haddy,Jakarta
+2024-07-24,Standard,31 cm,3,9500000,28.500.000,Latif,Denpasar
+2023-12-13,Mata Panda,39 cm,4,16000000,64.000.000,Rosyid,Jakarta
+2023-11-29,Semi King,20 cm,2,10000000,20.000.000,Haddy,Jakarta
+2024-10-12,Standard,25 cm,2,2200000,4.400.000,Latif,Jakarta
+2025-11-13,Semi King,20 cm,1,8500000,8.500.000,Ibnu,Depok
+2023-12-04,Dayung Setan,40 cm,1,12000000,12.000.000,Ajo,Bogor
+2024-09-08,Mata Panda,33 cm,1,30000000,30.000.000,Rosyid,Bekasi
+2023-05-22,King,23 cm,2,8500000,17.000.000,Latif,Jakarta
+2023-04-17,Standard,55 cm,9,7000000,63.000.000,Ajo,Bogor
+2023-09-28,Standard,25 cm,1,2200000,2.200.000,Haddy,Depok
+2025-07-19,Standard,15 cm,1,1400000,1.400.000,Rosyid,Bogor
+2025-11-02,Standard,14 cm,1,700000,700.000,Ibnu,Jakarta
+2024-10-13,Semi King,24 cm,3,19700000,59.100.000,Haddy,Pontianak
+2025-08-28,Standard,11 cm,3,1200000,3.600.000,Ibnu,Pontianak
+2024-09-18,Standard,35 cm,3,12000000,36.000.000,Eka,Palembang
+2024-07-04,Standard,25 cm,2,2200000,4.400.000,Eka,Bekasi
+2025-06-09,Standard,50 cm,14,7000000,98.000.000,Latif,Depok
+2023-07-13,Standard,25 cm,7,2200000,15.400.000,Ibnu,Bekasi
+2025-12-19,Standard,15 cm,1,10000000,10.000.000,Eka,Tangerang
+2025-04-21,Standard,35 cm,3,10000000,30.000.000,Ajo,Bekasi
+2024-10-11,Standard,25 cm,2,2200000,4.400.000,Ibnu,Jakarta
+2023-04-23,Standard,10 cm,6,1200000,7.200.000,Haddy,Bandung
+2025-08-01,Dayung Setan,23 cm,2,9500000,19.000.000,Latif,Jakarta
+2023-09-24,Dayung Setan,28 cm,2,8500000,17.000.000,Eka,Bekasi
+2024-01-10,King,21 cm,1,19600000,19.600.000,Rosyid,Jakarta
+2024-11-23,Standard,10 cm,7,1200000,8.400.000,Latif,Bandung
+2025-01-02,Standard,15 cm,1,700000,700.000,Ibnu,Tangerang
+2023-03-20,Semi King,24 cm,1,12000000,12.000.000,Ajo,Bekasi
+2023-09-10,King,22 cm,1,19800000,19.800.000,Latif,Jakarta
+2023-05-29,Mata Panda,29 cm,3,10000000,30.000.000,Rosyid,Depok
+2025-11-16,Mata Panda,51 cm,4,7000000,28.000.000,Latif,Depok
+2023-04-24,Standard,25 cm,2,2200000,4.400.000,Ajo,Depok
+2024-01-29,Standard,25 cm,2,2200000,4.400.000,Eka,Jakarta
+2025-12-04,Standard,15 cm,1,1400000,1.400.000,Rosyid,Bogor
+2025-10-13,Mata Panda,32 cm,1,14000000,14.000.000,Ibnu,Jakarta
+2025-05-19,Standard,15 cm,3,1200000,3.600.000,Ibnu,Bekasi
+2025-12-05,Semi King,20 cm,1,19900000,19.900.000,Eka,Bekasi
+2024-11-20,King,52 cm,1,7000000,7.000.000,Latif,Bekasi
+2024-02-13,Standard,12 cm,7,1200000,8.400.000,Rosyid,Yogyakarta
+2025-11-03,Mata Panda,34 cm,1,9500000,9.500.000,Haddy,Bekasi
+2023-08-18,Dayung Setan,24 cm,3,5000000,15.000.000,Eka,Palembang
+2023-07-27,King,38 cm,4,16000000,64.000.000,Latif,Jakarta
+2024-05-28,Standard,28 cm,2,9500000,19.000.000,Ibnu,Jakarta
+2024-09-14,King,24 cm,3,10000000,30.000.000,Rosyid,Denpasar
+2025-01-14,Standard,25 cm,2,2200000,4.400.000,Rosyid,Depok
+2024-12-20,Standard,25 cm,3,2200000,6.600.000,Ajo,Makassar
+2023-02-03,Standard,25 cm,2,2200000,4.400.000,Rosyid,Tangerang
+2023-09-30,Standard,55 cm,21,7000000,147.000.000,Haddy,Bandung
+2024-09-09,Standard,38 cm,4,10000000,40.000.000,Haddy,Bandung
+2023-12-26,Mata Panda,15 cm,2,10000000,20.000.000,Eka,Tangerang
+2025-03-05,Dayung Setan,20 cm,3,12000000,36.000.000,Ibnu,Surabaya
+2024-10-19,Standard,15 cm,1,1400000,1.400.000,Eka,Tangerang
+2025-09-20,Standard,22 cm,3,2200000,6.600.000,Haddy,Bogor
+2023-10-03,Standard,40 cm,32,7000000,224.000.000,Rosyid,Yogyakarta
+2024-02-28,Standard,25 cm,1,2200000,2.200.000,Eka,Depok
+2023-05-18,Mata Panda,51 cm,1,14000000,14.000.000,Haddy,Bogor
+2025-09-11,Mata Panda,29 cm,4,16000000,64.000.000,Latif,Semarang
+2025-08-02,King,37 cm,4,12000000,48.000.000,Rosyid,Bogor
+2023-03-24,Standard,25 cm,3,2200000,6.600.000,Ajo,Medan
+2023-11-11,King,33 cm,4,12000000,48.000.000,Latif,Semarang
+2025-12-02,Standard,15 cm,1,1400000,1.400.000,Ajo,Jakarta
+2025-03-25,Standard,20 cm,30,2200000,66.000.000,Haddy,Bogor
+2025-02-02,Mata Panda,39 cm,3,7000000,21.000.000,Latif,Medan
+2024-06-29,Standard,52 cm,3,6000000,18.000.000,Ibnu,Surabaya
+2025-06-05,Semi King,32 cm,3,10800000,32.400.000,Latif,Medan
+2025-01-06,Semi King,32 cm,2,18400000,36.800.000,Latif,Depok
+2023-02-01,Standard,11 cm,6,1200000,7.200.000,Latif,Bogor
+2024-12-30,Semi King,50 cm,3,9500000,28.500.000,Latif,Surabaya
+2025-08-19,Mata Panda,56 cm,2,8500000,17.000.000,Eka,Bogor
+2024-01-31,Mata Panda,31 cm,1,9500000,9.500.000,Eka,Bogor
+2023-08-03,Standard,15 cm,5,1200000,6.000.000,Ibnu,Bekasi
+2024-07-03,Standard,10 cm,3,1200000,3.600.000,Haddy,Semarang
+2023-10-05,Standard,45 cm,9,7000000,63.000.000,Ibnu,Jakarta
+2023-08-09,Standard,15 cm,1,850000,850.000,Haddy,Bekasi
+2023-12-09,Standard,22 cm,3,2200000,6.600.000,Ajo,Jakarta
+2024-07-25,Dayung Setan,60 cm,1,9500000,9.500.000,Latif,Bogor
+2025-09-04,Standard,38 cm,3,16000000,48.000.000,Haddy,Surabaya
+2025-01-24,Standard,25 cm,2,2200000,4.400.000,Rosyid,Bekasi
+2024-12-07,Semi King,20 cm,2,17200000,34.400.000,Eka,Jakarta
+2023-09-16,Standard,25 cm,2,2200000,4.400.000,Eka,Jakarta
+2023-11-03,Standard,15 cm,1,1300000,1.300.000,Latif,Jakarta
+2023-11-29,Standard,40 cm,19,7000000,133.000.000,Haddy,Jakarta
+2025-08-29,Standard,27 cm,2,6300000,12.600.000,Latif,Bogor
+2023-10-23,Mata Panda,21 cm,3,14000000,42.000.000,Eka,Bekasi
+2024-12-29,Standard,25 cm,1,2200000,2.200.000,Eka,Tangerang
+2024-08-10,Standard,21 cm,3,2200000,6.600.000,Haddy,Bogor
+2024-11-30,Standard,15 cm,3,1400000,4.200.000,Ajo,Palembang
+2023-02-18,King,36 cm,1,7000000,7.000.000,Eka,Depok
+2023-07-31,Standard,25 cm,1,2200000,2.200.000,Haddy,Bogor
+2023-06-28,Mata Panda,22 cm,1,11000000,11.000.000,Eka,Jakarta
+2024-03-25,Standard,15 cm,1,1400000,1.400.000,Ibnu,Jakarta
+2024-10-09,Standard,30 cm,18,2200000,39.600.000,Haddy,Semarang
+2023-09-08,Standard,60 cm,6,7000000,42.000.000,Latif,Bandung
+2025-08-15,Semi King,38 cm,4,10000000,40.000.000,Latif,Depok
+2024-10-23,Mata Panda,36 cm,4,9500000,38.000.000,Eka,Bekasi
+2024-11-19,King,21 cm,1,8500000,8.500.000,Rosyid,Jakarta
+2024-09-27,Standard,14 cm,6,1200000,7.200.000,Ibnu,Tangerang
+2024-07-21,Standard,21 cm,3,2200000,6.600.000,Eka,Tangerang
+2025-08-18,Standard,11 cm,7,1200000,8.400.000,Latif,Bogor
+2023-05-07,Standard,25 cm,3,2200000,6.600.000,Latif,Pontianak
+2024-12-30,Standard,34 cm,4,12000000,48.000.000,Eka,Jakarta
+2024-11-03,Standard,25 cm,35,2200000,77.000.000,Ibnu,Semarang
+2025-10-17,Standard,52 cm,1,9500000,9.500.000,Haddy,Bekasi
+2025-05-21,Standard,15 cm,1,1400000,1.400.000,Ibnu,Tangerang
+2025-10-01,Standard,21 cm,3,2200000,6.600.000,Rosyid,Denpasar
+2025-07-22,Mata Panda,41 cm,3,8500000,25.500.000,Latif,Jakarta
+2025-02-24,King,32 cm,3,7000000,21.000.000,Haddy,Denpasar
+2023-01-02,Mata Panda,24 cm,3,10000000,30.000.000,Eka,Depok
+2025-01-08,Standard,25 cm,7,2200000,15.400.000,Ibnu,Tangerang
+2025-10-08,Standard,55 cm,6,7000000,42.000.000,Rosyid,Bekasi
+2023-10-05,Standard,60 cm,6,7000000,42.000.000,Eka,Bandung
+2023-05-29,Standard,15 cm,1,1400000,1.400.000,Haddy,Bogor
+2024-07-15,Standard,10 cm,7,1200000,8.400.000,Latif,Semarang
+2025-09-26,Standard,10 cm,1,900000,900.000,Ibnu,Bekasi
+2025-10-13,Mata Panda,21 cm,2,14000000,28.000.000,Haddy,Tangerang
+2023-02-22,Standard,25 cm,2,2200000,4.400.000,Latif,Bogor
+2023-05-21,Standard,25 cm,3,2200000,6.600.000,Haddy,Bogor
+2024-11-08,Semi King,30 cm,3,10000000,30.000.000,Latif,Palembang
+2023-05-04,King,15 cm,2,12000000,24.000.000,Haddy,Jakarta
+2024-03-29,Dayung Setan,40 cm\,3,16000000,48.000.000,Rosyid,Bandung
+2025-04-12,Semi King,31 cm,2,14000000,28.000.000,Rosyid,Tangerang
+2025-07-11,Standard,25 cm,2,2200000,4.400.000,Latif,Bogor
+2025-04-23,Standard,21 cm,3,2200000,6.600.000,Ibnu,Pontianak
+2024-01-26,Standard,25 cm,2,2200000,4.400.000,Ajo,Tangerang
+2024-07-26,King,25 cm,2,8500000,17.000.000,Ibnu,Depok
+2023-11-12,Dayung Setan,20 cm,2,14000000,28.000.000,Ibnu,Bekasi
+2023-05-01,Semi King,23 cm,3,7000000,21.000.000,Haddy,Bandung
+2023-11-08,Standard,25 cm,3,2200000,6.600.000,Rosyid,Semarang
+2025-08-26,Standard,35 cm,34,7000000,238.000.000,Rosyid,Bandung
+2025-08-19,Dayung Setan,35 cm,3,14000000,42.000.000,Rosyid,Tangerang
+2023-10-28,Dayung Setan,27 cm,3,7000000,21.000.000,Rosyid,Bekasi
+2023-03-04,Semi King,51 cm,3,7000000,21.000.000,Rosyid,Palembang
+2023-01-16,Standard,21 cm,3,2200000,6.600.000,Rosyid,Jakarta
+2025-05-12,Standard,25 cm,8,2200000,17.600.000,Ajo,Depok
+2024-05-09,Semi King,24 cm,1,16900000,16.900.000,Haddy,Bogor
+2025-11-18,Standard,60 cm,6,7000000,42.000.000,Rosyid,Bekasi
+2024-11-13,Dayung Setan,27 cm,1,7000000,7.000.000,Eka,Jakarta
+2024-03-29,Standard,25 cm,7,2200000,15.400.000,Ajo,Bogor
+2024-08-06,Mata Panda,51 cm,3,16000000,48.000.000,Rosyid,Bandung
+2023-07-20,Dayung Setan,32 cm,3,8500000,25.500.000,Rosyid,Jakarta
+2023-04-27,Mata Panda,28 cm,4,14000000,56.000.000,Ibnu,Semarang
+2025-02-04,Semi King,28 cm,3,10000000,30.000.000,Haddy,Bekasi
+2025-04-21,Standard,25 cm,1,2200000,2.200.000,Haddy,Tangerang
+2024-09-19,Standard,25 cm,2,2200000,4.400.000,Ajo,Tangerang
+2025-03-29,Semi King,22 cm,3,8500000,25.500.000,Rosyid,Pontianak
+2024-07-06,Dayung Setan,36 cm,1,10000000,10.000.000,Ajo,Tangerang
+2025-01-29,Standard,50 cm,30,7000000,210.000.000,Rosyid,Depok
+2025-07-19,Standard,25 cm,2,2200000,4.400.000,Eka,Tangerang
+2023-09-16,Standard,25 cm,2,2200000,4.400.000,Latif,Bogor
+2023-06-10,King,51 cm,4,8500000,34.000.000,Haddy,Jakarta
+2023-08-27,Standard,21 cm,4,2200000,8.800.000,Haddy,Semarang
+2023-09-18,Mata Panda,15 cm,4,14000000,56.000.000,Latif,Depok
+2024-03-12,Semi King,38 cm,2,16000000,32.000.000,Latif,Tangerang
+2025-06-11,Standard,25 cm,1,2200000,2.200.000,Haddy,Jakarta
+2024-05-12,Dayung Setan,22 cm,1,5000000,5.000.000,Haddy,Tangerang
+2025-08-05,Standard,25 cm,24,2200000,52.800.000,Ibnu,Yogyakarta
+2024-11-17,Semi King,15 cm,4,8500000,34.000.000,Eka,Depok
+2023-03-25,Standard,55 cm,4,10000000,40.000.000,Eka,Tangerang
+2024-11-25,Dayung Setan,51 cm,2,9500000,19.000.000,Ajo,Bekasi
+2023-03-15,Semi King,20 cm,3,11800000,35.400.000,Eka,Denpasar
+2025-11-10,Standard,22 cm,1,2200000,2.200.000,Rosyid,Depok
+2024-03-26,Mata Panda,25 cm,3,8500000,25.500.000,Eka,Bandung
+2024-03-28,Standard,60 cm,5,7000000,35.000.000,Haddy,Depok
+2023-11-24,Standard,22 cm,3,2200000,6.600.000,Latif,Bekasi
+2024-07-02,Mata Panda,51 cm,4,12000000,48.000.000,Ibnu,Bogor
+2025-01-26,Standard,25 cm,2,2200000,4.400.000,Ibnu,Bekasi
+2025-12-25,Standard,45 cm,2,7000000,14.000.000,Haddy,Bekasi
+2023-02-04,Standard,25 cm,2,2200000,4.400.000,Haddy,Depok
+2025-05-05,Semi King,29 cm,3,10100000,30.300.000,Haddy,Denpasar
+2024-08-28,Mata Panda,28 cm,2,16000000,32.000.000,Latif,Depok
+2025-10-05,Standard,21 cm,3,2200000,6.600.000,Latif,Pontianak
+2023-08-27,Mata Panda,22 cm,2,9500000,19.000.000,Ibnu,Jakarta
+2024-01-21,Standard,35 cm,18,7000000,126.000.000,Latif,Bandung
+2024-03-15,Standard,25 cm,1,2200000,2.200.000,Rosyid,Bogor
+2024-02-14,Dayung Setan,38 cm,1,7000000,7.000.000,Ibnu,Tangerang
+2023-05-20,Dayung Setan,31 cm,3,8500000,25.500.000,Eka,Bogor
+2025-08-05,King,41 cm,4,9500000,38.000.000,Haddy,Tangerang
+2024-05-17,Semi King,22 cm,3,14000000,42.000.000,Latif,Jakarta
+2024-01-19,Standard,51 cm,4,9500000,38.000.000,Haddy,Yogyakarta
+2024-02-18,Semi King,30 cm,1,18100000,18.100.000,Rosyid,Bogor
+2023-01-11,Dayung Setan,60 cm,4,7000000,28.000.000,Rosyid,Bekasi
+2024-04-22,Semi King,22 cm,2,14500000,29.000.000,Ajo,Bekasi
+2024-03-18,Standard,26 cm,3,12000000,36.000.000,Haddy,Surabaya
+2024-12-15,Mata Panda,28 cm,1,17200000,17.200.000,Rosyid,Bekasi
+2023-12-19,Standard,25 cm,7,2200000,15.400.000,Haddy,Bandung
+2025-02-11,Mata Panda,36 cm,3,9500000,28.500.000,Ibnu,Depok
+2025-10-01,Mata Panda,22 cm,4,8500000,34.000.000,Ibnu,Yogyakarta
+2025-08-05,Dayung Setan,22 cm,3,5000000,15.000.000,Rosyid,Tangerang
+2024-03-06,Mata Panda,33 cm,4,7000000,28.000.000,Haddy,Semarang
+2025-12-19,Dayung Setan,30 cm,3,8500000,25.500.000,Eka,Makassar
+2023-05-09,Standard,27 cm,3,14000000,42.000.000,Ajo,Bogor
+2025-04-23,Standard,40 cm,20,7000000,140.000.000,Ajo,Bekasi
+2023-07-14,Standard,26 cm,1,5100000,5.100.000,Latif,Bogor
+2025-09-18,King,23 cm,1,15400000,15.400.000,Eka,Bogor
+2025-06-14,Standard,21 cm,3,2200000,6.600.000,Ibnu,Yogyakarta
+2023-11-05,Dayung Setan,33 cm,3,8500000,25.500.000,Latif,Yogyakarta
+2025-04-04,Standard,55 cm,10,7000000,70.000.000,Ibnu,Tangerang
+2023-10-21,Semi King,50 cm,4,14000000,56.000.000,Rosyid,Bandung
+2023-01-10,Dayung Setan,36 cm,2,10000000,20.000.000,Ajo,Jakarta
+2024-12-10,Semi King,28 cm,4,9500000,38.000.000,Eka,Bogor
+2025-10-28,King,32 cm,2,10000000,20.000.000,Haddy,Bogor
+2025-09-20,Standard,45 cm,9,7000000,63.000.000,Ibnu,Jakarta
+2024-07-01,Standard,25 cm,1,2200000,2.200.000,Eka,Bogor
+2023-01-09,Mata Panda,30 cm,3,14000000,42.000.000,Ajo,Palembang
+2024-10-01,Standard,23 cm,1,2200000,2.200.000,Latif,Bekasi
+2025-01-13,Semi King,30 cm,2,12800000,25.600.000,Rosyid,Jakarta
+2024-10-12,Standard,21 cm,3,2200000,6.600.000,Latif,Bogor
+2023-08-30,Dayung Setan,25 cm,3,7000000,21.000.000,Ibnu,Surabaya
+2025-09-19,Standard,39 cm,2,4000000,8.000.000,Ibnu,Bekasi
+2023-12-05,King,35 cm,1,8500000,8.500.000,Rosyid,Bogor
+2024-09-09,Dayung Setan,52 cm,3,12000000,36.000.000,Latif,Bandung
+2025-05-23,King,30 cm,2,9500000,19.000.000,Ibnu,Jakarta
+2024-12-31,Semi King,26 cm,4,9500000,38.000.000,Ibnu,Bekasi
+2023-05-10,Standard,45 cm,1,7000000,7.000.000,Haddy,Jakarta
+2025-01-21,Semi King,21 cm,2,14000000,28.000.000,Ibnu,Jakarta
+2025-04-25,Dayung Setan,33 cm,1,8500000,8.500.000,Ajo,Bogor
+2024-10-21,Mata Panda,24 cm,3,12000000,36.000.000,Ajo,Makassar
+2023-07-19,Standard,55 cm,1,6000000,6.000.000,Eka,Depok
+2024-03-21,Standard,41 cm,4,4300000,17.200.000,Rosyid,Yogyakarta
+2025-07-25,Standard,25 cm,1,2200000,2.200.000,Rosyid,Jakarta
+2023-05-26,Dayung Setan,31 cm,2,12000000,24.000.000,Ibnu,Tangerang
+2023-02-01,Dayung Setan,33 cm,3,9500000,28.500.000,Ajo,Medan
+2024-05-03,Semi King,39 cm,2,10000000,20.000.000,Ajo,Tangerang
+2025-08-15,King,38 cm,4,7000000,28.000.000,Rosyid,Bogor
+2023-04-10,Mata Panda,23 cm,1,9500000,9.500.000,Haddy,Bekasi
+2025-12-13,Semi King,21 cm,3,9500000,28.500.000,Haddy,Denpasar
+2023-06-21,Dayung Setan,35 cm,2,9500000,19.000.000,Haddy,Tangerang
+2024-06-15,Mata Panda,22 cm,2,12000000,24.000.000,Eka,Bogor
+2024-02-03,Dayung Setan,35 cm,3,9500000,28.500.000,Ibnu,Depok
+2023-12-30,Mata Panda,25 cm,1,11400000,11.400.000,Ajo,Bogor
+2023-07-26,King,23 cm,1,12900000,12.900.000,Haddy,Jakarta
+2024-07-16,Standard,55 cm,5,7000000,35.000.000,Ibnu,Bandung
+2024-06-29,Semi King,20 cm,2,14400000,28.800.000,Eka,Jakarta
+2025-02-18,Semi King,20 cm,3,19200000,57.600.000,Latif,Surabaya
+2023-07-03,Mata Panda,20 cm,1,10000000,10.000.000,Rosyid,Jakarta
+2024-12-25,Dayung Setan,60 cm,2,9500000,19.000.000,Eka,Depok
+2023-03-11,Mata Panda,32 cm,1,11100000,11.100.000,Eka,Depok
+2023-11-21,Standard,25 cm,2,2200000,4.400.000,Latif,Jakarta
+2024-06-23,Mata Panda,50 cm,2,10000000,20.000.000,Ibnu,Jakarta
+2025-06-30,Mata Panda,60 cm,3,8500000,25.500.000,Rosyid,Bogor
+2025-06-01,King,23 cm,1,12700000,12.700.000,Ajo,Jakarta
+2024-01-21,Semi King,30 cm,4,14000000,56.000.000,Eka,Tangerang
+2025-08-13,Standard,25 cm,15,2200000,33.000.000,Rosyid,Bekasi
+2024-06-16,Standard,25 cm,29,2200000,63.800.000,Ajo,Bandung
+2023-01-02,Dayung Setan,35 cm,3,9500000,28.500.000,Eka,Medan
+2024-02-27,Standard,35 cm,8,7000000,56.000.000,Rosyid,Depok
+2024-08-23,Standard,25 cm,1,2200000,2.200.000,Latif,Tangerang
+2023-06-05,Semi King,22 cm,3,14200000,42.600.000,Ajo,Makassar
+2025-02-09,Semi King,30 cm,1,18900000,18.900.000,Rosyid,Bekasi
+2023-11-17,Standard,21 cm,3,2200000,6.600.000,Rosyid,Tangerang
+2023-10-19,Standard,40 cm,7,7000000,49.000.000,Latif,Yogyakarta
+2023-02-06,Mata Panda,29 cm,3,16000000,48.000.000,Haddy,Pontianak
+2023-01-09,Semi King,40 cm,1,14400000,14.400.000,Eka,Tangerang
+2025-11-09,Semi King,26 cm,4,16000000,64.000.000,Ibnu,Yogyakarta
+2024-11-09,Standard,60 cm,6,7000000,42.000.000,Ibnu,Jakarta
+2025-08-05,Semi King,24 cm,3,13600000,40.800.000,Haddy,Surabaya
+2025-09-18,Standard,25 cm,2,2200000,4.400.000,Latif,Jakarta
+2023-10-23,Standard,55 cm,1,7000000,7.000.000,Eka,Jakarta
+2025-08-06,Dayung Setan,20 cm,3,5000000,15.000.000,Rosyid,Bekasi
+2023-06-15,Standard,25 cm,7,2200000,15.400.000,Latif,Yogyakarta
+2025-05-04,Dayung Setan,55 cm,3,9500000,28.500.000,Rosyid,Palembang
+2025-10-10,Semi King,21 cm,2,9500000,19.000.000,Haddy,Jakarta
+2025-07-27,Standard,25 cm,1,2200000,2.200.000,Ibnu,Tangerang
+2024-08-14,King,24 cm,1,14400000,14.400.000,Ajo,Tangerang
+2025-10-09,Standard,55 cm,1,9500000,9.500.000,Latif,Jakarta
+2023-07-10,Dayung Setan,15 cm,2,16000000,32.000.000,Latif,Bogor
+2024-12-06,Semi King,20 cm,2,15500000,31.000.000,Rosyid,Bogor
+2024-05-28,Standard,40 cm,12,7000000,84.000.000,Eka,Bandung
+2023-11-25,Semi King,30 cm,2,11800000,23.600.000,Latif,Bogor
+2024-03-09,Semi King,24 cm,2,14300000,28.600.000,Latif,Jakarta
+2024-09-30,Standard,55 cm,1,7000000,7.000.000,Latif,Jakarta
+2025-02-16,Semi King,25 cm,1,13100000,13.100.000,Ibnu,Bekasi
+2023-02-26,Mata Panda,33 cm,3,9500000,28.500.000,Latif,Semarang
+2024-09-01,Standard,25 cm,2,2200000,4.400.000,Eka,Jakarta
+2024-08-30,Standard,30 cm,31,2200000,68.200.000,Haddy,Bekasi
+2025-01-15,Standard,50 cm,18,7000000,126.000.000,Ibnu,Bogor
+2025-04-23,Standard,30 cm,11,2200000,24.200.000,Rosyid,Bekasi
+2024-06-21,Standard,50 cm,2,7000000,14.000.000,Eka,Tangerang
+2024-12-06,Standard,29 cm,1,7000000,7.000.000,Latif,Jakarta
+2024-08-11,Dayung Setan,22 cm,2,12000000,24.000.000,Ibnu,Bekasi
+2023-08-27,Standard,60 cm,3,16000000,48.000.000,Latif,Pontianak
+2024-09-07,Mata Panda,33 cm,1,30000000,30.000.000,Latif,Depok
+2023-01-03,Standard,41 cm,2,14000000,28.000.000,Ajo,Jakarta
+2023-08-30,Standard,60 cm,22,7000000,154.000.000,Rosyid,Tangerang
+2025-05-18,Semi King,31 cm,2,15300000,30.600.000,Ibnu,Depok
+2025-11-25,Standard,22 cm,3,2200000,6.600.000,Rosyid,Palembang
+2024-09-21,Standard,25 cm,2,2200000,4.400.000,Rosyid,Bogor
+2023-07-29,Standard,25 cm,2,2200000,4.400.000,Eka,Depok
+2024-12-05,Standard,50 cm,2,7000000,14.000.000,Eka,Bekasi
+2025-06-25,Standard,25 cm,2,2200000,4.400.000,Rosyid,Bekasi
+2025-11-10,Mata Panda,56 cm,4,9500000,38.000.000,Rosyid,Jakarta
+2024-11-17,Standard,25 cm,2,2200000,4.400.000,Haddy,Depok
+2024-09-05,Dayung Setan,29 cm,3,7000000,21.000.000,Ajo,Makassar
+2025-05-14,Standard,26 cm,4,16000000,64.000.000,Ajo,Bogor
+2025-11-09,Semi King,25 cm,4,16000000,64.000.000,Ibnu,Bogor
+2025-03-20,King,23 cm,4,10000000,40.000.000,Haddy,Bogor
+2023-11-14,Mata Panda,21 cm,3,7000000,21.000.000,Eka,Denpasar
+2023-02-17,Semi King,29 cm,2,19700000,39.400.000,Latif,Bogor
+2023-03-02,Standard,60 cm,5,7000000,35.000.000,Rosyid,Yogyakarta
+2025-07-26,Standard,25 cm,16,2200000,35.200.000,Eka,Yogyakarta
+2023-09-09,King,27 cm,3,14000000,42.000.000,Eka,Denpasar
+2025-11-15,Standard,55 cm,3,10000000,30.000.000,Eka,Makassar
+2024-11-30,Standard,25 cm,2,2200000,4.400.000,Ajo,Jakarta
+2025-03-19,Semi King,25 cm,3,15700000,47.100.000,Ibnu,Medan
+2023-12-11,Dayung Setan,39 cm,3,8500000,25.500.000,Latif,Medan
+2024-02-17,Standard,35 cm,28,7000000,196.000.000,Eka,Bogor
+2024-11-08,Standard,40 cm,3,4000000,12.000.000,Latif,Semarang
+2025-05-08,Dayung Setan,41 cm,4,16000000,64.000.000,Latif,Bandung
+2023-12-16,Mata Panda,35 cm,1,30000000,30.000.000,Ajo,Jakarta
+2025-06-10,Semi King,60 cm,3,12000000,36.000.000,Eka,Medan
+2023-01-18,Standard,21 cm,3,2200000,6.600.000,Rosyid,Tangerang
+2025-03-07,Mata Panda,23 cm,1,11900000,11.900.000,Haddy,Bekasi
+2025-08-01,Standard,40 cm,1,16000000,16.000.000,Ibnu,Tangerang
+2024-12-15,Semi King,36 cm,4,16000000,64.000.000,Eka,Semarang
+2023-06-22,Semi King,31 cm,3,11000000,33.000.000,Eka,Tangerang
+2023-04-12,Standard,50 cm,2,7000000,14.000.000,Ajo,Jakarta
+2023-07-13,Semi King,31 cm,3,14200000,42.600.000,Latif,Bekasi
+2023-11-10,Standard,25 cm,7,2200000,15.400.000,Rosyid,Bekasi
+2023-11-09,Standard,30 cm,24,2200000,52.800.000,Eka,Tangerang
+2023-08-23,King,23 cm,4,9500000,38.000.000,Ajo,Bandung
+2023-01-12,Standard,50 cm,2,2300000,4.600.000,Ibnu,Jakarta
+2023-08-29,Semi King,33 cm,1,12000000,12.000.000,Ajo,Bogor
+2024-01-16,Mata Panda,20 cm,3,8500000,25.500.000,Eka,Pontianak
+2025-09-24,Semi King,27 cm,1,11200000,11.200.000,Ajo,Tangerang
+2023-02-12,King,23 cm,1,17200000,17.200.000,Rosyid,Bogor
+2025-11-12,Dayung Setan,35 cm,2,9500000,19.000.000,Haddy,Depok
+2023-03-17,Standard,21 cm,3,2200000,6.600.000,Rosyid,Jakarta
+2025-07-18,Standard,30 cm,27,2200000,59.400.000,Ajo,Jakarta
+2025-12-22,Standard,25 cm,2,2200000,4.400.000,Ajo,Jakarta
+2024-04-03,Dayung Setan,37 cm,1,10000000,10.000.000,Eka,Depok
+2025-03-08,Standard,35 cm,15,7000000,105.000.000,Haddy,Jakarta
+2024-07-13,Standard,25 cm,24,2200000,52.800.000,Ibnu,Yogyakarta
+2025-10-02,King,60 cm,3,9500000,28.500.000,Rosyid,Depok
+2024-12-27,Dayung Setan,35 cm,3,9500000,28.500.000,Latif,Tangerang
+2025-02-10,Standard,10 cm,5,1200000,6.000.000,Ajo,Semarang
+2025-07-16,Standard,25 cm,3,2200000,6.600.000,Eka,Depok
+2023-09-15,Standard,25 cm,1,2200000,2.200.000,Latif,Bekasi
+2025-08-30,Standard,15 cm,1,1400000,1.400.000,Latif,Bogor
+2023-02-12,Standard,40 cm,10,7000000,70.000.000,Haddy,Bekasi
+2024-08-14,Standard,25 cm,7,2200000,15.400.000,Ibnu,Depok
+2024-07-19,Mata Panda,24 cm,4,12000000,48.000.000,Haddy,Tangerang
+2025-05-03,Standard,25 cm,1,2200000,2.200.000,Ajo,Tangerang
+2023-01-25,Standard,40 cm,27,7000000,189.000.000,Ajo,Jakarta
+2024-12-10,Standard,25 cm,3,2200000,6.600.000,Ibnu,Palembang
+2023-07-27,Standard,25 cm,2,2200000,4.400.000,Ibnu,Bogor
+2024-01-14,Standard,15 cm,1,1400000,1.400.000,Latif,Depok
+2024-12-09,Standard,15 cm,5,1200000,6.000.000,Eka,Bandung
+2023-04-08,Standard,40 cm,3,4000000,12.000.000,Rosyid,Depok
+2024-12-26,Standard,25 cm,1,2200000,2.200.000,Rosyid,Depok
+2025-10-04,Mata Panda,26 cm,1,16000000,16.000.000,Eka,Jakarta
+2024-01-31,Standard,25 cm,14,2200000,30.800.000,Rosyid,Tangerang
+2025-10-26,Dayung Setan,20 cm,4,8500000,34.000.000,Rosyid,Jakarta
+2025-06-25,Standard,15 cm,3,1400000,4.200.000,Haddy,Bogor
+2023-03-31,Semi King,50 cm,4,12000000,48.000.000,Eka,Bogor
+2023-04-04,Standard,50 cm,8,7000000,56.000.000,Haddy,Tangerang
+2024-04-07,Semi King,28 cm,3,18800000,56.400.000,Haddy,Bandung
+2024-07-10,Standard,12 cm,1,850000,850.000,Latif,Bekasi
+2023-07-14,Mata Panda,21 cm,1,9500000,9.500.000,Ajo,Depok
+2023-07-23,Semi King,40 cm,2,12000000,24.000.000,Haddy,Depok
+2023-06-27,Semi King,60 cm,1,16100000,16.100.000,Ibnu,Depok
+2024-12-10,Standard,50 cm,1,7000000,7.000.000,Latif,Tangerang
+2023-11-30,Standard,55 cm,19,7000000,133.000.000,Ibnu,Bogor
+2024-05-14,King,41 cm,1,9500000,9.500.000,Ibnu,Bekasi
+2025-01-18,Dayung Setan,60 cm,3,16500000,49.500.000,Ajo,Denpasar
+2023-12-05,Dayung Setan,29 cm,1,8500000,8.500.000,Latif,Tangerang
+2025-07-27,Standard,11 cm,4,1200000,4.800.000,Latif,Bandung
+2023-06-20,Semi King,33 cm,2,17000000,34.000.000,Rosyid,Depok
+2023-12-25,Standard,15 cm,4,1200000,4.800.000,Eka,Depok
+2023-04-24,Mata Panda,30 cm,1,10000000,10.000.000,Rosyid,Bogor
+2025-01-12,Standard,25 cm,1,2200000,2.200.000,Rosyid,Bekasi
+2025-10-20,Standard,25 cm,15,2200000,33.000.000,Eka,Depok
+2025-06-03,Standard,11 cm,6,1200000,7.200.000,Rosyid,Semarang
+2024-01-02,Standard,32 cm,3,7500000,22.500.000,Eka,Palembang
+2024-02-06,Dayung Setan,20 cm,3,5000000,15.000.000,Rosyid,Jakarta
+2023-11-14,Standard,55 cm,7,7000000,49.000.000,Eka,Bogor
+2023-06-13,Standard,14 cm,4,1200000,4.800.000,Haddy,Semarang
+2023-12-28,Semi King,20 cm,2,11100000,22.200.000,Eka,Tangerang
+2025-06-15,Standard,25 cm,1,2200000,2.200.000,Rosyid,Depok
+2024-04-20,Standard,10 cm,1,700000,700.000,Rosyid,Depok
+2023-05-10,King,51 cm,3,9500000,28.500.000,Ajo,Bogor
+2023-02-05,Dayung Setan,30 cm,4,7000000,28.000.000,Ajo,Yogyakarta
+2024-06-04,Standard,60 cm,6,7000000,42.000.000,Ajo,Yogyakarta
+2023-01-19,King,50 cm,3,16000000,48.000.000,Rosyid,Pontianak
+2024-03-30,Standard,13 cm,3,1200000,3.600.000,Latif,Depok
+2024-11-25,King,51 cm,1,7000000,7.000.000,Eka,Bogor
+2025-03-11,Standard,13 cm,7,1200000,8.400.000,Haddy,Bandung
+2024-10-14,Dayung Setan,24 cm,4,8500000,34.000.000,Eka,Bogor
+2025-08-26,Standard,25 cm,1,2200000,2.200.000,Ajo,Bekasi
+2025-01-06,Standard,25 cm,7,2200000,15.400.000,Ibnu,Bekasi
+2025-01-25,Mata Panda,25 cm,1,18900000,18.900.000,Latif,Tangerang
+2025-06-09,Standard,11 cm,1,850000,850.000,Latif,Jakarta
+2023-07-30,Semi King,52 cm,4,14000000,56.000.000,Rosyid,Jakarta
+2024-04-07,Dayung Setan,26 cm,4,9500000,38.000.000,Rosyid,Bandung
+2024-06-12,Semi King,20 cm,3,7000000,21.000.000,Haddy,Tangerang
+2023-09-03,Mata Panda,26 cm,3,8500000,25.500.000,Haddy,Denpasar
+2023-09-14,Standard,22 cm,3,2200000,6.600.000,Eka,Medan
+2025-01-17,Semi King,30 cm,2,9500000,19.000.000,Ajo,Bekasi
+2025-11-27,Standard,10 cm,3,1200000,3.600.000,Ajo,Semarang
+2023-05-20,Standard,25 cm,3,2200000,6.600.000,Latif,Tangerang
+2024-08-18,Standard,30 cm,2,2300000,4.600.000,Haddy,Jakarta
+2025-07-01,Dayung Setan,31 cm,2,8500000,17.000.000,Ibnu,Tangerang
+2025-11-18,Mata Panda,24 cm,1,8500000,8.500.000,Eka,Tangerang
+2025-06-29,Standard,25 cm,3,2200000,6.600.000,Rosyid,Yogyakarta
+2023-02-10,Standard,14 cm,4,1200000,4.800.000,Eka,Depok
+2024-07-02,Standard,25 cm,1,2200000,2.200.000,Rosyid,Bogor
+2023-05-20,Standard,21 cm,3,2200000,6.600.000,Rosyid,Medan
+2023-02-09,Standard,10 cm,3,1200000,3.600.000,Ibnu,Bandung
+2023-11-21,Standard,25 cm,2,2200000,4.400.000,Latif,Depok
+2025-11-14,Standard,51 cm,1,6000000,6.000.000,Ajo,Tangerang
+2023-08-27,Standard,22 cm,3,2200000,6.600.000,Eka,Medan
+2025-05-06,Standard,45 cm,9,7000000,63.000.000,Ibnu,Bekasi
+2023-05-22,King,21 cm,1,12000000,12.000.000,Latif,Bogor
+2024-01-31,Standard,10 cm,1,850000,850.000,Haddy,Jakarta
+2023-01-25,Standard,34 cm,1,16000000,16.000.000,Rosyid,Jakarta
+2025-08-08,Standard,38 cm,1,4000000,4.000.000,Eka,Bekasi
+2025-09-22,Standard,25 cm,2,2200000,4.400.000,Ibnu,Tangerang
+2025-11-23,Semi King,33 cm,2,9500000,19.000.000,Latif,Depok
+2024-07-30,Standard,25 cm,2,2200000,4.400.000,Ibnu,Jakarta
+2023-05-26,Mata Panda,32 cm,3,9500000,28.500.000,Ibnu,Medan
+2025-09-09,Mata Panda,20 cm,1,7000000,7.000.000,Rosyid,Bogor
+2023-06-17,Standard,14 cm,6,1200000,7.200.000,Rosyid,Tangerang
+2025-09-26,Standard,50 cm,17,7000000,119.000.000,Ajo,Bekasi
+2024-06-24,Standard,41 cm,2,4300000,8.600.000,Ibnu,Tangerang
+2024-07-18,Standard,25 cm,1,2200000,2.200.000,Ibnu,Bogor
+2023-06-13,Standard,25 cm,9,2200000,19.800.000,Latif,Tangerang
+2025-01-17,Dayung Setan,20 cm,2,5000000,10.000.000,Eka,Bekasi
+2024-02-07,King,31 cm,1,12000000,12.000.000,Haddy,Depok
+2024-06-16,Semi King,34 cm,4,14000000,56.000.000,Latif,Jakarta
+2025-07-13,Standard,11 cm,1,850000,850.000,Rosyid,Bekasi
+2024-05-29,Dayung Setan,26 cm,3,12000000,36.000.000,Ajo,Jakarta
+2023-07-04,Standard,15 cm,1,750000,750.000,Ibnu,Tangerang
+2025-01-14,Dayung Setan,21 cm,3,14000000,42.000.000,Eka,Jakarta
+2025-05-28,Standard,25 cm,2,2200000,4.400.000,Eka,Jakarta
+2023-04-17,Dayung Setan,31 cm,3,8500000,25.500.000,Ibnu,Makassar
+2025-10-17,Standard,25 cm,3,2200000,6.600.000,Eka,Bogor
+2025-07-25,Standard,25 cm,15,2200000,33.000.000,Latif,Yogyakarta
+2024-05-06,Semi King,20 cm,2,10600000,21.200.000,Rosyid,Jakarta
+2024-02-18,Semi King,55 cm,3,8500000,25.500.000,Eka,Tangerang
+2023-12-13,Standard,25 cm,3,2200000,6.600.000,Latif,Surabaya
+2023-07-14,Standard,15 cm,3,1400000,4.200.000,Haddy,Yogyakarta
+2023-02-12,Standard,60 cm,2,7000000,14.000.000,Latif,Depok
+2025-12-21,Dayung Setan,51 cm,3,10000000,30.000.000,Eka,Makassar
+2025-10-17,Semi King,26 cm,3,17200000,51.600.000,Ibnu,Yogyakarta
+2025-06-03,Standard,25 cm,2,2200000,4.400.000,Eka,Jakarta
+2023-02-27,King,38 cm,4,12000000,48.000.000,Ajo,Semarang
+2025-04-11,Standard,13 cm,7,1200000,8.400.000,Latif,Depok
+2024-06-23,Semi King,28 cm,2,14000000,28.000.000,Eka,Bogor
+2025-05-20,Standard,12 cm,5,1200000,6.000.000,Rosyid,Tangerang
+2025-10-29,Dayung Setan,31 cm,3,14000000,42.000.000,Haddy,Depok
+2024-08-18,Standard,30 cm,9,2200000,19.800.000,Rosyid,Depok
+2023-07-14,Standard,11 cm,1,750000,750.000,Ajo,Bekasi
+2025-10-14,Semi King,50 cm,4,16000000,64.000.000,Haddy,Tangerang
+2025-01-12,Standard,10 cm,7,1200000,8.400.000,Rosyid,Tangerang
+2024-12-07,Standard,12 cm,1,900000,900.000,Ajo,Bekasi
+2024-06-06,Semi King,55 cm,4,7000000,28.000.000,Eka,Semarang
+2025-05-10,Mata Panda,28 cm,2,12000000,24.000.000,Ajo,Jakarta
+2023-08-30,Standard,40 cm,23,7000000,161.000.000,Eka,Jakarta
+2023-04-12,Dayung Setan,21 cm,2,8500000,17.000.000,Rosyid,Tangerang
+2023-06-09,Standard,25 cm,28,2200000,61.600.000,Eka,Bogor
+2023-03-06,Standard,13 cm,1,750000,750.000,Haddy,Tangerang
+2025-04-21,Standard,28 cm,4,12000000,48.000.000,Ibnu,Yogyakarta
+2025-05-02,King,27 cm,3,12000000,36.000.000,Latif,Depok
+2024-07-18,Semi King,35 cm,3,10800000,32.400.000,Rosyid,Palembang
+2025-10-20,Standard,15 cm,1,1500000,1.500.000,Eka,Bogor
+2024-01-01,King,23 cm,1,10100000,10.100.000,Rosyid,Tangerang
+2025-06-21,Standard,14 cm,6,1200000,7.200.000,Rosyid,Bogor
+2024-11-05,Semi King,35 cm,2,14700000,29.400.000,Rosyid,Tangerang
+2023-12-06,Standard,15 cm,7,1200000,8.400.000,Haddy,Tangerang
+2025-03-01,Semi King,51 cm,3,8500000,25.500.000,Ibnu,Pontianak
+2025-03-23,Mata Panda,22 cm,3,9500000,28.500.000,Ibnu,Denpasar
+2023-06-23,Standard,55 cm,3,7000000,21.000.000,Ajo,Tangerang
+2024-06-21,Semi King,28 cm,2,13500000,27.000.000,Haddy,Depok
+2025-07-27,Standard,25 cm,3,2200000,6.600.000,Rosyid,Medan
+2025-07-04,Standard,27 cm,2,8500000,17.000.000,Ibnu,Bogor
+2024-03-15,Standard,12 cm,1,800000,800.000,Eka,Depok
+2023-02-24,Standard,37 cm,1,14000000,14.000.000,Ajo,Jakarta
+2023-12-01,King,22 cm,1,10700000,10.700.000,Rosyid,Jakarta
+2023-03-14,Standard,60 cm,5,7000000,35.000.000,Ajo,Bekasi
+2025-08-14,Dayung Setan,29 cm,2,12000000,24.000.000,Haddy,Bekasi
+2023-07-08,Standard,35 cm,8,7000000,56.000.000,Rosyid,Bogor
+2025-01-25,Standard,50 cm,2,7000000,14.000.000,Latif,Bogor
+2024-07-13,Standard,25 cm,10,2200000,22.000.000,Eka,Bekasi
+2023-11-26,Standard,15 cm,1,1300000,1.300.000,Rosyid,Bekasi
+2023-11-30,Dayung Setan,25 cm,2,7000000,14.000.000,Eka,Bogor
+2024-12-03,Standard,25 cm,15,2200000,33.000.000,Ibnu,Bandung
+2023-07-21,Standard,60 cm,11,7000000,77.000.000,Ibnu,Bandung
+2025-05-30,King,20 cm,2,13300000,26.600.000,Rosyid,Jakarta
+2023-10-21,Standard,20 cm,3,2200000,6.600.000,Ajo,Bandung
+2025-11-25,Standard,60 cm,5,7000000,35.000.000,Latif,Bogor
+2024-05-03,King,50 cm,2,7000000,14.000.000,Ajo,Tangerang
+2024-01-11,Standard,15 cm,2,1400000,2.800.000,Eka,Tangerang
+2025-07-30,Semi King,36 cm,3,10000000,30.000.000,Ajo,Denpasar
+2025-02-26,Standard,25 cm,1,2200000,2.200.000,Ibnu,Depok
+2024-09-14,Standard,15 cm,2,1400000,2.800.000,Ajo,Bekasi
+2025-09-22,King,55 cm,3,14000000,42.000.000,Latif,Jakarta
+2023-09-16,Standard,15 cm,1,1400000,1.400.000,Ibnu,Jakarta
+2025-02-07,Standard,15 cm,1,1300000,1.300.000,Rosyid,Bogor
+2023-12-14,Dayung Setan,23 cm,2,7000000,14.000.000,Rosyid,Jakarta
+2025-07-12,Dayung Setan,40 cm,3,7000000,21.000.000,Ibnu,Medan
+2023-05-07,Standard,45 cm,9,7000000,63.000.000,Rosyid,Bekasi
+2023-01-19,Standard,50 cm,21,7000000,147.000.000,Ajo,Bekasi
+2024-07-05,Standard,25 cm,20,2200000,44.000.000,Latif,Bogor
+2024-03-12,Standard,12 cm,3,1200000,3.600.000,Rosyid,Bogor
+2023-12-02,Semi King,28 cm,3,8500000,25.500.000,Latif,Surabaya
+2023-07-18,Dayung Setan,36 cm,3,9500000,28.500.000,Rosyid,Depok
+2023-07-28,Standard,25 cm,2,2200000,4.400.000,Ibnu,Bogor
+2024-03-20,Standard,25 cm,8,2200000,17.600.000,Ajo,Yogyakarta
+2023-08-25,Standard,11 cm,5,1200000,6.000.000,Ajo,Bandung
+2024-05-09,Standard,21 cm,3,2200000,6.600.000,Latif,Bandung
+2023-09-09,Dayung Setan,39 cm,4,7000000,28.000.000,Eka,Bogor
+2023-12-27,Standard,15 cm,1,750000,750.000,Ajo,Tangerang
+2025-02-15,King,39 cm,2,10000000,20.000.000,Ajo,Jakarta
+2024-02-03,Standard,37 cm,4,7000000,28.000.000,Latif,Bekasi
+2025-01-31,Mata Panda,31 cm,3,7000000,21.000.000,Rosyid,Denpasar
+2023-11-03,Mata Panda,21 cm,1,7000000,7.000.000,Ajo,Bogor
+2023-10-24,Standard,15 cm,1,750000,750.000,Rosyid,Depok
+2023-08-02,Standard,14 cm,7,1200000,8.400.000,Ajo,Tangerang
+2024-08-07,Standard,25 cm,16,2200000,35.200.000,Eka,Semarang
+2024-05-22,Standard,30 cm,3,3700000,11.100.000,Eka,Bandung
+2023-08-15,Semi King,41 cm,3,12000000,36.000.000,Ajo,Bekasi
+2023-11-16,Standard,22 cm,3,2200000,6.600.000,Rosyid,Surabaya
+2023-12-01,Semi King,27 cm,3,8500000,25.500.000,Ibnu,Jakarta
+2025-07-01,Standard,40 cm,10,7000000,70.000.000,Haddy,Bogor
+2023-04-29,Standard,15 cm,1,1400000,1.400.000,Latif,Bekasi
+2024-08-29,Standard,41 cm,1,10000000,10.000.000,Ajo,Depok
+2023-04-23,King,34 cm,1,14000000,14.000.000,Haddy,Bekasi
+2023-12-05,Standard,50 cm,1,7000000,7.000.000,Haddy,Jakarta
+2025-12-02,Semi King,31 cm,4,16000000,64.000.000,Rosyid,Tangerang
+2023-12-20,Standard,15 cm,2,1300000,2.600.000,Rosyid,Tangerang
+2025-01-31,Standard,15 cm,2,16000000,32.000.000,Ibnu,Bekasi
+2024-01-19,Standard,15 cm,4,1400000,5.600.000,Eka,Tangerang
+2025-12-27,Standard,21 cm,3,2200000,6.600.000,Eka,Medan
+2025-10-30,Standard,25 cm,3,2200000,6.600.000,Ajo,Medan
+2024-05-31,Mata Panda,21 cm,3,10000000,30.000.000,Rosyid,Palembang
+2024-04-13,Standard,22 cm,3,2200000,6.600.000,Ibnu,Bogor
+2024-02-19,Mata Panda,34 cm,4,12000000,48.000.000,Haddy,Jakarta
+2023-08-17,Semi King,33 cm,1,13100000,13.100.000,Ibnu,Depok
+2024-12-30,Standard,21 cm,3,2200000,6.600.000,Eka,Makassar
+2023-11-11,Standard,25 cm,1,2200000,2.200.000,Eka,Bekasi
+2023-08-04,Standard,21 cm,3,2200000,6.600.000,Eka,Bandung
+2024-01-18,Mata Panda,35 cm,1,12000000,12.000.000,Eka,Jakarta
+2023-10-02,King,29 cm,2,9500000,19.000.000,Rosyid,Depok
+2023-08-11,Standard,25 cm,2,2200000,4.400.000,Latif,Bekasi
+2025-06-11,Standard,15 cm,1,1400000,1.400.000,Eka,Tangerang
+2023-01-16,Standard,30 cm,12,2200000,26.400.000,Rosyid,Semarang
+2024-12-11,Standard,15 cm,2,1300000,2.600.000,Rosyid,Tangerang
+2025-08-31,Standard,25 cm,2,2200000,4.400.000,Haddy,Bekasi
+2023-01-19,Mata Panda,30 cm,4,14000000,56.000.000,Haddy,Semarang
+2025-12-18,Standard,15 cm,3,1300000,3.900.000,Ajo,Palembang
+2024-05-06,Semi King,32 cm,3,13800000,41.400.000,Ajo,Bogor
+2025-07-05,Standard,13 cm,7,1200000,8.400.000,Eka,Tangerang
+2024-05-24,Dayung Setan,31 cm,1,8500000,8.500.000,Ibnu,Tangerang
+2025-06-15,Dayung Setan,34 cm,1,8500000,8.500.000,Eka,Depok
+2023-05-28,Semi King,40 cm,1,9500000,9.500.000,Ajo,Jakarta
+2024-03-17,Standard,35 cm,26,7000000,182.000.000,Rosyid,Depok
+2025-06-04,Standard,11 cm,3,1200000,3.600.000,Ajo,Medan
+2024-11-12,Semi King,34 cm,3,10000000,30.000.000,Ibnu,Surabaya
+2024-11-11,Standard,25 cm,1,2200000,2.200.000,Latif,Depok
+2023-12-04,Dayung Setan,29 cm,3,9500000,28.500.000,Latif,Jakarta
+2025-05-02,King,26 cm,4,7000000,28.000.000,Haddy,Semarang
+2023-11-04,Standard,25 cm,2,2200000,4.400.000,Rosyid,Jakarta
+2023-05-10,Mata Panda,29 cm,3,12000000,36.000.000,Haddy,Denpasar
+2025-01-20,Dayung Setan,27 cm,3,8500000,25.500.000,Rosyid,Jakarta
+2024-11-22,Dayung Setan,28 cm,3,8500000,25.500.000,Eka,Surabaya
+2025-03-10,Semi King,34 cm,4,9500000,38.000.000,Rosyid,Jakarta
+2025-07-24,Standard,40 cm,18,7000000,126.000.000,Haddy,Bandung
+2023-11-16,Standard,12 cm,1,750000,750.000,Rosyid,Jakarta
+2023-11-19,King,23 cm,1,14400000,14.400.000,Ajo,Depok
+2023-10-21,Semi King,39 cm,3,12000000,36.000.000,Ibnu,Bandung
+2025-09-20,Standard,40 cm,3,4000000,12.000.000,Eka,Bandung
+2025-10-28,Standard,50 cm,1,7000000,7.000.000,Ibnu,Tangerang
+2025-01-03,Dayung Setan,31 cm,3,16000000,48.000.000,Ibnu,Semarang
+2024-03-27,King,50 cm,1,8500000,8.500.000,Latif,Bekasi
+2023-04-04,Standard,13 cm,5,1200000,6.000.000,Ajo,Bekasi
+2023-02-22,Standard,22 cm,3,2200000,6.600.000,Eka,Jakarta
+2025-02-12,Standard,10 cm,1,700000,700.000,Latif,Jakarta
+2023-04-21,Semi King,52 cm,4,16000000,64.000.000,Latif,Jakarta
+2024-02-01,Standard,25 cm,3,2200000,6.600.000,Eka,Bandung
+2023-11-08,Standard,10 cm,6,1200000,7.200.000,Latif,Bekasi
+2023-10-30,Semi King,35 cm,2,14100000,28.200.000,Ajo,Depok
+2024-07-18,Standard,25 cm,2,2200000,4.400.000,Latif,Bekasi
+2023-08-19,Semi King,50 cm,3,9500000,28.500.000,Rosyid,Pontianak
+2023-03-02,Special,33 cm,4,9500000,38000000,Ajo,Bogor
+2025-02-18,Shortbody,23 cm,2,8500000,17000000,Haddy,Jakarta
+2024-08-24,Slayer,28 cm,1,8500000,8500000,Ajo,Bogor
+2024-11-05,Shortbody,56 cm,5,12000000,60000000,Latif,Jakarta
+2023-12-17,Slayer,35 cm,5,9500000,47500000,Latif,Tangerang
+2023-04-06,Sumo,26 cm,5,8500000,42500000,Eka,Bandung
+2024-01-18,Slayer,40 cm,2,12000000,24000000,Ibnu,Jakarta
+2023-10-27,Sepauk,26 cm,5,12000000,60000000,Ibnu,Tangerang
+2023-03-08,Special,37 cm,2,13500000,27000000,Ajo,Tangerang
+2024-10-23,Shortbody,25 cm,4,9500000,38000000,Eka,Bekasi
+2023-11-07,Sepauk,30 cm,3,5000000,15000000,Eka,Palembang
+2025-09-24,Sumo,52 cm,2,8500000,17000000,Haddy,Bogor
+2025-12-23,Special,52 cm,5,7000000,35000000,Eka,Tangerang
+2025-09-09,Sumo,33 cm,3,7000000,21000000,Rosyid,Makassar
+2023-05-07,Sepauk,36 cm,5,8500000,42500000,Rosyid,Depok
+2024-09-22,Slayer,33 cm,1,10000000,10000000,Latif,Bogor
+2024-03-08,Shortbody,38 cm,1,10000000,10000000,Rosyid,Depok
+2023-12-23,Special,37 cm,1,13100000,13100000,Ibnu,Bekasi
+2024-07-17,Special,36 cm,2,14000000,28000000,Haddy,Tangerang
+2023-05-06,Sumo,26 cm,2,7000000,14000000,Latif,Jakarta
+2023-01-14,Special,37 cm,5,14000000,70000000,Haddy,Tangerang
+2025-02-20,Sepauk,21 cm,4,5000000,20000000,Ajo,Palembang
+2023-05-16,Special,40 cm,3,7000000,21000000,Haddy,Palembang
+2023-03-31,Sumo,31 cm,2,7000000,14000000,Ibnu,Bogor
+2023-03-30,Special,34 cm,3,10000000,30000000,Rosyid,Semarang
+2024-11-11,Shortbody,20 cm,1,8500000,8500000,Latif,Tangerang
+2024-09-03,Slayer,35 cm,1,10000000,10000000,Haddy,Bekasi
+2025-11-25,Special,32 cm,1,12000000,12000000,Latif,Depok
+2025-11-10,Special,33 cm,1,16000000,16000000,Latif,Tangerang
+2024-02-18,Sumo,52 cm,4,16000000,64000000,Haddy,Depok
+2023-03-15,Sumo,55 cm,5,10000000,50000000,Haddy,Bandung
+2024-01-08,Slayer,22 cm,2,10000000,20000000,Haddy,Depok
+2023-01-11,Special,50 cm,5,12000000,60000000,Rosyid,Semarang
+2024-04-23,Shortbody,23 cm,1,16900000,16900000,Ibnu,Bogor
+2025-08-16,Shortbody,30 cm,2,19500000,39000000,Haddy,Jakarta
+2025-03-02,Special,37 cm,4,12000000,48000000,Eka,Jakarta
+2023-10-21,Sepauk,26 cm,4,5000000,20000000,Latif,Bogor
+2023-02-05,Shortbody,21 cm,1,12000000,12000000,Ibnu,Bekasi
+2024-01-07,Slayer,31 cm,2,9500000,19000000,Ajo,Tangerang
+2024-06-03,Sepauk,40 cm,5,14000000,70000000,Rosyid,Depok
+2025-02-11,Special,30 cm,1,7000000,7000000,Ajo,Tangerang
+2025-05-27,Sumo,26 cm,5,9500000,47500000,Rosyid,Yogyakarta
+2025-02-17,Shortbody,29 cm,1,14600000,14600000,Haddy,Bogor
+2025-04-06,Slayer,24 cm,1,8500000,8500000,Ibnu,Bogor
+2024-05-30,Sumo,31 cm,3,16000000,48000000,Ibnu,Medan
+2025-06-30,Sumo,29 cm,3,8500000,25500000,Eka,Makassar
+2023-11-10,Shortbody,33 cm,4,7000000,28000000,Eka,Denpasar
+2023-08-07,Slayer,39 cm,4,10000000,40000000,Ibnu,Palembang
+2025-05-23,Sepauk,22 cm,10,5000000,50000000,Ibnu,Yogyakarta
+2023-09-05,Sepauk,29 cm,10,5000000,50000000,Ibnu,Tangerang
+2023-09-24,Special,55 cm,2,7000000,14000000,Rosyid,Jakarta
+2024-09-25,Sumo,27 cm,12,7000000,84000000,Ajo,Depok
+2023-09-18,Slayer,34 cm,1,19000000,19000000,Ibnu,Tangerang
+2024-08-24,Sepauk,33 cm,4,5000000,20000000,Eka,Palembang
+2025-10-21,Slayer,40 cm,3,10000000,30000000,Rosyid,Pontianak
+2023-12-01,Slayer,20 cm,2,8500000,17000000,Haddy,Bogor
+2023-03-16,Shortbody,24 cm,1,10300000,10300000,Eka,Depok
+2024-11-06,Slayer,50 cm,4,12000000,48000000,Haddy,Bogor
+2023-03-15,Special,23 cm,2,9500000,19000000,Ajo,Bogor
+2024-04-17,Slayer,20 cm,1,12000000,12000000,Ibnu,Tangerang
+2024-01-19,Sumo,31 cm,5,8500000,42500000,Eka,Bogor
+2025-07-29,Sumo,35 cm,1,17500000,17500000,Haddy,Tangerang
+2025-12-03,Slayer,35 cm,1,16000000,16000000,Ajo,Depok
+2024-03-20,Sepauk,23 cm,5,16000000,80000000,Rosyid,Bandung
+2023-07-31,Sumo,29 cm,2,7000000,14000000,Haddy,Tangerang
+2023-03-29,Sumo,38 cm,5,10000000,50000000,Rosyid,Tangerang
+2024-05-12,Slayer,51 cm,2,14000000,28000000,Eka,Bekasi
+2024-03-06,Sepauk,41 cm,2,16000000,32000000,Eka,Jakarta
+2024-04-15,Shortbody,27 cm,1,13300000,13300000,Latif,Bekasi
+2023-08-05,Slayer,39 cm,3,7000000,21000000,Haddy,Medan
+2025-03-02,Shortbody,34 cm,3,14000000,42000000,Eka,Bekasi
+2024-09-21,Sepauk,33 cm,5,5000000,25000000,Rosyid,Bekasi
+2023-12-29,Slayer,25 cm,1,8500000,8500000,Eka,Bekasi
+2025-10-15,Sepauk,29 cm,3,16000000,48000000,Haddy,Bandung
+2025-02-16,Special,27 cm,1,7000000,7000000,Ibnu,Tangerang
+2023-01-30,Special,23 cm,1,9500000,9500000,Ajo,Bogor
+2024-05-10,Special,15 cm,1,12000000,12000000,Eka,Bogor
+2023-10-12,Shortbody,41 cm,1,10000000,10000000,Ajo,Depok
+2025-01-12,Sumo,23 cm,1,16000000,16000000,Haddy,Tangerang
+2025-10-21,Slayer,24 cm,2,8500000,17000000,Haddy,Tangerang
+2025-02-05,Special,29 cm,1,18400000,18400000,Ajo,Bekasi
+2023-01-22,Special,26 cm,1,13400000,13400000,Latif,Jakarta
+2023-08-24,Shortbody,26 cm,4,8500000,34000000,Eka,Tangerang
+2024-02-15,Special,26 cm,1,15300000,15300000,Rosyid,Tangerang
+2024-07-16,Sumo,50 cm,1,7000000,7000000,Ajo,Depok
+2024-10-17,Sepauk,26 cm,3,5000000,15000000,Haddy,Yogyakarta
+2025-03-23,Slayer,25 cm,1,14000000,14000000,Eka,Tangerang
+2024-05-16,Shortbody,22 cm,1,13100000,13100000,Rosyid,Jakarta
+2023-06-21,Shortbody,20 cm,1,11000000,11000000,Latif,Bogor
+2025-09-24,Shortbody,22 cm,2,10000000,20000000,Haddy,Bogor
+2024-02-17,Shortbody,30 cm,4,7000000,28000000,Eka,Medan
+2024-10-26,Special,38 cm,1,10000000,10000000,Ajo,Tangerang
+2024-04-21,Slayer,23 cm,5,14000000,70000000,Eka,Bogor
+2024-03-28,Shortbody,15 cm,5,16000000,80000000,Haddy,Yogyakarta
+2023-08-17,Slayer,24 cm,2,8500000,17000000,Eka,Depok
+2024-07-12,Sepauk,27 cm,2,9500000,19000000,Rosyid,Bekasi
+2024-01-01,Special,40 cm,1,7000000,7000000,Latif,Jakarta
+2023-10-26,Sumo,23 cm,1,7000000,7000000,Ibnu,Bekasi
+2024-04-13,Shortbody,24 cm,2,10200000,20400000,Rosyid,Bogor
+2024-04-20,Sepauk,55 cm,5,7000000,35000000,Eka,Jakarta
+2023-11-19,Shortbody,29 cm,2,13400000,26800000,Latif,Jakarta
+2023-08-14,Sepauk,22 cm,10,5000000,50000000,Ibnu,Bogor
+2025-05-24,Shortbody,34 cm,2,14000000,28000000,Latif,Bekasi
+2023-01-08,Sepauk,30 cm,3,5000000,15000000,Haddy,Bogor
+2023-01-03,Special,32 cm,3,7000000,21000000,Ibnu,Semarang
+2024-09-16,Sumo,25 cm,3,9500000,28500000,Ajo,Palembang
+2025-01-06,Sepauk,33 cm,10,5000000,50000000,Latif,Depok
+2023-09-18,Sepauk,30 cm,1,8500000,8500000,Eka,Depok
+2025-12-26,Special,39 cm,2,19800000,39600000,Eka,Bekasi
+2023-03-31,Special,29 cm,1,10000000,10000000,Rosyid,Bekasi
+2024-02-07,Sumo,22 cm,4,7000000,28000000,Eka,Surabaya
+2023-10-10,Sumo,52 cm,4,16000000,64000000,Ibnu,Bekasi
+2024-04-14,Sepauk,23 cm,10,5000000,50000000,Haddy,Tangerang
+2024-08-24,Sumo,25 cm,3,14000000,42000000,Haddy,Yogyakarta
+2024-10-11,Special,25 cm,4,10000000,40000000,Rosyid,Palembang
+2023-02-17,Slayer,29 cm,3,8500000,25500000,Latif,Bandung
+2025-05-13,Sepauk,22 cm,10,5000000,50000000,Haddy,Bogor
+2025-02-09,Sumo,24 cm,4,9500000,38000000,Ibnu,Jakarta
+2025-03-26,Sepauk,21 cm,3,5000000,15000000,Ibnu,Semarang
+2025-06-25,Sepauk,28 cm,3,14000000,42000000,Eka,Yogyakarta
+2023-10-16,Special,40 cm,3,11100000,33300000,Rosyid,Bandung
+2025-10-12,Sumo,25 cm,3,7000000,21000000,Latif,Yogyakarta
+2024-05-22,Slayer,23 cm,2,8500000,17000000,Ibnu,Jakarta
+2023-10-17,Sumo,38 cm,3,7000000,21000000,Ajo,Bandung
+2023-05-10,Sepauk,60 cm,2,7000000,14000000,Ajo,Depok
+2023-01-04,Shortbody,21 cm,1,12100000,12100000,Haddy,Tangerang
+2023-12-14,Sumo,37 cm,4,10000000,40000000,Haddy,Pontianak
+2025-08-08,Sepauk,56 cm,1,10000000,10000000,Haddy,Depok
+2024-03-20,Sepauk,29 cm,3,5000000,15000000,Ajo,Surabaya
+2023-11-10,Sumo,28 cm,2,14000000,28000000,Eka,Depok
+2023-01-06,Sepauk,36 cm,1,14000000,14000000,Latif,Depok
+2024-11-28,Shortbody,20 cm ,1,8500000,8500000,Ibnu,Bogor
+2025-09-29,Sumo,27 cm,5,7000000,35000000,Ajo,Jakarta
+2023-11-15,Special,21 cm,1,9500000,9500000,Ibnu,Tangerang
+2023-01-20,Slayer,27 cm,5,9500000,47500000,Eka,Jakarta
+2024-12-28,Sepauk,33 cm,5,5000000,25000000,Rosyid,Tangerang
+2024-12-10,Sepauk,56 cm,1,14000000,14000000,Haddy,Bogor
+2025-03-05,Shortbody,29 cm,2,18000000,36000000,Eka,Depok
+2023-12-15,Sumo,52 cm,5,8500000,42500000,Haddy,Depok
+2024-07-01,Sepauk,36 cm,1,16000000,16000000,Eka,Bekasi
+2024-10-31,Sepauk,60 cm,2,7000000,14000000,Ibnu,Tangerang
+2024-10-11,Sumo,41 cm,1,10000000,10000000,Rosyid,Tangerang
+2024-09-23,Sepauk,32 cm,5,5000000,25000000,Latif,Yogyakarta
+2024-02-21,Slayer,22 cm,4,16000000,64000000,Ajo,Semarang
+2025-03-18,Sepauk,41 cm,5,7000000,35000000,Latif,Yogyakarta
+2023-06-13,Sepauk,37 cm,4,10000000,40000000,Eka,Palembang
+2025-06-27,Sepauk,27 cm,4,5000000,20000000,Haddy,Medan
+2025-12-12,Sepauk,32 cm,5,10000000,50000000,Ibnu,Bekasi
+2024-01-10,Special,25 cm,2,16500000,33000000,Latif,Depok
+2023-06-18,Special,34 cm,5,10000000,50000000,Ibnu,Bogor
+2024-02-04,Sumo,24 cm,2,7000000,14000000,Rosyid,Depok
+2024-12-12,Sumo,23 cm,2,14000000,28000000,Rosyid,Bogor
+2023-11-09,Shortbody,31 cm,4,10000000,40000000,Latif,Bogor
+2024-03-30,Special,33 cm,4,8500000,34000000,Ibnu,Bogor
+2023-01-25,Sumo,23 cm,10,7000000,70000000,Ajo,Bandung
+2024-11-02,Slayer,24 cm,4,9500000,38000000,Latif,Depok
+2024-05-27,Sumo,28 cm,1,10000000,10000000,Haddy,Tangerang
+2024-01-13,Special,24 cm,1,10000000,10000000,Ibnu,Bogor
+2023-08-11,Sepauk,51 cm,3,8500000,25500000,Haddy,Bogor
+2024-05-14,Sumo,33 cm,5,10000000,50000000,Eka,Tangerang
+2024-08-22,Slayer,20 cm,2,8500000,17000000,Ajo,Depok
+2023-05-23,Sepauk,22 cm,2,12000000,24000000,Haddy,Bekasi
+2025-09-25,Sepauk,21 cm,4,9500000,38000000,Haddy,Tangerang
+2025-03-30,Sumo,23 cm,4,7000000,28000000,Haddy,Bandung
+2023-08-09,Shortbody,15 cm,1,12000000,12000000,Ibnu,Jakarta
+2023-09-15,Slayer,27 cm,2,10000000,20000000,Rosyid,Jakarta
+2023-09-30,Shortbody,28 cm,4,8500000,34000000,Latif,Yogyakarta
+2024-11-12,Special,51 cm,1,12000000,12000000,Ajo,Bekasi
+2023-06-14,Shortbody,55 cm,1,7000000,7000000,Latif,Bekasi
+2024-06-28,Shortbody,20 cm,3,10000000,30000000,Eka,Bogor
+2024-06-22,Special,37 cm,1,18800000,18800000,Haddy,Tangerang
+2025-09-28,Shortbody,23 cm,1,16900000,16900000,Rosyid,Bogor
+2023-12-19,Special,20 cm,1,10000000,10000000,Latif,Bekasi
+2025-02-03,Shortbody,41 cm,2,12000000,24000000,Rosyid,Depok
+2023-01-01,Shortbody,15 cm,4,16000000,64000000,Rosyid,Denpasar
+2025-09-05,Shortbody,33 cm,2,12000000,24000000,Eka,Tangerang
+2025-02-27,Special,33 cm,2,10000000,20000000,Ibnu,Bekasi
+2025-03-16,Sepauk,26 cm,10,5000000,50000000,Rosyid,Tangerang
+2025-06-16,Sumo,60 cm,5,8500000,42500000,Ibnu,Depok
+2024-06-01,Shortbody,50 cm,2,14000000,28000000,Haddy,Bekasi
+2023-05-28,Sumo,50 cm,1,9500000,9500000,Ibnu,Bogor
+2023-04-28,Special,27 cm,2,13100000,26200000,Latif,Bekasi
+2023-08-22,Sumo,31 cm,1,16000000,16000000,Eka,Bekasi
+2023-09-02,Shortbody,50 cm,4,16000000,64000000,Eka,Palembang
+2024-07-30,Shortbody,30 cm,1,10000000,10000000,Latif,Bekasi
+2024-10-18,Slayer,22 cm,2,8500000,17000000,Latif,Bogor
+2023-12-05,Sumo,25 cm,3,16000000,48000000,Latif,Denpasar
+2023-09-21,Shortbody,22 cm,1,18700000,18700000,Ibnu,Jakarta
+2024-10-17,Sepauk,20 cm,2,8500000,17000000,Eka,Bogor
+2024-02-10,Shortbody,28 cm,1,12100000,12100000,Eka,Bekasi
+2023-09-19,Sepauk,34 cm,4,9500000,38000000,Ibnu,Makassar
+2025-08-18,Special,36 cm,3,12100000,36300000,Ibnu,Medan
+2025-01-13,Shortbody,34 cm,1,7000000,7000000,Haddy,Bekasi
+2023-03-12,Special,27 cm,1,19400000,19400000,Latif,Bekasi
+2023-07-03,Shortbody,30 cm,1,14800000,14800000,Ajo,Jakarta
+2024-05-07,Special,37 cm,3,12000000,36000000,Ajo,Makassar
+2025-06-13,Special,34 cm,1,20000000,20000000,Rosyid,Bogor
+2023-11-23,Shortbody,23 cm,1,15000000,15000000,Latif,Jakarta
+2023-09-23,Special,33 cm,5,14000000,70000000,Latif,Bogor
+2023-10-28,Shortbody,25 cm,1,19200000,19200000,Eka,Bekasi
+2024-08-31,Sumo,23 cm,4,10000000,40000000,Ibnu,Medan
+2025-02-20,Sepauk,34 cm,3,7000000,21000000,Ajo,Bekasi
+2024-09-08,Shortbody,37 cm,2,7000000,14000000,Latif,Depok
+2024-08-29,Special,40 cm,1,10500000,10500000,Ibnu,Jakarta
+2025-02-01,Special,34 cm,1,7000000,7000000,Latif,Jakarta
+2025-03-08,Special,50 cm,4,10000000,40000000,Haddy,Makassar
+2025-03-18,Special,30 cm,4,9500000,38000000,Eka,Bogor
+2024-09-27,Sumo,32 cm,1,10000000,10000000,Haddy,Jakarta
+2025-12-05,Slayer,33 cm,1,10000000,10000000,Latif,Tangerang
+2025-04-24,Shortbody,24 cm,1,13700000,13700000,Haddy,Jakarta
+2023-09-29,Slayer,26 cm,1,16000000,16000000,Latif,Bogor
+2023-12-24,Special,40 cm,2,13000000,26000000,Rosyid,Bogor
+2023-11-25,Sepauk,20 cm,10,5000000,50000000,Haddy,Tangerang
+2024-12-08,Special,20 cm,2,14000000,28000000,Ajo,Bogor
+2025-07-30,Slayer,21 cm,5,9500000,47500000,Eka,Bogor
+2024-07-12,Shortbody,23 cm,4,7000000,28000000,Ajo,Makassar
+2024-04-19,Sepauk,30 cm,3,8500000,25500000,Eka,Bogor
+2025-09-30,Sepauk,55 cm,4,9500000,38000000,Eka,Yogyakarta
+2023-04-29,Shortbody,21 cm,2,14700000,29400000,Haddy,Tangerang
+2024-12-29,Sumo,31 cm,2,7000000,14000000,Haddy,Bekasi
+2024-05-10,Slayer,27 cm,5,12000000,60000000,Ajo,Yogyakarta
+2025-09-17,Sumo,34 cm,4,14000000,56000000,Rosyid,Makassar
+2023-12-20,Special,25 cm,2,10000000,20000000,Haddy,Bogor
+2024-01-31,Special,28 cm,1,19900000,19900000,Rosyid,Bogor
+2023-09-09,Sepauk,60 cm,2,12000000,24000000,Rosyid,Depok
+2024-10-14,Sepauk,60 cm,2,12000000,24000000,Rosyid,Jakarta
+2024-12-03,Slayer,56 cm,1,16000000,16000000,Ajo,Bogor
+2025-10-12,Sepauk,27 cm,10,5000000,50000000,Rosyid,Depok
+2023-09-07,Special,26 cm,1,12900000,12900000,Latif,Bekasi
+2024-05-23,Shortbody,25 cm,1,12800000,12800000,Latif,Bogor
+2024-12-16,Special,56 cm,2,14000000,28000000,Haddy,Bogor
+2023-05-31,Slayer,22 cm,3,12000000,36000000,Ajo,Bekasi
+2024-09-20,Sumo,34 cm,5,7000000,35000000,Haddy,Jakarta
+2023-12-04,Shortbody,55 cm,3,12000000,36000000,Ibnu,Surabaya
+2025-12-23,Sepauk,22 cm,3,9500000,28500000,Latif,Denpasar
+2023-02-12,Shortbody,24 cm,1,18300000,18300000,Rosyid,Bekasi
+2023-09-14,Sepauk,33 cm,4,5000000,20000000,Rosyid,Pontianak
+2025-06-30,Special,37 cm,1,14000000,14000000,Rosyid,Bekasi
+2025-09-18,Special,34 cm,5,10000000,50000000,Latif,Yogyakarta
+2023-09-30,Sumo,28 cm,3,14000000,42000000,Ajo,Bandung
+2024-05-12,Sumo,30 cm,3,8500000,25500000,Ajo,Denpasar
+2024-01-31,Sumo,32 cm,15,7000000,105000000,Rosyid,Bandung
+2024-11-15,Shortbody,21 cm,1,16000000,16000000,Ibnu,Depok
+2023-08-06,Shortbody,20 cm,1,16000000,16000000,Ajo,Tangerang
+2024-05-25,Special,31 cm,5,10000000,50000000,Rosyid,Bogor
+2024-12-02,Sepauk,20 cm,3,5000000,15000000,Eka,Depok
+2024-08-29,Sumo,35 cm,4,14000000,56000000,Eka,Depok
+2025-02-24,Shortbody,34 cm,2,10000000,20000000,Latif,Bekasi
+2025-10-01,Slayer,29 cm,5,9500000,47500000,Ibnu,Yogyakarta
+2023-09-02,Sumo,31 cm,4,12000000,48000000,Rosyid,Denpasar
+2024-09-05,Special,38 cm,4,12000000,48000000,Ajo,Medan
+2024-08-10,Sumo,52 cm,1,8500000,8500000,Ibnu,Bogor
+2023-05-06,Slayer,40 cm,1,9500000,9500000,Rosyid,Depok
+2024-01-10,Shortbody,26 cm,1,8500000,8500000,Ibnu,Jakarta
+2023-01-25,Shortbody,26 cm,3,16000000,48000000,Ibnu,Pontianak
+2025-11-27,Special,52 cm,5,8500000,42500000,Latif,Bekasi
+2024-10-06,Sepauk,20 cm,4,8500000,34000000,Rosyid,Depok
+2025-08-22,Sepauk,37 cm,5,12000000,60000000,Rosyid,Jakarta
+2023-02-13,Special,39 cm,2,17700000,35400000,Rosyid,Depok
+2025-07-20,Special,21 cm,4,8500000,34000000,Ibnu,Surabaya
+2024-12-09,Shortbody,27 cm,1,15300000,15300000,Haddy,Bogor
+2025-11-28,Slayer,37 cm,2,7000000,14000000,Rosyid,Depok
+2025-07-01,Sepauk,51 cm,5,14000000,70000000,Rosyid,Depok
+2025-12-07,Sumo,60 cm,5,9500000,47500000,Haddy,Yogyakarta
+2023-11-12,Shortbody,21 cm,1,12800000,12800000,Haddy,Bogor
+2025-05-08,Special,40 cm,1,15900000,15900000,Haddy,Depok
+2025-05-04,Slayer,30 cm,4,9500000,38000000,Ajo,Semarang
+2025-01-05,Slayer,20 cm,1,8500000,8500000,Latif,Jakarta
+2023-02-24,Shortbody,29 cm,1,15100000,15100000,Rosyid,Bekasi
+2024-12-24,Sumo,30 cm,3,7000000,21000000,Ajo,Bandung
+2024-04-21,Sumo,32 cm,3,10000000,30000000,Ibnu,Denpasar
+2024-07-30,Sepauk,60 cm,5,9500000,47500000,Latif,Bandung
+2024-07-15,Slayer,50 cm,5,7000000,35000000,Ibnu,Bogor
+2024-05-07,Sumo,55 cm,3,7000000,21000000,Latif,Surabaya
+2025-02-11,Slayer,40 cm,4,12000000,48000000,Haddy,Palembang
+2024-03-09,Slayer,34 cm,4,8500000,34000000,Ajo,Denpasar
+2025-01-12,Slayer,26 cm,1,9500000,9500000,Haddy,Bogor
+2024-08-24,Special,40 cm,4,16000000,64000000,Ajo,Surabaya
+2024-05-21,Sepauk,27 cm,3,5000000,15000000,Eka,Medan
+2023-06-03,Shortbody,25 cm,1,18600000,18600000,Haddy,Bogor
+2024-04-18,Shortbody,29 cm,1,13300000,13300000,Haddy,Jakarta
+2025-10-14,Sepauk,21 cm,4,5000000,20000000,Haddy,Semarang
+2023-08-31,Special,40 cm,1,11400000,11400000,Haddy,Tangerang
+2025-10-12,Sumo,30 cm,10,7000000,70000000,Ibnu,Semarang
+2025-02-08,Sepauk,30 cm,3,7000000,21000000,Rosyid,Depok
+2024-02-21,Sepauk,27 cm,3,8500000,25500000,Rosyid,Medan
+2023-08-02,Shortbody,26 cm,1,11200000,11200000,Ajo,Depok
+2024-04-03,Sumo,50 cm,1,12000000,12000000,Haddy,Bekasi
+2024-12-02,Sepauk,30 cm,2,12000000,24000000,Rosyid,Jakarta
+2023-08-31,Shortbody,27 cm,1,16500000,16500000,Ajo,Jakarta
+2025-12-02,Sumo,51 cm,2,12000000,24000000,Rosyid,Depok
+2025-01-11,Sumo,60 cm,1,12000000,12000000,Rosyid,Tangerang
+2025-09-25,Sepauk,30 cm,2,7000000,14000000,Ibnu,Jakarta
+2024-01-04,Slayer,24 cm,2,8500000,17000000,Rosyid,Tangerang
+2024-11-27,Sepauk,15 cm,1,14000000,14000000,Ibnu,Depok
+2025-06-26,Shortbody,35 cm,3,12000000,36000000,Eka,Jakarta
+2024-10-14,Special,33 cm,1,14400000,14400000,Haddy,Tangerang
+2023-02-06,Slayer,24 cm,1,9500000,9500000,Ajo,Bekasi
+2024-06-25,Sumo,25 cm,20,7000000,140000000,Rosyid,Jakarta
+2023-07-15,Special,34 cm,5,10000000,50000000,Haddy,Bekasi
+2025-05-30,Slayer,37 cm,3,10000000,30000000,Haddy,Palembang
+2023-09-16,Sepauk,33 cm,2,14000000,28000000,Ajo,Depok
+2023-04-30,Shortbody,31 cm,3,9500000,28500000,Haddy,Bogor
+2025-10-19,Special,32 cm,1,19100000,19100000,Rosyid,Tangerang
+2025-07-16,Special,40 cm,1,19000000,19000000,Ajo,Depok
+2023-04-01,Special,38 cm,2,15900000,31800000,Latif,Bogor
+2025-05-07,Sumo,56 cm,4,7000000,28000000,Eka,Jakarta
+2025-03-03,Sepauk,30 cm,3,5000000,15000000,Haddy,Depok
+2025-09-26,Slayer,24 cm,4,12000000,48000000,Rosyid,Yogyakarta
+2023-05-17,Special,26 cm,1,8500000,8500000,Latif,Bogor
+2025-01-01,Sepauk,32 cm,3,5000000,15000000,Eka,Medan
+2025-10-12,Special,35 cm,1,19900000,19900000,Rosyid,Bogor
+2025-07-15,Sepauk,34 cm,10,5000000,50000000,Ibnu,Jakarta
+2023-09-14,Shortbody,51 cm,3,8500000,25500000,Ibnu,Depok
+2023-11-28,Slayer,33 cm,5,16000000,80000000,Ibnu,Yogyakarta
+2024-04-14,Shortbody,27 cm,1,16500000,16500000,Rosyid,Tangerang
+2025-03-28,Sepauk,37 cm,2,7000000,14000000,Rosyid,Depok
+2023-02-12,Sepauk,29 cm,6,5000000,30000000,Ajo,Semarang
+2024-04-11,Special,39 cm,3,8500000,25500000,Ajo,Palembang
+2023-08-19,Sumo,23 cm,2,8500000,17000000,Ibnu,Tangerang
+2025-09-06,Shortbody,41 cm,1,12000000,12000000,Latif,Jakarta
+2025-12-11,Shortbody,22 cm,1,15300000,15300000,Ajo,Bekasi
+2023-06-27,Slayer,52 cm,5,16000000,80000000,Rosyid,Bekasi
+2024-04-19,Sumo,60 cm,1,14000000,14000000,Ajo,Depok
+2025-05-19,Sumo,50 cm,1,14000000,14000000,Latif,Jakarta
+2023-03-10,Sepauk,56 cm,3,7000000,21000000,Eka,Bogor
+2023-03-16,Slayer,15 cm,5,12000000,60000000,Eka,Jakarta
+2025-01-10,Special,32 cm,5,16000000,80000000,Rosyid,Bekasi
+2024-04-02,Sumo,39 cm,3,8500000,25500000,Haddy,Medan
+2023-07-17,Sepauk,40 cm,5,12000000,60000000,Ibnu,Tangerang
+2025-10-13,Special,24 cm,4,8500000,34000000,Latif,Bogor
+2025-03-09,Special,33 cm,4,14000000,56000000,Eka,Pontianak
+2025-05-28,Special,50 cm,4,8500000,34000000,Eka,Jakarta
+2024-03-05,Sepauk,22 cm,3,8500000,25500000,Latif,Surabaya
+2025-06-07,Shortbody,51 cm,2,16000000,32000000,Latif,Tangerang
+2023-08-02,Slayer,28 cm,3,7000000,21000000,Haddy,Palembang
+2024-09-26,Slayer,31 cm,1,10000000,10000000,Rosyid,Jakarta
+2025-09-28,Shortbody,26 cm,2,11900000,23800000,Eka,Depok
+2023-12-17,Sepauk,26 cm,4,5000000,20000000,Ibnu,Depok
+2025-10-11,Special,35 cm,1,13000000,13000000,Rosyid,Bogor
+2023-10-22,Special,27 cm,1,12800000,12800000,Ajo,Jakarta
+2023-11-03,Sumo,33 cm,3,14000000,42000000,Ibnu,Makassar
+2025-05-09,Slayer,41 cm,1,8500000,8500000,Eka,Jakarta
+2023-01-22,Shortbody,60 cm,4,9500000,38000000,Eka,Jakarta
+2024-01-02,Sepauk,20 cm,10,5000000,50000000,Eka,Yogyakarta
+2025-11-27,Sumo,36 cm,3,12000000,36000000,Rosyid,Depok
+2025-08-26,Special,31 cm,2,15200000,30400000,Rosyid,Jakarta
+2025-10-03,Sepauk,30 cm,4,12000000,48000000,Latif,Palembang
+2025-02-09,Shortbody,26 cm,1,12900000,12900000,Latif,Jakarta
+2023-09-03,Slayer,27 cm,4,10000000,40000000,Eka,Semarang
+2025-08-06,Shortbody,34 cm,3,8500000,25500000,Ajo,Yogyakarta
+2025-05-02,Sepauk,20 cm,5,16000000,80000000,Rosyid,Depok
+2025-04-16,Sumo,51 cm,2,8500000,17000000,Haddy,Jakarta
+2025-02-07,Shortbody,28 cm,3,7000000,21000000,Rosyid,Bekasi
+2024-08-22,Sepauk,41 cm,3,8500000,25500000,Ajo,Yogyakarta
+2024-03-07,Shortbody,34 cm,1,10000000,10000000,Eka,Bekasi
+2025-07-04,Shortbody,39 cm,1,12000000,12000000,Ajo,Tangerang
+2023-10-20,Shortbody,28 cm,4,12000000,48000000,Haddy,Makassar
+2023-05-09,Special,31 cm,1,16700000,16700000,Ajo,Jakarta
+2023-08-03,Sepauk,31 cm,3,5000000,15000000,Haddy,Depok
+2023-03-20,Shortbody,60 cm,1,7000000,7000000,Ajo,Bogor
+2025-10-28,Special,29 cm,1,15700000,15700000,Eka,Bekasi
+2024-06-20,Special,30 cm,3,7000000,21000000,Eka,Pontianak
+2024-06-02,Sepauk,34 cm,3,7000000,21000000,Latif,Semarang
+2025-12-21,Sepauk,51 cm,5,9500000,47500000,Rosyid,Semarang
+2025-04-12,Slayer,22 cm,2,8500000,17000000,Rosyid,Bekasi
+2024-09-25,Sepauk,31 cm,7,5000000,35000000,Haddy,Yogyakarta
+2025-02-16,Special,31 cm,3,14000000,42000000,Eka,Bandung
+2025-03-07,Shortbody,21 cm,2,18300000,36600000,Rosyid,Bekasi
+2024-08-02,Sepauk,40 cm,5,10000000,50000000,Latif,Bekasi
+2024-03-08,Sepauk,23 cm,1,14000000,14000000,Ibnu,Bekasi
+2025-09-13,Sumo,33 cm,1,13800000,13800000,Ibnu,Jakarta
+2024-05-31,Special,28 cm,1,14000000,14000000,Latif,Depok
+2024-05-07,Special,29 cm,1,17100000,17100000,Haddy,Depok
+2025-05-28,Shortbody,26 cm,3,12000000,36000000,Ibnu,Palembang
+2023-12-26,Special,24 cm,5,8500000,42500000,Latif,Bandung
+2025-01-22,Shortbody,26 cm,2,18800000,37600000,Ajo,Jakarta
+2024-04-28,Special,27 cm,2,7000000,14000000,Haddy,Jakarta
+2024-03-23,Special,28 cm,3,7000000,21000000,Haddy,Tangerang
+2025-09-25,Special,41 cm,4,10000000,40000000,Eka,Makassar
+2023-03-03,Special,40 cm,3,9500000,28500000,Latif,Bandung
+2023-09-17,Sepauk,31 cm,10,5000000,50000000,Ajo,Bogor
+2023-05-07,Sumo,41 cm,3,9500000,28500000,Rosyid,Jakarta
+2025-03-19,Sumo,50 cm,2,14000000,28000000,Ibnu,Tangerang
+2023-05-20,Special,31 cm,2,15900000,31800000,Rosyid,Tangerang
+2025-09-12,Sumo,26 cm,2,12000000,24000000,Rosyid,Depok
+2024-01-23,Special,28 cm,2,16000000,32000000,Rosyid,Depok
+2025-06-24,Sumo,34 cm,3,11200000,33600000,Haddy,Tangerang
+2024-09-07,Sumo,27 cm,1,8500000,8500000,Eka,Jakarta
+2023-09-14,Special,27 cm,2,18900000,37800000,Haddy,Bogor
+2023-07-19,Special,60 cm,1,16000000,16000000,Ajo,Bekasi
+2023-09-10,Sepauk,29 cm,1,12000000,12000000,Rosyid,Bogor
+2024-06-18,Shortbody,21 cm,2,12900000,25800000,Ibnu,Depok
+2024-12-07,Shortbody,60 cm,3,12000000,36000000,Ajo,Denpasar
+2024-07-20,Slayer,56 cm,3,10000000,30000000,Ibnu,Semarang
+2023-07-02,Sepauk,38 cm,3,14000000,42000000,Haddy,Surabaya
+2025-02-18,Special,31 cm,1,14100000,14100000,Eka,Bogor
+2023-03-09,Special,40 cm,1,19100000,19100000,Rosyid,Bogor
+2023-11-17,Sumo,24 cm,15,7000000,105000000,Haddy,Bekasi
+2023-07-19,Sumo,20 cm,2,7000000,14000000,Ajo,Jakarta
+2025-07-11,Slayer,39 cm,2,7000000,14000000,Ibnu,Jakarta
+2023-12-14,Special,55 cm,4,16000000,64000000,Haddy,Surabaya
+2025-04-02,Special,31 cm,4,9500000,38000000,Haddy,Bandung
+2023-10-27,Sepauk,27 cm,4,5000000,20000000,Eka,Yogyakarta
+2023-09-03,Special,37 cm,1,19400000,19400000,Ibnu,Tangerang
+2023-04-12,Sepauk,38 cm,3,10000000,30000000,Haddy,Bekasi
+2025-04-08,Sumo,29 cm,4,12000000,48000000,Eka,Makassar
+2025-07-27,Special,35 cm,1,11200000,11200000,Ibnu,Bekasi
+2023-01-29,Shortbody,29 cm,1,16500000,16500000,Ajo,Depok
+2023-06-23,Shortbody,24 cm,5,10000000,50000000,Haddy,Bekasi
+2023-06-06,Slayer,22 cm,1,7000000,7000000,Ibnu,Depok
+2024-06-26,Sumo,33 cm,2,14000000,28000000,Eka,Bogor
+2023-12-18,Sumo,52 cm,3,8500000,25500000,Haddy,Tangerang
+2025-01-31,Slayer,33 cm,2,7000000,14000000,Haddy,Depok
+2024-05-16,Shortbody,27 cm,3,7000000,21000000,Haddy,Jakarta
+2024-11-22,Sumo,56 cm,5,8500000,42500000,Rosyid,Bogor

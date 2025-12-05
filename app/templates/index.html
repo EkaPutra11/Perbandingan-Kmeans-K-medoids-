@@ -1,41 +1,214 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}Dashboard | Arwana Analytics{% endblock %}
+{% block title %}Dashboard - Arwana Sales Analytics{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 
-<div class="container-fluid">
-
-    <h2 class="mb-4">Dashboard</h2>
-
-    <div class="row">
-
-        <!-- Card 1 -->
-        <div class="col-md-4">
-            <div class="card shadow-sm p-3">
-                <h5>Total Data Upload</h5>
-                <p class="text-secondary">Belum ada data</p>
-            </div>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="col-md-4">
-            <div class="card shadow-sm p-3">
-                <h5>Proses KMeans</h5>
-                <p class="text-secondary">Belum dijalankan</p>
-            </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="col-md-4">
-            <div class="card shadow-sm p-3">
-                <h5>Proses KMedoids</h5>
-                <p class="text-secondary">Belum dijalankan</p>
-            </div>
-        </div>
-
+<div class="dashboard-container">
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h1>📊 Dashboard Arwana Sales</h1>
+        <p>Ringkasan data penjualan dan analisis clustering</p>
     </div>
 
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📦</div>
+            <div class="stat-label">Total Records</div>
+            <div class="stat-value stat-value-large">{{ total_records | default(0) }}</div>
+            <div class="stat-subtext">Data penjualan tersimpan</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-label">Standard Products</div>
+            <div class="stat-value">{{ standard_count | default(0) }}</div>
+            <div class="stat-subtext">{{ "%.1f" | format((standard_count / total_records * 100) if total_records > 0 else 0) }}% dari total</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-label">Non-Standard Products</div>
+            <div class="stat-value">{{ non_standard_count | default(0) }}</div>
+            <div class="stat-subtext">{{ "%.1f" | format((non_standard_count / total_records * 100) if total_records > 0 else 0) }}% dari total</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">📏</div>
+            <div class="stat-label">Unique Sizes</div>
+            <div class="stat-value">{{ unique_sizes | default(0) }}</div>
+            <div class="stat-subtext">Variasi ukuran produk</div>
+        </div>
+    </div>
+
+    <!-- Data Table Section -->
+    <div class="data-section">
+        <div class="data-header">
+            <h3>📋 Data Penjualan</h3>
+        </div>
+        <div class="data-body">
+            {% if data_table and data_table|length > 0 %}
+                <!-- Table Controls -->
+                <div class="table-controls">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Cari kategori atau ukuran...">
+                    </div>
+                    <div class="filter-box">
+                        <select id="categoryFilter" onchange="filterTable()">
+                            <option value="">Semua Kategori</option>
+                            <option value="Standard">Standard</option>
+                            <option value="Non-Standard">Non-Standard</option>
+                        </select>
+                    </div>
+                    <button class="export-btn" onclick="exportTable()">📥 Export CSV</button>
+                </div>
+
+                <!-- Data Table -->
+                <div style="overflow-x: auto;">
+                    <table class="table table-hover data-table" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th class="table-id">#</th>
+                                <th>Kategori</th>
+                                <th>Ukuran</th>
+                                <th class="table-numeric">Jumlah Terjual</th>
+                                <th class="table-numeric">Total Harga</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            {% for item in data_table %}
+                            <tr data-kategori="{{ item['Kategori'] }}">
+                                <td class="table-id" data-label="ID">{{ item['ID'] }}</td>
+                                <td class="table-kategori" data-label="Kategori">{{ item['Kategori'] }}</td>
+                                <td data-label="Ukuran">{{ item['Ukuran'] }}</td>
+                                <td class="table-numeric" data-label="Jumlah Terjual">{{ item['Jumlah Terjual'] }}</td>
+                                <td class="table-numeric" data-label="Total Harga">{{ item['Total Harga'] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="table-pagination">
+                    <div class="pagination-info">
+                        Menampilkan <strong id="pageInfo">1-{{ [data_table|length, 10]|min }}</strong> dari <strong>{{ data_table|length }}</strong> records
+                    </div>
+                    <div class="pagination-controls">
+                        <button onclick="prevPage()" id="prevBtn" class="btn btn-sm btn-outline-primary">← Previous</button>
+                        <button onclick="nextPage()" id="nextBtn" class="btn btn-sm btn-outline-primary">Next →</button>
+                    </div>
+                </div>
+            {% else %}
+                <div class="table-empty">
+                    <div class="table-empty-icon">📭</div>
+                    <p>Belum ada data penjualan</p>
+                    <p style="font-size: 0.9rem; color: #bdc3c7;">Silakan upload data melalui halaman <a href="/upload">Upload Data</a></p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
 
+<script>
+let currentPage = 1;
+const itemsPerPage = 10;
+let filteredData = [];
+
+// Initialize table
+function initTable() {
+    const table = document.getElementById('dataTable');
+    if (table) {
+        filterTable();
+    }
+}
+
+// Filter and search table
+function filterTable() {
+    const searchText = document.getElementById('searchInput').value.toLowerCase();
+    const categoryFilter = document.getElementById('categoryFilter').value;
+    const rows = document.getElementById('tableBody').querySelectorAll('tr');
+    
+    filteredData = [];
+    
+    rows.forEach(row => {
+        const kategori = row.getAttribute('data-kategori');
+        const text = row.textContent.toLowerCase();
+        
+        const matchCategory = !categoryFilter || 
+            (categoryFilter === 'Standard' && kategori === 'Standard') ||
+            (categoryFilter === 'Non-Standard' && kategori !== 'Standard');
+        
+        const matchSearch = !searchText || text.includes(searchText);
+        
+        if (matchCategory && matchSearch) {
+            filteredData.push(row);
+        }
+    });
+    
+    currentPage = 1;
+    updateTableDisplay();
+}
+
+// Update table display
+function updateTableDisplay() {
+    const rows = document.getElementById('tableBody').querySelectorAll('tr');
+    rows.forEach(row => row.style.display = 'none');
+    
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    
+    for (let i = start; i < end && i < filteredData.length; i++) {
+        filteredData[i].style.display = '';
+    }
+    
+    // Update pagination
+    const pageInfo = document.getElementById('pageInfo');
+    pageInfo.textContent = `${start + 1}-${Math.min(end, filteredData.length)}`;
+    
+    document.getElementById('prevBtn').disabled = currentPage === 1;
+    document.getElementById('nextBtn').disabled = end >= filteredData.length;
+}
+
+// Pagination
+function prevPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        updateTableDisplay();
+    }
+}
+
+function nextPage() {
+    const maxPage = Math.ceil(filteredData.length / itemsPerPage);
+    if (currentPage < maxPage) {
+        currentPage++;
+        updateTableDisplay();
+    }
+}
+
+// Search event
+document.getElementById('searchInput').addEventListener('keyup', filterTable);
+
+// Export to CSV
+function exportTable() {
+    let csv = 'ID,Kategori,Ukuran,Jumlah Terjual,Total Harga\n';
+    
+    const rows = document.getElementById('tableBody').querySelectorAll('tr');
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const rowData = Array.from(cells).slice(0, 5).map(cell => '"' + cell.textContent.trim() + '"').join(',');
+        csv += rowData + '\n';
+    });
+    
+    const link = document.createElement('a');
+    link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    link.download = 'data_penjualan_' + new Date().toISOString().slice(0, 10) + '.csv';
+    link.click();
+}
+
+// Initialize on load
+window.addEventListener('load', initTable);
+</script>
 {% endblock %}

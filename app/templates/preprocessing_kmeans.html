@@ -23,13 +23,28 @@
                             </div>
                             <div class="col-md-6 d-flex align-items-end">
                                 <button type="button" class="btn btn-primary w-100" id="run-btn">
-                                    <span id="btn-text">Run Clustering</span>
+                                    <span id="btn-text">Jalankan Clustering</span>
                                     <span id="spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
                                 </button>
                             </div>
                         </div>
                     </form>
                     <div id="alert-container" class="mt-3"></div>
+                    
+                    <!-- Status Display -->
+                    <div id="status-container" class="mt-3 d-none">
+                        <div class="alert alert-info">
+                            <div class="d-flex align-items-center">
+                                <div class="spinner-border spinner-border-sm me-3" role="status" id="status-spinner">
+                                    <span class="visually-hidden">Processing...</span>
+                                </div>
+                                <div>
+                                    <strong id="status-text">Processing...</strong>
+                                    <p id="status-message" class="mb-0 mt-1"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -149,12 +164,19 @@ document.getElementById('run-btn').addEventListener('click', async function() {
     const spinner = document.getElementById('spinner');
     const btnText = document.getElementById('btn-text');
     const alertContainer = document.getElementById('alert-container');
+    const statusContainer = document.getElementById('status-container');
+    const statusText = document.getElementById('status-text');
+    const statusMessage = document.getElementById('status-message');
+    const statusSpinner = document.getElementById('status-spinner');
 
     // Show loading state
     spinner.classList.remove('d-none');
     btnText.textContent = 'Processing...';
     this.disabled = true;
     alertContainer.innerHTML = '';
+    statusContainer.classList.remove('d-none');
+    statusText.textContent = 'Running KMeans Clustering...';
+    statusMessage.textContent = `Processing ${k} clusters, please wait...`;
 
     try {
         const response = await fetch('{{ url_for("main.process_kmeans") }}', {
@@ -167,7 +189,12 @@ document.getElementById('run-btn').addEventListener('click', async function() {
 
         const data = await response.json();
 
-        if (response.ok) {
+        if (response.ok && data.status === 'success') {
+            // Show success message
+            statusSpinner.innerHTML = '<i class="text-success" style="font-size: 1.5rem;">✓</i>';
+            statusText.textContent = 'Clustering Berhasil!';
+            statusMessage.textContent = `Hasil disimpan dengan Inertia: ${parseFloat(data.inertia).toFixed(2)}`;
+            
             // Show metrics
             document.getElementById('inertia-value').textContent = 
                 parseFloat(data.inertia).toFixed(2);
@@ -183,6 +210,14 @@ document.getElementById('run-btn').addEventListener('click', async function() {
             displayClusterChart(data.cluster_distribution);
             document.getElementById('chart-container').classList.remove('d-none');
 
+            // Change status container color to success
+            setTimeout(() => {
+                const statusDiv = statusContainer.querySelector('.alert');
+                statusDiv.classList.remove('alert-info');
+                statusDiv.classList.add('alert-success');
+            }, 500);
+
+
             // Success alert
             alertContainer.innerHTML = `
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -191,6 +226,13 @@ document.getElementById('run-btn').addEventListener('click', async function() {
                 </div>
             `;
         } else {
+            statusSpinner.innerHTML = '<i class="text-danger" style="font-size: 1.5rem;">✗</i>';
+            statusText.textContent = 'Clustering Gagal!';
+            statusMessage.textContent = data.error || 'Unknown error occurred';
+            const statusDiv = statusContainer.querySelector('.alert');
+            statusDiv.classList.remove('alert-info');
+            statusDiv.classList.add('alert-danger');
+            
             alertContainer.innerHTML = `
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <strong>Error:</strong> ${data.error || 'Unknown error occurred'}
@@ -199,6 +241,13 @@ document.getElementById('run-btn').addEventListener('click', async function() {
             `;
         }
     } catch (error) {
+        statusSpinner.innerHTML = '<i class="text-danger" style="font-size: 1.5rem;">✗</i>';
+        statusText.textContent = 'Clustering Gagal!';
+        statusMessage.textContent = error.message;
+        const statusDiv = statusContainer.querySelector('.alert');
+        statusDiv.classList.remove('alert-info');
+        statusDiv.classList.add('alert-danger');
+        
         alertContainer.innerHTML = `
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Error:</strong> ${error.message}
@@ -217,53 +266,97 @@ function displayAnalysis(analysis) {
     const standardContent = document.getElementById('standard-content');
     const nonStandardContent = document.getElementById('non-standard-content');
 
-    // Standard
-    let standardHtml = '<div class="table-responsive">';
-    if (analysis.standard && Object.keys(analysis.standard).length > 0) {
-        standardHtml += '<table class="table table-sm table-hover"><thead class="table-light">';
-        standardHtml += '<tr><th>Size Range</th><th>Terlaris</th><th>Sedang</th><th>Kurang Laris</th><th>Total</th></tr></thead><tbody>';
+    function renderCategoryAnalysis(categoryData) {
+        if (!categoryData || Object.keys(categoryData).length === 0) {
+            return '<p class="text-muted text-center">No data</p>';
+        }
+
+        let html = '';
         
-        Object.entries(analysis.standard).forEach(([range, data]) => {
-            standardHtml += `
-                <tr>
-                    <td><strong>${range}</strong></td>
-                    <td><span class="badge bg-success">${data.terlaris}</span></td>
-                    <td><span class="badge bg-warning text-dark">${data.sedang}</span></td>
-                    <td><span class="badge bg-danger">${data.kurang_laris}</span></td>
-                    <td><strong>${data.total_terjual.toFixed(0)}</strong></td>
-                </tr>
+        // Group by tier and size range
+        const tiers = {
+            'terlaris': { name: 'Terlaris (Top Sales)', badge: 'bg-success', items: [] },
+            'sedang': { name: 'Sedang (Medium Sales)', badge: 'bg-warning text-dark', items: [] },
+            'kurang_laris': { name: 'Kurang Laris (Low Sales)', badge: 'bg-danger', items: [] }
+        };
+
+        // Organize data by tier
+        Object.entries(categoryData).forEach(([range, data]) => {
+            const tier = data.tier || 'kurang_laris';
+            if (tiers[tier]) {
+                tiers[tier].items.push({ range, ...data });
+            }
+        });
+
+        // Render each tier
+        Object.entries(tiers).forEach(([tierKey, tierData]) => {
+            if (tierData.items.length === 0) return;
+
+            html += `
+                <div class="mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="badge ${tierData.badge} p-2 me-2">${tierData.name}</span>
+                        <small class="text-muted">${tierData.items.length} size range(s)</small>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover border">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Size Range</th>
+                                    <th class="text-end">Jumlah Terjual</th>
+                                    <th>Cluster</th>
+                                    <th>Kategori</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+
+            tierData.items.forEach(item => {
+                if (item.items && Array.isArray(item.items)) {
+                    // Group items by size range
+                    let sizeRangeTotal = 0;
+                    let clusterIds = new Set();
+                    
+                    item.items.forEach(subItem => {
+                        sizeRangeTotal += parseFloat(subItem.jumlah_terjual || 0);
+                        clusterIds.add(subItem.cluster);
+                    });
+
+                    html += `
+                        <tr>
+                            <td><strong>${item.range}</strong></td>
+                            <td class="text-end"><strong>${sizeRangeTotal.toFixed(0)}</strong></td>
+                            <td>
+                                ${Array.from(clusterIds).map(id => 
+                                    `<span class="badge bg-secondary">C${id}</span>`
+                                ).join(' ')}
+                            </td>
+                            <td>${item.items.length} item(s)</td>
+                        </tr>
+                    `;
+                }
+            });
+
+            html += `
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             `;
         });
-        
-        standardHtml += '</tbody></table>';
-    } else {
-        standardHtml += '<p class="text-muted text-center">No data</p>';
+
+        return html;
     }
+
+    // Standard
+    let standardHtml = '<div class="table-responsive">';
+    standardHtml += renderCategoryAnalysis(analysis.standard);
     standardHtml += '</div>';
     standardContent.innerHTML = standardHtml;
 
     // Non-Standard
     let nonStandardHtml = '<div class="table-responsive">';
-    if (analysis.non_standard && Object.keys(analysis.non_standard).length > 0) {
-        nonStandardHtml += '<table class="table table-sm table-hover"><thead class="table-light">';
-        nonStandardHtml += '<tr><th>Size Range</th><th>Terlaris</th><th>Sedang</th><th>Kurang Laris</th><th>Total</th></tr></thead><tbody>';
-        
-        Object.entries(analysis.non_standard).forEach(([range, data]) => {
-            nonStandardHtml += `
-                <tr>
-                    <td><strong>${range}</strong></td>
-                    <td><span class="badge bg-success">${data.terlaris}</span></td>
-                    <td><span class="badge bg-warning text-dark">${data.sedang}</span></td>
-                    <td><span class="badge bg-danger">${data.kurang_laris}</span></td>
-                    <td><strong>${data.total_terjual.toFixed(0)}</strong></td>
-                </tr>
-            `;
-        });
-        
-        nonStandardHtml += '</tbody></table>';
-    } else {
-        nonStandardHtml += '<p class="text-muted text-center">No data</p>';
-    }
+    nonStandardHtml += renderCategoryAnalysis(analysis.non_standard);
     nonStandardHtml += '</div>';
     nonStandardContent.innerHTML = nonStandardHtml;
 }

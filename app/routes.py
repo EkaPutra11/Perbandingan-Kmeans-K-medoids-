@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, jsonify, current_app
 from app.processing_kmeans import process_kmeans_manual, save_kmeans_manual_result, get_kmeans_result
 from app.processing_kmedoids import process_kmedoids_manual, save_kmedoids_manual_result, get_kmedoids_result
 from app.elbow_method import calculate_elbow_kmeans, calculate_elbow_kmedoids
+from app.analysis_formatter import format_results_display, get_data_table, format_category_analysis
 from app.models import db, Penjualan, KMeansResult, KMedoidsResult, KMeansClusterDetail, KMedoidsClusterDetail
 import pandas as pd
 import os
@@ -13,7 +14,21 @@ main = Blueprint('main', __name__)
 # Dashboard
 @main.route('/')
 def index():
-    return render_template('index.html', active_page='dashboard')
+    # Get stats
+    total_records = Penjualan.query.count()
+    standard_count = Penjualan.query.filter_by(kategori='Standard').count()
+    non_standard_count = total_records - standard_count
+    unique_sizes = len(set([d.size for d in Penjualan.query.all()]))
+    
+    # Get data table
+    data_table = get_data_table()
+    
+    return render_template('index.html', active_page='dashboard', 
+                         total_records=total_records,
+                         standard_count=standard_count,
+                         non_standard_count=non_standard_count,
+                         unique_sizes=unique_sizes,
+                         data_table=data_table)
 
 
 # Upload Data
@@ -235,4 +250,13 @@ def delete_results():
 def results():
     kmeans = get_kmeans_result()
     kmedoids = get_kmedoids_result()
-    return render_template('results.html', active_page='results', kmeans=kmeans, kmedoids=kmedoids)
+    
+    # Format results for display
+    if kmeans and kmedoids:
+        formatted_results = format_results_display(kmeans, kmedoids)
+    else:
+        formatted_results = None
+    
+    return render_template('results.html', active_page='results', 
+                         kmeans=kmeans, kmedoids=kmedoids,
+                         formatted_results=formatted_results)

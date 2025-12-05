@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block title %}Hasil Clustering - Arwana Sales Analytics{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Clustering Results</h2>
+
+    <!-- KMeans Results -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">✓ KMeans Clustering Results</h5>
+                </div>
+                <div class="card-body" id="kmeans-results">
+                    <p class="text-muted text-center">Loading KMeans results...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KMedoids Results -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">✓ KMedoids Clustering Results</h5>
+                </div>
+                <div class="card-body" id="kmedoids-results">
+                    <p class="text-muted text-center">Loading KMedoids results...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Options -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <button class="btn btn-primary" onclick="exportToCSV()">📥 Export to CSV</button>
+            <button class="btn btn-info" onclick="printResults()">🖨 Print</button>
+        </div>
+    </div>
+</div>
+
+<script>
+async function loadResults() {
+    // Load KMeans
+    try {
+        const kmRes = await fetch('{{ url_for("main.preprocessing_kmeans") }}', {
+            headers: { 'Accept': 'application/json' }
+        });
+        const kmData = await kmRes.json();
+        displayKMeansResults(kmData);
+    } catch (e) {
+        document.getElementById('kmeans-results').innerHTML = 
+            '<p class="text-danger">Error loading KMeans results</p>';
+    }
+
+    // Load KMedoids
+    try {
+        const kmRes = await fetch('{{ url_for("main.preprocessing_kmedoids") }}', {
+            headers: { 'Accept': 'application/json' }
+        });
+        const kmData = await kmRes.json();
+        displayKMedoidsResults(kmData);
+    } catch (e) {
+        document.getElementById('kmedoids-results').innerHTML = 
+            '<p class="text-danger">Error loading KMedoids results</p>';
+    }
+}
+
+function displayKMeansResults(data) {
+    if (!data.inertia) {
+        document.getElementById('kmeans-results').innerHTML = 
+            '<p class="text-muted text-center">No KMeans results yet. Run clustering first!</p>';
+        return;
+    }
+
+    let html = `
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <div class="card bg-light">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Inertia</h6>
+                        <h3>${parseFloat(data.inertia).toFixed(2)}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-light">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Davies-Bouldin</h6>
+                        <h3>${parseFloat(data.davies_bouldin).toFixed(3)}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-light">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Clusters</h6>
+                        <h3>${Object.keys(data.cluster_distribution || {}).length}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h6 class="mt-4 mb-2">Standard Category by Size Range</h6>
+        <div class="table-responsive mb-4">
+            ${buildAnalysisTable(data.analysis?.standard || {})}
+        </div>
+
+        <h6 class="mb-2">Non-Standard Category by Size Range</h6>
+        <div class="table-responsive">
+            ${buildAnalysisTable(data.analysis?.non_standard || {})}
+        </div>
+    `;
+    document.getElementById('kmeans-results').innerHTML = html;
+}
+
+function displayKMedoidsResults(data) {
+    if (!data.cost) {
+        document.getElementById('kmedoids-results').innerHTML = 
+            '<p class="text-muted text-center">No KMedoids results yet. Run clustering first!</p>';
+        return;
+    }
+
+    let html = `
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <div class="card bg-light">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Total Cost</h6>
+                        <h3>${parseFloat(data.cost).toFixed(2)}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-light">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Davies-Bouldin</h6>
+                        <h3>${parseFloat(data.davies_bouldin).toFixed(3)}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-light">
+                    <div class="card-body text-center">
+                        <h6 class="text-muted">Clusters</h6>
+                        <h3>${Object.keys(data.cluster_distribution || {}).length}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h6 class="mt-4 mb-2">Standard Category by Size Range</h6>
+        <div class="table-responsive mb-4">
+            ${buildAnalysisTable(data.analysis?.standard || {})}
+        </div>
+
+        <h6 class="mb-2">Non-Standard Category by Size Range</h6>
+        <div class="table-responsive">
+            ${buildAnalysisTable(data.analysis?.non_standard || {})}
+        </div>
+    `;
+    document.getElementById('kmedoids-results').innerHTML = html;
+}
+
+function buildAnalysisTable(analysis) {
+    if (!analysis || Object.keys(analysis).length === 0) {
+        return '<p class="text-muted text-center">No data</p>';
+    }
+
+    let table = '<table class="table table-sm table-hover"><thead class="table-light"><tr>';
+    table += '<th>Size Range</th><th>Terlaris</th><th>Sedang</th><th>Kurang Laris</th><th>Total Sales</th></tr></thead><tbody>';
+
+    Object.entries(analysis).forEach(([range, data]) => {
+        table += `<tr>
+            <td><strong>${range}</strong></td>
+            <td><span class="badge bg-success">${data.terlaris || 0}</span></td>
+            <td><span class="badge bg-warning text-dark">${data.sedang || 0}</span></td>
+            <td><span class="badge bg-danger">${data.kurang_laris || 0}</span></td>
+            <td><strong>${data.total_terjual.toFixed(0)}</strong></td>
+        </tr>`;
+    });
+
+    table += '</tbody></table>';
+    return table;
+}
+
+function exportToCSV() {
+    alert('Export to CSV - Feature coming soon!');
+}
+
+function printResults() {
+    window.print();
+}
+
+// Load results on page load
+window.addEventListener('DOMContentLoaded', loadResults);
+</script>
+{% endblock %}

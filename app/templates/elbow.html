@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+
+{% block title %}Elbow Method - Arwana Sales Analytics{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">📊 Elbow Method</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">KMeans Elbow Method</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/elbow/kmeans" id="kmeansForm">
+                        <div class="mb-3">
+                            <label for="kmeansK" class="form-label">Maximum K value:</label>
+                            <input type="number" class="form-control" id="kmeansK" name="max_k" value="10" min="2" max="20" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" id="kmeansBtn">Calculate KMeans Elbow</button>
+                    </form>
+                    <div id="kmeansAlert" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">KMedoids Elbow Method</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/elbow/kmedoids" id="kmedoidsForm">
+                        <div class="mb-3">
+                            <label for="kmedoidsK" class="form-label">Maximum K value:</label>
+                            <input type="number" class="form-control" id="kmedoidsK" name="max_k" value="10" min="2" max="20" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100" id="kmedoidsBtn">Calculate KMedoids Elbow</button>
+                    </form>
+                    <div id="kmedoidsAlert" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">KMeans Inertia by K</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="kmeansChart"></canvas>
+                    <div id="kmeansMessage" class="text-muted text-center mt-3">Click "Calculate" to generate chart</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">KMedoids Cost by K</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="kmedoidsChart"></canvas>
+                    <div id="kmedoidsMessage" class="text-muted text-center mt-3">Click "Calculate" to generate chart</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <strong>💡 Elbow Method:</strong> This method helps determine the optimal number of clusters by finding the "elbow" point in the graph where inertia/cost starts to decrease at a slower rate.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+    let kmeansChart = null;
+    let kmedoidsChart = null;
+
+    document.getElementById('kmeansForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const maxK = document.getElementById('kmeansK').value;
+        const btn = document.getElementById('kmeansBtn');
+        
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+        
+        try {
+            const response = await fetch('/elbow/kmeans', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ max_k: parseInt(maxK) })
+            });
+            
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                displayKmeansChart(data.results);
+                showAlert('kmeansAlert', 'success', '✓ KMeans elbow method calculated successfully');
+            } else {
+                showAlert('kmeansAlert', 'danger', '✗ ' + data.message);
+            }
+        } catch (error) {
+            showAlert('kmeansAlert', 'danger', '✗ Error: ' + error.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = 'Calculate KMeans Elbow';
+        }
+    });
+
+    document.getElementById('kmedoidsForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const maxK = document.getElementById('kmedoidsK').value;
+        const btn = document.getElementById('kmedoidsBtn');
+        
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+        
+        try {
+            const response = await fetch('/elbow/kmedoids', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ max_k: parseInt(maxK) })
+            });
+            
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                displayKmedoidsChart(data.results);
+                showAlert('kmedoidsAlert', 'success', '✓ KMedoids elbow method calculated successfully');
+            } else {
+                showAlert('kmedoidsAlert', 'danger', '✗ ' + data.message);
+            }
+        } catch (error) {
+            showAlert('kmedoidsAlert', 'danger', '✗ Error: ' + error.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = 'Calculate KMedoids Elbow';
+        }
+    });
+
+    function displayKmeansChart(results) {
+        const ctx = document.getElementById('kmeansChart').getContext('2d');
+        
+        if (kmeansChart) {
+            kmeansChart.destroy();
+        }
+        
+        const labels = results.k_values;
+        const data = results.inertias;
+        
+        kmeansChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Inertia',
+                    data: data,
+                    borderColor: '#0d6efd',
+                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#0d6efd',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true },
+                    title: { display: true, text: 'KMeans Inertia vs K' }
+                },
+                scales: {
+                    y: { beginAtZero: false, title: { display: true, text: 'Inertia' } },
+                    x: { title: { display: true, text: 'Number of Clusters (K)' } }
+                }
+            }
+        });
+        
+        document.getElementById('kmeansMessage').style.display = 'none';
+    }
+
+    function displayKmedoidsChart(results) {
+        const ctx = document.getElementById('kmedoidsChart').getContext('2d');
+        
+        if (kmedoidsChart) {
+            kmedoidsChart.destroy();
+        }
+        
+        const labels = results.k_values;
+        const data = results.costs;
+        
+        kmedoidsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Cost',
+                    data: data,
+                    borderColor: '#198754',
+                    backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    pointRadius: 6,
+                    pointBackgroundColor: '#198754',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true },
+                    title: { display: true, text: 'KMedoids Cost vs K' }
+                },
+                scales: {
+                    y: { beginAtZero: false, title: { display: true, text: 'Cost' } },
+                    x: { title: { display: true, text: 'Number of Clusters (K)' } }
+                }
+            }
+        });
+        
+        document.getElementById('kmedoidsMessage').style.display = 'none';
+    }
+
+    function showAlert(elementId, type, message) {
+        const alertContainer = document.getElementById(elementId);
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        
+        alertContainer.innerHTML = `
+            <div class="alert alert-${alertClass} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,338 @@
+{% extends 'base.html' %}
+
+{% block title %}KMedoids Preprocessing - Arwana Sales Analytics{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>KMedoids Clustering</h2>
+            <p class="text-muted">Manual K-Medoids implementation using PAM algorithm</p>
+
+            <!-- Clustering Form -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Run Clustering</h5>
+                </div>
+                <div class="card-body">
+                    <form id="kmedoids-form" method="POST">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="k-value" class="form-label">Number of Clusters (K):</label>
+                                <input type="number" class="form-control" id="k-value" name="k" value="3" min="2" max="10">
+                            </div>
+                            <div class="col-md-6 d-flex align-items-end">
+                                <button type="button" class="btn btn-success w-100" id="run-btn">
+                                    <span id="btn-text">Run Clustering</span>
+                                    <span id="spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="alert-container" class="mt-3"></div>
+                </div>
+            </div>
+
+            <!-- Metrics Display -->
+            <div id="metrics-container" class="d-none">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted">Total Cost</h6>
+                                <h3 id="cost-value">-</h3>
+                                <small class="text-muted">Sum of distances to medoids</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted">Davies-Bouldin Index</h6>
+                                <h3 id="dbi-value">-</h3>
+                                <small class="text-muted">Lower is better (0 = perfect)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Breakdown Tabs -->
+            <div id="results-container" class="d-none">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Analysis Breakdown by Category & Size Range</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-tabs mb-3" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#standard-tab">Standard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#non-standard-tab">Non-Standard</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <!-- Standard Tab -->
+                            <div id="standard-tab" class="tab-pane fade show active">
+                                <div id="standard-content">
+                                    <p class="text-muted text-center">No data</p>
+                                </div>
+                            </div>
+
+                            <!-- Non-Standard Tab -->
+                            <div id="non-standard-tab" class="tab-pane fade">
+                                <div id="non-standard-content">
+                                    <p class="text-muted text-center">No data</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cluster Distribution Chart -->
+            <div id="chart-container" class="d-none mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Cluster Distribution</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="cluster-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Info -->
+        <div class="col-md-4">
+            <div class="card bg-success text-white mb-3">
+                <div class="card-header">
+                    <h5 class="mb-0">Algorithm</h5>
+                </div>
+                <div class="card-body small">
+                    <p><strong>Method:</strong> K-Medoids Clustering</p>
+                    <p><strong>Implementation:</strong> PAM Algorithm (no libraries)</p>
+                    <p><strong>Features:</strong></p>
+                    <ul>
+                        <li>Partition Around Medoids</li>
+                        <li>Robust medoid selection</li>
+                        <li>Swap-based optimization</li>
+                        <li>Davies-Bouldin Index</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card bg-warning text-dark">
+                <div class="card-header">
+                    <h5 class="mb-0">Legend</h5>
+                </div>
+                <div class="card-body small">
+                    <p><strong>Terlaris (Best-seller):</strong> Total sales ≥ 100</p>
+                    <p><strong>Sedang (Medium):</strong> Total sales ≥ 50, < 100</p>
+                    <p><strong>Kurang Laris (Low):</strong> Total sales < 50</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+<script>
+let clusterChart = null;
+
+document.getElementById('run-btn').addEventListener('click', async function() {
+    const k = document.getElementById('k-value').value;
+    const spinner = document.getElementById('spinner');
+    const btnText = document.getElementById('btn-text');
+    const alertContainer = document.getElementById('alert-container');
+
+    // Show loading state
+    spinner.classList.remove('d-none');
+    btnText.textContent = 'Processing...';
+    this.disabled = true;
+    alertContainer.innerHTML = '';
+
+    try {
+        const response = await fetch('{{ url_for("main.process_kmedoids") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'k=' + k
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Show metrics
+            document.getElementById('cost-value').textContent = 
+                parseFloat(data.cost).toFixed(2);
+            document.getElementById('dbi-value').textContent = 
+                parseFloat(data.davies_bouldin).toFixed(3);
+            document.getElementById('metrics-container').classList.remove('d-none');
+
+            // Show results
+            displayAnalysis(data.analysis);
+            document.getElementById('results-container').classList.remove('d-none');
+
+            // Show chart
+            displayClusterChart(data.cluster_distribution);
+            document.getElementById('chart-container').classList.remove('d-none');
+
+            // Success alert
+            alertContainer.innerHTML = `
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Success!</strong> Clustering completed with K=${k} clusters.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+        } else {
+            alertContainer.innerHTML = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error:</strong> ${data.error || 'Unknown error occurred'}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+        }
+    } catch (error) {
+        alertContainer.innerHTML = `
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error:</strong> ${error.message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+    } finally {
+        // Hide loading state
+        spinner.classList.add('d-none');
+        btnText.textContent = 'Run Clustering';
+        this.disabled = false;
+    }
+});
+
+function displayAnalysis(analysis) {
+    const standardContent = document.getElementById('standard-content');
+    const nonStandardContent = document.getElementById('non-standard-content');
+
+    // Standard
+    let standardHtml = '<div class="table-responsive">';
+    if (analysis.standard && Object.keys(analysis.standard).length > 0) {
+        standardHtml += '<table class="table table-sm table-hover"><thead class="table-light">';
+        standardHtml += '<tr><th>Size Range</th><th>Terlaris</th><th>Sedang</th><th>Kurang Laris</th><th>Total</th></tr></thead><tbody>';
+        
+        Object.entries(analysis.standard).forEach(([range, data]) => {
+            standardHtml += `
+                <tr>
+                    <td><strong>${range}</strong></td>
+                    <td><span class="badge bg-success">${data.terlaris}</span></td>
+                    <td><span class="badge bg-warning text-dark">${data.sedang}</span></td>
+                    <td><span class="badge bg-danger">${data.kurang_laris}</span></td>
+                    <td><strong>${data.total_terjual.toFixed(0)}</strong></td>
+                </tr>
+            `;
+        });
+        
+        standardHtml += '</tbody></table>';
+    } else {
+        standardHtml += '<p class="text-muted text-center">No data</p>';
+    }
+    standardHtml += '</div>';
+    standardContent.innerHTML = standardHtml;
+
+    // Non-Standard
+    let nonStandardHtml = '<div class="table-responsive">';
+    if (analysis.non_standard && Object.keys(analysis.non_standard).length > 0) {
+        nonStandardHtml += '<table class="table table-sm table-hover"><thead class="table-light">';
+        nonStandardHtml += '<tr><th>Size Range</th><th>Terlaris</th><th>Sedang</th><th>Kurang Laris</th><th>Total</th></tr></thead><tbody>';
+        
+        Object.entries(analysis.non_standard).forEach(([range, data]) => {
+            nonStandardHtml += `
+                <tr>
+                    <td><strong>${range}</strong></td>
+                    <td><span class="badge bg-success">${data.terlaris}</span></td>
+                    <td><span class="badge bg-warning text-dark">${data.sedang}</span></td>
+                    <td><span class="badge bg-danger">${data.kurang_laris}</span></td>
+                    <td><strong>${data.total_terjual.toFixed(0)}</strong></td>
+                </tr>
+            `;
+        });
+        
+        nonStandardHtml += '</tbody></table>';
+    } else {
+        nonStandardHtml += '<p class="text-muted text-center">No data</p>';
+    }
+    nonStandardHtml += '</div>';
+    nonStandardContent.innerHTML = nonStandardHtml;
+}
+
+function displayClusterChart(distribution) {
+    const ctx = document.getElementById('cluster-chart').getContext('2d');
+    
+    if (clusterChart) {
+        clusterChart.destroy();
+    }
+
+    clusterChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(distribution).map(k => 'Cluster ' + k),
+            datasets: [{
+                label: 'Number of Items',
+                data: Object.values(distribution),
+                backgroundColor: [
+                    'rgba(34, 193, 34, 0.7)',
+                    'rgba(76, 175, 80, 0.7)',
+                    'rgba(129, 199, 132, 0.7)',
+                    'rgba(165, 214, 167, 0.7)',
+                    'rgba(200, 230, 201, 0.7)',
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+}
+
+// Load existing results on page load
+window.addEventListener('DOMContentLoaded', async function() {
+    try {
+        const response = await fetch('{{ url_for("main.preprocessing_kmedoids") }}', {
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        const data = await response.json();
+
+        if (data.cost !== null) {
+            document.getElementById('cost-value').textContent = 
+                parseFloat(data.cost).toFixed(2);
+            document.getElementById('dbi-value').textContent = 
+                parseFloat(data.davies_bouldin).toFixed(3);
+            document.getElementById('metrics-container').classList.remove('d-none');
+
+            if (data.analysis) {
+                displayAnalysis(data.analysis);
+                document.getElementById('results-container').classList.remove('d-none');
+            }
+
+            if (data.cluster_distribution) {
+                displayClusterChart(data.cluster_distribution);
+                document.getElementById('chart-container').classList.remove('d-none');
+            }
+        }
+    } catch (error) {
+        console.error('Error loading results:', error);
+    }
+});
+</script>
+{% endblock %}

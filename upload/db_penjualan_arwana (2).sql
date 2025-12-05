@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 05, 2025 at 09:05 AM
+-- Generation Time: Dec 05, 2025 at 10:55 AM
 -- Server version: 10.11.11-MariaDB
 -- PHP Version: 8.2.12
 
@@ -32,6 +32,7 @@ CREATE TABLE `kmeans_cluster_detail` (
   `kmeans_result_id` int(11) NOT NULL,
   `penjualan_id` int(11) NOT NULL,
   `cluster_id` int(11) NOT NULL,
+  `cluster` varchar(50) DEFAULT NULL,
   `kategori` varchar(100) DEFAULT NULL,
   `size` varchar(50) DEFAULT NULL,
   `jumlah_terjual` int(11) DEFAULT NULL,
@@ -58,6 +59,7 @@ CREATE TABLE `kmeans_result` (
   `max_iterations` int(11) DEFAULT NULL,
   `random_state` int(11) DEFAULT NULL,
   `cluster_distribution` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`cluster_distribution`)),
+  `analysis_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`analysis_data`)),
   `data_kategori_count` int(11) DEFAULT NULL,
   `data_size_count` int(11) DEFAULT NULL,
   `data_penjual_count` int(11) DEFAULT NULL,
@@ -76,6 +78,7 @@ CREATE TABLE `kmedoids_cluster_detail` (
   `kmedoids_result_id` int(11) NOT NULL,
   `penjualan_id` int(11) NOT NULL,
   `cluster_id` int(11) NOT NULL,
+  `cluster` varchar(50) DEFAULT NULL,
   `kategori` varchar(100) DEFAULT NULL,
   `size` varchar(50) DEFAULT NULL,
   `jumlah_terjual` int(11) DEFAULT NULL,
@@ -102,7 +105,9 @@ CREATE TABLE `kmedoids_result` (
   `n_samples` int(11) DEFAULT NULL,
   `max_iterations` int(11) DEFAULT NULL,
   `random_state` int(11) DEFAULT NULL,
+  `medoids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`medoids`)),
   `cluster_distribution` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`cluster_distribution`)),
+  `analysis_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`analysis_data`)),
   `data_kategori_count` int(11) DEFAULT NULL,
   `data_size_count` int(11) DEFAULT NULL,
   `data_penjual_count` int(11) DEFAULT NULL,
@@ -174,31 +179,31 @@ ALTER TABLE `penjualan`
 -- AUTO_INCREMENT for table `kmeans_cluster_detail`
 --
 ALTER TABLE `kmeans_cluster_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10866;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24447;
 
 --
 -- AUTO_INCREMENT for table `kmeans_result`
 --
 ALTER TABLE `kmeans_result`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `kmedoids_cluster_detail`
 --
 ALTER TABLE `kmedoids_cluster_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13223;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21371;
 
 --
 -- AUTO_INCREMENT for table `kmedoids_result`
 --
 ALTER TABLE `kmedoids_result`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `penjualan`
 --
 ALTER TABLE `penjualan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8149;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14939;
 
 --
 -- Constraints for dumped tables

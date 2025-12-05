@@ -8,6 +8,7 @@ class Penjualan(db.Model):
     __tablename__ = 'penjualan'
 
     id = db.Column(db.Integer, primary_key=True)
+    tanggal_terjual = db.Column(db.Date, nullable=False)
     kategori = db.Column(db.String(100))
     size = db.Column(db.String(50))
     jumlah_terjual = db.Column(db.Integer)
@@ -71,6 +72,7 @@ class KMeansClusterDetail(db.Model):
     kmeans_result_id = db.Column(db.Integer, db.ForeignKey('kmeans_result.id'), nullable=False)
     penjualan_id = db.Column(db.Integer, db.ForeignKey('penjualan.id'), nullable=False)
     cluster_id = db.Column(db.Integer, nullable=False)
+    cluster = db.Column(db.String(50))
     kategori = db.Column(db.String(100))
     size = db.Column(db.String(50))
     jumlah_terjual = db.Column(db.Integer)
@@ -90,6 +92,7 @@ class KMedoidsClusterDetail(db.Model):
     kmedoids_result_id = db.Column(db.Integer, db.ForeignKey('kmedoids_result.id'), nullable=False)
     penjualan_id = db.Column(db.Integer, db.ForeignKey('penjualan.id'), nullable=False)
     cluster_id = db.Column(db.Integer, nullable=False)
+    cluster = db.Column(db.String(50))
     kategori = db.Column(db.String(100))
     size = db.Column(db.String(50))
     jumlah_terjual = db.Column(db.Integer)

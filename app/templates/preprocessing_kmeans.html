@@ -3,27 +3,455 @@
 {% block title %}KMeans Preprocessing - Arwana Sales Analytics{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-8">
-            <h2>KMeans Clustering</h2>
-            <p class="text-muted">Manual K-Means implementation (no library)</p>
+<style>
+    .preprocessing-header {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 10px;
+    }
+    
+    .preprocessing-header h1 {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .preprocessing-header p {
+        margin-bottom: 0;
+        opacity: 0.95;
+    }
+    
+    .control-card {
+        border: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .control-card .card-header {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        border: none;
+        padding: 1.2rem;
+    }
+    
+    .control-card .card-header h5 {
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .form-control {
+        border-radius: 6px;
+        border: 1px solid #dee2e6;
+        padding: 0.7rem;
+    }
+    
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+    
+    .metrics-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .metric-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 8px;
+        padding: 1.5rem;
+        text-align: center;
+        border-left: 4px solid #0d6efd;
+    }
+    
+    .metric-card h6 {
+        color: #6c757d;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+    }
+    
+    .metric-card h3 {
+        color: #0d6efd;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .metric-card small {
+        color: #6c757d;
+        font-size: 0.8rem;
+    }
+    
+    .results-card {
+        border: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+    
+    .results-card .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #0d6efd;
+        padding: 1.2rem;
+    }
+    
+    .results-card .card-header h5 {
+        font-weight: 600;
+        margin: 0;
+        color: #333;
+    }
+    
+    .nav-tabs .nav-link {
+        color: #6c757d;
+        border: none;
+        border-bottom: 3px solid transparent;
+        font-weight: 500;
+        margin-bottom: -2px;
+    }
+    
+    .nav-tabs .nav-link:hover {
+        color: #0d6efd;
+        border-bottom-color: #0d6efd;
+    }
+    
+    .nav-tabs .nav-link.active {
+        color: #0d6efd;
+        background-color: transparent;
+        border-bottom-color: #0d6efd;
+    }
+    
+    .chart-container {
+        position: relative;
+        height: 400px;
+        margin: 1rem 0;
+    }
+    
+    .sidebar-card {
+        border: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 1.5rem;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .sidebar-card.info-card {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+    }
+    
+    .sidebar-card.legend-card {
+        background: linear-gradient(135deg, #ffc107 0%, #ffb700 100%);
+        color: #333;
+    }
+    
+    .sidebar-card .card-header {
+        background: rgba(0,0,0,0.1);
+        border: none;
+        padding: 1rem;
+    }
+    
+    .sidebar-card .card-header h5 {
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .sidebar-card .card-body {
+        padding: 1rem;
+    }
+    
+    .sidebar-card p {
+        margin-bottom: 0.7rem;
+        font-size: 0.9rem;
+    }
+    
+    .sidebar-card ul {
+        padding-left: 1.2rem;
+        margin-bottom: 0;
+    }
+    
+    .sidebar-card li {
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .btn-primary-large {
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        border-radius: 6px;
+        border: none;
+    }
+    
+    .status-success .spinner-border {
+        color: #198754 !important;
+    }
+    
+    .status-loading .spinner-border {
+        color: #0d6efd !important;
+    }
 
+    /* === NEW STYLES FOR ITERATIONS === */
+    .iteration-section {
+        margin-top: 2rem;
+    }
+
+    .iteration-card {
+        border: 2px solid #e9ecef;
+        border-left: 5px solid #0d6efd;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .iteration-header {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .iteration-content {
+        padding: 1.5rem;
+    }
+
+    .centroid-section {
+        margin-bottom: 2rem;
+    }
+
+    .centroid-title {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+    }
+
+    .centroid-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .centroid-box {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .centroid-label {
+        display: inline-block;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem;
+        color: white;
+    }
+
+    .centroid-label.c0 {
+        background: linear-gradient(135deg, #198754 0%, #157347 100%);
+    }
+
+    .centroid-label.c1 {
+        background: linear-gradient(135deg, #ffc107 0%, #ffb700 100%);
+        color: #333;
+    }
+
+    .centroid-label.c2 {
+        background: linear-gradient(135deg, #dc3545 0%, #bb2d3b 100%);
+    }
+
+    .centroid-value {
+        font-weight: 600;
+        color: #0d6efd;
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .centroid-label-small {
+        font-size: 0.75rem;
+        color: #6c757d;
+        text-transform: uppercase;
+    }
+
+    .distance-section {
+        margin-bottom: 1rem;
+    }
+
+    .distance-title {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+    }
+
+    .distance-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        background: white;
+    }
+
+    .distance-table thead {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .distance-table th {
+        padding: 0.75rem;
+        text-align: left;
+        font-weight: 600;
+        color: #333;
+        border: 1px solid #dee2e6;
+    }
+
+    .distance-table td {
+        padding: 0.75rem;
+        border: 1px solid #dee2e6;
+    }
+
+    .distance-table tbody tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+
+    .distance-table tbody tr:hover {
+        background: #e7f1ff;
+    }
+
+    .distance-value {
+        font-weight: 500;
+        text-align: right;
+    }
+
+    .cluster-badge {
+        display: inline-block;
+        padding: 0.3rem 0.7rem;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: white;
+    }
+
+    .cluster-badge.c0 {
+        background: #198754;
+    }
+
+    .cluster-badge.c1 {
+        background: #ffc107;
+        color: #333;
+    }
+
+    .cluster-badge.c2 {
+        background: #dc3545;
+    }
+
+    .convergence-badge {
+        display: inline-block;
+        background: #d1ecf1;
+        border: 1px solid #bee5eb;
+        color: #0c5460;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-top: 1rem;
+    }
+
+    .final-results-section {
+        margin-top: 2rem;
+    }
+
+    .final-results-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        background: white;
+        margin-bottom: 1.5rem;
+    }
+
+    .final-results-table thead {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+    }
+
+    .final-results-table th {
+        padding: 0.75rem;
+        text-align: left;
+        font-weight: 600;
+        border: 1px solid #dee2e6;
+    }
+
+    .final-results-table td {
+        padding: 0.75rem;
+        border: 1px solid #dee2e6;
+    }
+
+    .final-results-table tbody tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+
+    .summary-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .summary-stat {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 6px;
+        padding: 1rem;
+        text-align: center;
+        border: 1px solid #dee2e6;
+    }
+
+    .summary-stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #0d6efd;
+        margin-bottom: 0.5rem;
+    }
+
+    .summary-stat-label {
+        font-size: 0.85rem;
+        color: #6c757d;
+        font-weight: 500;
+    }
+</style>
+
+<div class="preprocessing-header">
+    <div class="container">
+        <h1>📊 K-Means Clustering</h1>
+        <p>Manual K-Means implementation dengan pengukuran kualitas Davies-Bouldin Index</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
             <!-- Clustering Form -->
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Run Clustering</h5>
+            <div class="card control-card">
+                <div class="card-header">
+                    <h5>⚙️ Konfigurasi Clustering</h5>
                 </div>
                 <div class="card-body">
                     <form id="kmeans-form" method="POST">
                         <div class="row">
                             <div class="col-md-6">
-                                <label for="k-value" class="form-label">Number of Clusters (K):</label>
+                                <label for="k-value" class="form-label fw-500">Jumlah Cluster (K)</label>
                                 <input type="number" class="form-control" id="k-value" name="k" value="3" min="2" max="10">
+                                <small class="text-muted">Tentukan jumlah cluster yang diinginkan (2-10)</small>
                             </div>
                             <div class="col-md-6 d-flex align-items-end">
-                                <button type="button" class="btn btn-primary w-100" id="run-btn">
-                                    <span id="btn-text">Jalankan Clustering</span>
+                                <button type="button" class="btn btn-primary btn-primary-large w-100" id="run-btn">
+                                    <span id="btn-text">▶️ Jalankan Clustering</span>
                                     <span id="spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
                                 </button>
                             </div>
@@ -33,14 +461,14 @@
                     
                     <!-- Status Display -->
                     <div id="status-container" class="mt-3 d-none">
-                        <div class="alert alert-info">
+                        <div class="alert alert-info status-loading mb-0">
                             <div class="d-flex align-items-center">
                                 <div class="spinner-border spinner-border-sm me-3" role="status" id="status-spinner">
                                     <span class="visually-hidden">Processing...</span>
                                 </div>
                                 <div>
                                     <strong id="status-text">Processing...</strong>
-                                    <p id="status-message" class="mb-0 mt-1"></p>
+                                    <p id="status-message" class="mb-0 mt-1 small"></p>
                                 </div>
                             </div>
                         </div>
@@ -50,382 +478,68 @@
 
             <!-- Metrics Display -->
             <div id="metrics-container" class="d-none">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="card bg-light">
-                            <div class="card-body text-center">
-                                <h6 class="text-muted">Inertia</h6>
-                                <h3 id="inertia-value">-</h3>
-                                <small class="text-muted">Sum of squared distances to centroids</small>
-                            </div>
-                        </div>
+                <div class="metrics-row">
+                    <div class="metric-card">
+                        <h6>Inertia</h6>
+                        <h3 id="inertia-value">-</h3>
+                        <small>Jumlah kuadrat jarak ke centroid</small>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card bg-light">
-                            <div class="card-body text-center">
-                                <h6 class="text-muted">Davies-Bouldin Index</h6>
-                                <h3 id="dbi-value">-</h3>
-                                <small class="text-muted">Lower is better (0 = perfect)</small>
-                            </div>
-                        </div>
+                    <div class="metric-card" style="border-left-color: #198754;">
+                        <h6>Davies-Bouldin Index</h6>
+                        <h3 id="dbi-value" style="color: #198754;">-</h3>
+                        <small>Semakin rendah semakin baik</small>
                     </div>
                 </div>
             </div>
 
-            <!-- Analysis Breakdown Tabs -->
-            <div id="results-container" class="d-none">
-                <div class="card">
+            <!-- Analysis Breakdown - REMOVED -->
+            <!-- Chart - REMOVED -->
+
+            <!-- Iterations Visualization -->
+            <div id="iterations-container" class="d-none iteration-section">
+                <div class="results-card">
                     <div class="card-header">
-                        <h5 class="mb-0">Analysis Breakdown by Category & Size Range</h5>
+                        <h5>📊 Proses K-Means Iterasi Detail</h5>
                     </div>
                     <div class="card-body">
-                        <ul class="nav nav-tabs mb-3" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#standard-tab">Standard</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#non-standard-tab">Non-Standard</a>
-                            </li>
-                        </ul>
-
-                        <div class="tab-content">
-                            <!-- Standard Tab -->
-                            <div id="standard-tab" class="tab-pane fade show active">
-                                <div id="standard-content">
-                                    <p class="text-muted text-center">No data</p>
-                                </div>
-                            </div>
-
-                            <!-- Non-Standard Tab -->
-                            <div id="non-standard-tab" class="tab-pane fade">
-                                <div id="non-standard-content">
-                                    <p class="text-muted text-center">No data</p>
-                                </div>
-                            </div>
-                        </div>
+                        <div id="iterations-list"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Cluster Distribution Chart -->
-            <div id="chart-container" class="d-none mt-4">
-                <div class="card">
+            <!-- Final Results Section -->
+            <div id="final-results-container" class="d-none final-results-section">
+                <div class="results-card">
                     <div class="card-header">
-                        <h5 class="mb-0">Cluster Distribution</h5>
+                        <h5>✅ Hasil Cluster K-Means Final</h5>
                     </div>
                     <div class="card-body">
-                        <canvas id="cluster-chart"></canvas>
+                        <div class="table-responsive">
+                            <table class="final-results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Kategori</th>
+                                        <th>Size Range</th>
+                                        <th>Jumlah Terjual</th>
+                                        <th>Cluster</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="final-results-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h6 style="margin-top: 2rem; font-weight: 600;">📈 Ringkasan Cluster</h6>
+                        <div class="summary-stats" id="summary-stats"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Sidebar Info -->
-        <div class="col-md-4">
-            <div class="card bg-info text-white mb-3">
-                <div class="card-header">
-                    <h5 class="mb-0">Algorithm</h5>
-                </div>
-                <div class="card-body small">
-                    <p><strong>Method:</strong> K-Means Clustering</p>
-                    <p><strong>Implementation:</strong> Manual (no libraries)</p>
-                    <p><strong>Features:</strong></p>
-                    <ul>
-                        <li>Centroid initialization</li>
-                        <li>Iterative reassignment</li>
-                        <li>Convergence detection</li>
-                        <li>Davies-Bouldin Index</li>
-                    </ul>
-                </div>
-            </div>
 
-            <div class="card bg-warning text-dark">
-                <div class="card-header">
-                    <h5 class="mb-0">Legend</h5>
-                </div>
-                <div class="card-body small">
-                    <p><strong>Terlaris (Best-seller):</strong> Total sales ≥ 100</p>
-                    <p><strong>Sedang (Medium):</strong> Total sales ≥ 50, < 100</p>
-                    <p><strong>Kurang Laris (Low):</strong> Total sales < 50</p>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
-<!-- Chart.js Library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-
-<script>
-let clusterChart = null;
-
-document.getElementById('run-btn').addEventListener('click', async function() {
-    const k = document.getElementById('k-value').value;
-    const spinner = document.getElementById('spinner');
-    const btnText = document.getElementById('btn-text');
-    const alertContainer = document.getElementById('alert-container');
-    const statusContainer = document.getElementById('status-container');
-    const statusText = document.getElementById('status-text');
-    const statusMessage = document.getElementById('status-message');
-    const statusSpinner = document.getElementById('status-spinner');
-
-    // Show loading state
-    spinner.classList.remove('d-none');
-    btnText.textContent = 'Processing...';
-    this.disabled = true;
-    alertContainer.innerHTML = '';
-    statusContainer.classList.remove('d-none');
-    statusText.textContent = 'Running KMeans Clustering...';
-    statusMessage.textContent = `Processing ${k} clusters, please wait...`;
-
-    try {
-        const response = await fetch('{{ url_for("main.process_kmeans") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'k=' + k
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.status === 'success') {
-            // Show success message
-            statusSpinner.innerHTML = '<i class="text-success" style="font-size: 1.5rem;">✓</i>';
-            statusText.textContent = 'Clustering Berhasil!';
-            statusMessage.textContent = `Hasil disimpan dengan Inertia: ${parseFloat(data.inertia).toFixed(2)}`;
-            
-            // Show metrics
-            document.getElementById('inertia-value').textContent = 
-                parseFloat(data.inertia).toFixed(2);
-            document.getElementById('dbi-value').textContent = 
-                parseFloat(data.davies_bouldin).toFixed(3);
-            document.getElementById('metrics-container').classList.remove('d-none');
-
-            // Show results
-            displayAnalysis(data.analysis);
-            document.getElementById('results-container').classList.remove('d-none');
-
-            // Show chart
-            displayClusterChart(data.cluster_distribution);
-            document.getElementById('chart-container').classList.remove('d-none');
-
-            // Change status container color to success
-            setTimeout(() => {
-                const statusDiv = statusContainer.querySelector('.alert');
-                statusDiv.classList.remove('alert-info');
-                statusDiv.classList.add('alert-success');
-            }, 500);
-
-
-            // Success alert
-            alertContainer.innerHTML = `
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Success!</strong> Clustering completed with K=${k} clusters.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            `;
-        } else {
-            statusSpinner.innerHTML = '<i class="text-danger" style="font-size: 1.5rem;">✗</i>';
-            statusText.textContent = 'Clustering Gagal!';
-            statusMessage.textContent = data.error || 'Unknown error occurred';
-            const statusDiv = statusContainer.querySelector('.alert');
-            statusDiv.classList.remove('alert-info');
-            statusDiv.classList.add('alert-danger');
-            
-            alertContainer.innerHTML = `
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Error:</strong> ${data.error || 'Unknown error occurred'}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            `;
-        }
-    } catch (error) {
-        statusSpinner.innerHTML = '<i class="text-danger" style="font-size: 1.5rem;">✗</i>';
-        statusText.textContent = 'Clustering Gagal!';
-        statusMessage.textContent = error.message;
-        const statusDiv = statusContainer.querySelector('.alert');
-        statusDiv.classList.remove('alert-info');
-        statusDiv.classList.add('alert-danger');
-        
-        alertContainer.innerHTML = `
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Error:</strong> ${error.message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        `;
-    } finally {
-        // Hide loading state
-        spinner.classList.add('d-none');
-        btnText.textContent = 'Run Clustering';
-        this.disabled = false;
-    }
-});
-
-function displayAnalysis(analysis) {
-    const standardContent = document.getElementById('standard-content');
-    const nonStandardContent = document.getElementById('non-standard-content');
-
-    function renderCategoryAnalysis(categoryData) {
-        if (!categoryData || Object.keys(categoryData).length === 0) {
-            return '<p class="text-muted text-center">No data</p>';
-        }
-
-        let html = '';
-        
-        // Group by tier and size range
-        const tiers = {
-            'terlaris': { name: 'Terlaris (Top Sales)', badge: 'bg-success', items: [] },
-            'sedang': { name: 'Sedang (Medium Sales)', badge: 'bg-warning text-dark', items: [] },
-            'kurang_laris': { name: 'Kurang Laris (Low Sales)', badge: 'bg-danger', items: [] }
-        };
-
-        // Organize data by tier
-        Object.entries(categoryData).forEach(([range, data]) => {
-            const tier = data.tier || 'kurang_laris';
-            if (tiers[tier]) {
-                tiers[tier].items.push({ range, ...data });
-            }
-        });
-
-        // Render each tier
-        Object.entries(tiers).forEach(([tierKey, tierData]) => {
-            if (tierData.items.length === 0) return;
-
-            html += `
-                <div class="mb-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="badge ${tierData.badge} p-2 me-2">${tierData.name}</span>
-                        <small class="text-muted">${tierData.items.length} size range(s)</small>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-sm table-hover border">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Size Range</th>
-                                    <th class="text-end">Jumlah Terjual</th>
-                                    <th>Cluster</th>
-                                    <th>Kategori</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-            `;
-
-            tierData.items.forEach(item => {
-                if (item.items && Array.isArray(item.items)) {
-                    // Group items by size range
-                    let sizeRangeTotal = 0;
-                    let clusterIds = new Set();
-                    
-                    item.items.forEach(subItem => {
-                        sizeRangeTotal += parseFloat(subItem.jumlah_terjual || 0);
-                        clusterIds.add(subItem.cluster);
-                    });
-
-                    html += `
-                        <tr>
-                            <td><strong>${item.range}</strong></td>
-                            <td class="text-end"><strong>${sizeRangeTotal.toFixed(0)}</strong></td>
-                            <td>
-                                ${Array.from(clusterIds).map(id => 
-                                    `<span class="badge bg-secondary">C${id}</span>`
-                                ).join(' ')}
-                            </td>
-                            <td>${item.items.length} item(s)</td>
-                        </tr>
-                    `;
-                }
-            });
-
-            html += `
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
-        });
-
-        return html;
-    }
-
-    // Standard
-    let standardHtml = '<div class="table-responsive">';
-    standardHtml += renderCategoryAnalysis(analysis.standard);
-    standardHtml += '</div>';
-    standardContent.innerHTML = standardHtml;
-
-    // Non-Standard
-    let nonStandardHtml = '<div class="table-responsive">';
-    nonStandardHtml += renderCategoryAnalysis(analysis.non_standard);
-    nonStandardHtml += '</div>';
-    nonStandardContent.innerHTML = nonStandardHtml;
-}
-
-function displayClusterChart(distribution) {
-    const ctx = document.getElementById('cluster-chart').getContext('2d');
-    
-    if (clusterChart) {
-        clusterChart.destroy();
-    }
-
-    clusterChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: Object.keys(distribution).map(k => 'Cluster ' + k),
-            datasets: [{
-                label: 'Number of Items',
-                data: Object.values(distribution),
-                backgroundColor: [
-                    'rgba(54, 162, 235, 0.7)',
-                    'rgba(75, 192, 192, 0.7)',
-                    'rgba(255, 159, 64, 0.7)',
-                    'rgba(153, 102, 255, 0.7)',
-                    'rgba(255, 99, 132, 0.7)',
-                ]
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                y: { beginAtZero: true }
-            }
-        }
-    });
-}
-
-// Load existing results on page load
-window.addEventListener('DOMContentLoaded', async function() {
-    try {
-        const response = await fetch('{{ url_for("main.preprocessing_kmeans") }}', {
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-        const data = await response.json();
-
-        if (data.inertia !== null) {
-            document.getElementById('inertia-value').textContent = 
-                parseFloat(data.inertia).toFixed(2);
-            document.getElementById('dbi-value').textContent = 
-                parseFloat(data.davies_bouldin).toFixed(3);
-            document.getElementById('metrics-container').classList.remove('d-none');
-
-            if (data.analysis) {
-                displayAnalysis(data.analysis);
-                document.getElementById('results-container').classList.remove('d-none');
-            }
-
-            if (data.cluster_distribution) {
-                displayClusterChart(data.cluster_distribution);
-                document.getElementById('chart-container').classList.remove('d-none');
-            }
-        }
-    } catch (error) {
-        console.error('Error loading results:', error);
-    }
-});
-</script>
+<script src="{{ url_for('static', filename='js/preprocessing-kmeans.js') }}"></script>
 {% endblock %}

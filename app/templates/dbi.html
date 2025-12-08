@@ -1,0 +1,493 @@
+{% extends 'base.html' %}
+
+{% block title %}Davies-Bouldin Index - Arwana Sales Analytics{% endblock %}
+
+{% block content %}
+<style>
+    .dbi-header {
+        background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 10px;
+    }
+    
+    .dbi-header h1 {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .dbi-header p {
+        margin-bottom: 0;
+        opacity: 0.95;
+    }
+    
+    .form-card {
+        border: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .form-card .card-header {
+        background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
+        color: white;
+        padding: 1.2rem;
+        font-weight: 600;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    
+    .form-control {
+        border-radius: 6px;
+        border: 1px solid #dee2e6;
+        padding: 0.7rem;
+        font-size: 0.95rem;
+    }
+    
+    .form-control:focus {
+        border-color: #6f42c1;
+        box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
+    }
+    
+    .btn-run {
+        width: 100%;
+        padding: 0.75rem;
+        font-weight: 600;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
+        color: white;
+    }
+    
+    .btn-run:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(111, 66, 193, 0.4);
+    }
+    
+    .btn-run:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    .spinner-border-sm {
+        width: 1rem;
+        height: 1rem;
+        border-width: 0.25em;
+        margin-right: 0.5rem;
+    }
+    
+    .result-container {
+        display: none;
+        animation: slideIn 0.3s ease;
+    }
+    
+    .result-container.show {
+        display: block;
+    }
+    
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .chart-container {
+        text-align: center;
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+    
+    .chart-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .results-table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 1rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .results-table thead {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    .results-table th {
+        padding: 1rem;
+        text-align: center;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .results-table td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #dee2e6;
+        text-align: center;
+    }
+    
+    .results-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .results-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .metric-value {
+        font-weight: 500;
+        font-family: 'Courier New', monospace;
+    }
+    
+    .k-value {
+        font-weight: 600;
+        color: #6f42c1;
+    }
+    
+    .dbi-kmeans {
+        color: #0d6efd;
+    }
+    
+    .dbi-kmedoids {
+        color: #dc3545;
+    }
+    
+    .alert {
+        border-radius: 6px;
+        border: none;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .alert-info {
+        background-color: #e2e3e5;
+        color: #383d41;
+    }
+    
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #842029;
+    }
+    
+    .alert-success {
+        background-color: #d1e7dd;
+        color: #0f5132;
+    }
+    
+    .input-info {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+    }
+    
+    .loading-spinner {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    .info-box {
+        background: #e7f3ff;
+        border-left: 4px solid #0d6efd;
+        padding: 1rem;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+    }
+    
+    .info-box strong {
+        color: #0d6efd;
+    }
+    
+    .comparison-badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
+    }
+    
+    .badge-kmeans {
+        background-color: #cfe2ff;
+        color: #084298;
+    }
+    
+    .badge-kmedoids {
+        background-color: #f8d7da;
+        color: #842029;
+    }
+</style>
+
+<div class="container-fluid mt-4">
+    <!-- Header -->
+    <div class="dbi-header">
+        <div class="container">
+            <h1>📊 Davies-Bouldin Index (DBI)</h1>
+            <p>Bandingkan kualitas clustering antara K-Means dan K-Medoids menggunakan Davies-Bouldin Index</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Form Section -->
+        <div class="row mb-4">
+            <div class="col-lg-6">
+                <div class="form-card">
+                    <div class="card-header">
+                        ⚙️ Pengaturan Perhitungan DBI
+                    </div>
+                    <div class="card-body">
+                        <form id="dbiForm">
+                            <div class="info-box">
+                                <strong>💡 Catatan:</strong> DBI yang lebih rendah menunjukkan clustering yang lebih baik. Semakin kecil nilai DBI, semakin terpisah dan terdefinisi dengan baik cluster-clusternya.
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="k_min" class="form-label">K Minimal</label>
+                                    <input type="number" class="form-control" id="k_min" name="k_min" 
+                                           value="2" min="2" max="20" required>
+                                    <div class="input-info">Minimum: 2</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="k_max" class="form-label">K Maksimal</label>
+                                    <input type="number" class="form-control" id="k_max" name="k_max" 
+                                           value="10" min="2" max="20" required>
+                                    <div class="input-info">Maksimum: 20</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="max_iter" class="form-label">Max Iterasi</label>
+                                    <input type="number" class="form-control" id="max_iter" name="max_iter" 
+                                           value="100" min="10" max="500" required>
+                                    <div class="input-info">Range: 10-500</div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn-run" id="dbiBtn">
+                                <span class="btn-text">▶ Run DBI Comparison</span>
+                            </button>
+                        </form>
+                        <div id="dbiAlert" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="col-lg-6">
+                <div class="form-card">
+                    <div class="card-header">
+                        📋 Informasi
+                    </div>
+                    <div class="card-body">
+                        <div style="line-height: 2;">
+                            <h6 style="margin-bottom: 1rem; font-weight: 600;">Apa itu Davies-Bouldin Index?</h6>
+                            <p style="font-size: 0.95rem; color: #666; margin-bottom: 1rem;">
+                                Davies-Bouldin Index (DBI) adalah ukuran validasi cluster yang mengukur rata-rata 
+                                kesamaan antara setiap cluster dengan cluster yang paling mirip dengannya. Nilai DBI 
+                                yang lebih rendah menunjukkan clustering yang lebih baik.
+                            </p>
+                            
+                            <h6 style="margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: 600;">Interpretasi:</h6>
+                            <ul style="padding-left: 1.5rem; font-size: 0.95rem;">
+                                <li><strong>DBI Rendah (< 1.0):</strong> Clustering berkualitas sangat baik</li>
+                                <li><strong>DBI Sedang (1.0 - 1.5):</strong> Clustering berkualitas baik</li>
+                                <li><strong>DBI Tinggi (> 1.5):</strong> Clustering perlu peningkatan</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultContainer" class="result-container mt-4">
+            <!-- Chart -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="form-card">
+                        <div class="card-header">
+                            📈 Grafik Perbandingan DBI
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <img id="dbiChart" src="" alt="DBI Comparison Chart">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-card">
+                        <div class="card-header">
+                            📋 Hasil Analisis Lengkap
+                        </div>
+                        <div class="card-body">
+                            <div style="overflow-x: auto;">
+                                <table class="results-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Jumlah Cluster (K)</th>
+                                            <th>
+                                                DBI K-Means
+                                                <span class="comparison-badge badge-kmeans">KM</span>
+                                            </th>
+                                            <th>
+                                                DBI K-Medoids
+                                                <span class="comparison-badge badge-kmedoids">KMed</span>
+                                            </th>
+                                            <th>Perbedaan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dbiTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Information Box -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="alert alert-info" style="background-color: #e7f3ff; border-left: 4px solid #0d6efd; color: #004085;">
+                    <strong>ℹ️ Catatan Penting:</strong>
+                    <br>
+                    Davies-Bouldin Index mengevaluasi kualitas cluster berdasarkan rasio antara dispersi intra-cluster 
+                    dan separasi inter-cluster. Semakin rendah nilainya, semakin baik kualitas clustering. Untuk dataset 
+                    yang sama, algoritma dengan nilai DBI lebih rendah dianggap menghasilkan clustering yang lebih baik.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Handle Form Submit
+    document.getElementById('dbiForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await runDbiComparison();
+    });
+
+    async function runDbiComparison() {
+        const button = document.getElementById('dbiBtn');
+        const alertDiv = document.getElementById('dbiAlert');
+        const resultContainer = document.getElementById('resultContainer');
+        
+        // Get form data
+        const k_min = parseInt(document.getElementById('k_min').value);
+        const k_max = parseInt(document.getElementById('k_max').value);
+        const max_iter = parseInt(document.getElementById('max_iter').value);
+        
+        // Validate
+        if (k_min < 2 || k_max < k_min || k_max > 20) {
+            alertDiv.innerHTML = '<div class="alert alert-danger">❌ K minimal harus >= 2, K maksimal >= K minimal, dan <= 20</div>';
+            return;
+        }
+        
+        // Show loading state
+        button.disabled = true;
+        button.innerHTML = '<span class="loading-spinner"><span class="spinner-border spinner-border-sm text-light" role="status" aria-hidden="true"></span><span class="btn-text">Processing...</span></span>';
+        alertDiv.innerHTML = '<div class="alert alert-info">⏳ Sedang menghitung DBI untuk kedua algoritma...</div>';
+        resultContainer.classList.remove('show');
+        
+        try {
+            const response = await fetch('/dbi', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    k_min: k_min,
+                    k_max: k_max,
+                    max_iter: max_iter
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                // Display chart
+                const chartImg = document.getElementById('dbiChart');
+                chartImg.src = `data:image/png;base64,${data.chart}`;
+                
+                // Populate table
+                const tableBody = document.getElementById('dbiTableBody');
+                tableBody.innerHTML = '';
+                
+                data.list_k.forEach((k, index) => {
+                    const dbi_kmeans = data.list_dbi_kmeans[index];
+                    const dbi_kmedoids = data.list_dbi_kmedoids[index];
+                    const diff = Math.abs(dbi_kmeans - dbi_kmedoids);
+                    const better = dbi_kmeans < dbi_kmedoids ? 'KMeans' : 'KMedoids';
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="k-value">${k}</td>
+                        <td class="metric-value dbi-kmeans">${dbi_kmeans.toFixed(3)}</td>
+                        <td class="metric-value dbi-kmedoids">${dbi_kmedoids.toFixed(3)}</td>
+                        <td class="metric-value">${diff.toFixed(3)} <small style="color: #6c757d;">(${better} lebih baik)</small></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                
+                // Show result container
+                resultContainer.classList.add('show');
+                
+                // Show success message
+                alertDiv.innerHTML = '<div class="alert alert-success">✅ Perhitungan DBI berhasil selesai!</div>';
+            } else {
+                alertDiv.innerHTML = `<div class="alert alert-danger">❌ Error: ${data.message}</div>`;
+            }
+        } catch (error) {
+            alertDiv.innerHTML = `<div class="alert alert-danger">❌ Error: ${error.message}</div>`;
+        } finally {
+            button.disabled = false;
+            button.innerHTML = '<span class="btn-text">▶ Run DBI Comparison</span>';
+        }
+    }
+</script>
+
+{% endblock %}

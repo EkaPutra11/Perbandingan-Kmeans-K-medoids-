@@ -1,12 +1,14 @@
 from flask import Blueprint, render_template, request, jsonify, current_app
-from app.processing_kmeans import process_kmeans_manual, save_kmeans_manual_result, get_kmeans_result
+from app.processing_kmeans import process_kmeans_manual, save_kmeans_manual_result, get_kmeans_result, get_kmeans_iteration_details
 from app.processing_kmedoids import process_kmedoids_manual, save_kmedoids_manual_result, get_kmedoids_result
-from app.elbow_method import calculate_elbow_kmeans, calculate_elbow_kmedoids
+from app.dbi_calculator import calculate_dbi_comparison, render_dbi_chart
 from app.analysis_formatter import format_results_display, get_data_table, format_category_analysis
 from app.models import db, Penjualan, KMeansResult, KMedoidsResult, KMeansClusterDetail, KMedoidsClusterDetail
 import pandas as pd
 import os
 from werkzeug.utils import secure_filename
+import base64
+from io import BytesIO
 
 main = Blueprint('main', __name__)
 
@@ -18,7 +20,6 @@ def index():
     total_records = Penjualan.query.count()
     standard_count = Penjualan.query.filter_by(kategori='Standard').count()
     non_standard_count = total_records - standard_count
-    unique_sizes = len(set([d.size for d in Penjualan.query.all()]))
     
     # Get data table
     data_table = get_data_table()
@@ -27,7 +28,6 @@ def index():
                          total_records=total_records,
                          standard_count=standard_count,
                          non_standard_count=non_standard_count,
-                         unique_sizes=unique_sizes,
                          data_table=data_table)
 
 
@@ -96,16 +96,11 @@ def data_stats():
         total = Penjualan.query.count()
         standard = Penjualan.query.filter_by(kategori='Standard').count()
         non_standard = total - standard
-        
-        # Count unique sizes
-        sizes = db.session.query(Penjualan.size.distinct()).all()
-        unique_sizes = len([s[0] for s in sizes if s[0]])
 
         return jsonify({
             'total_records': total,
             'standard_count': standard,
-            'non_standard_count': non_standard,
-            'unique_sizes': unique_sizes
+            'non_standard_count': non_standard
         })
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
@@ -146,6 +141,66 @@ def process_kmeans():
         return jsonify({'status': 'error', 'error': str(e)})
 
 
+# Preprocessing KMeans - Get iteration details
+@main.route('/preprocessing/kmeans/iterations', methods=['GET'])
+def kmeans_iterations():
+    """Get detailed iteration steps for KMeans clustering"""
+    try:
+        from app.processing_kmeans import KMeansManual, analyze_clustering_results, convert_numpy_types
+        import numpy as np
+        
+        # Get all data
+        data = Penjualan.query.all()
+        if not data:
+            return jsonify({'status': 'error', 'message': 'No data available'})
+        
+        # Convert to DataFrame
+        df = pd.DataFrame([{
+            'id': d.id,
+            'kategori': d.kategori,
+            'size': d.size,
+            'jumlah_terjual': float(d.jumlah_terjual),
+            'total_harga': float(d.total_harga) if d.total_harga else 0
+        } for d in data])
+        
+        # Prepare features for clustering
+        X = df[['jumlah_terjual', 'total_harga']].values.astype(float)
+        
+        # Normalize data
+        X_mean = X.mean(axis=0)
+        X_std = X.std(axis=0)
+        X_normalized = (X - X_mean) / (X_std + 1e-8)
+        
+        # Run KMeans with tracking
+        kmeans = KMeansManual(k=3, max_iterations=100, random_state=42)
+        kmeans.fit(X_normalized)
+        
+        # Get iteration details
+        iterations = get_kmeans_iteration_details(df, X_normalized, kmeans)
+        
+        # Get analysis
+        analysis = analyze_clustering_results(df, kmeans.labels, kmeans.centroids)
+        analysis = convert_numpy_types(analysis)
+        
+        return jsonify({
+            'status': 'success',
+            'iterations': iterations,
+            'total_iterations': len(iterations),
+            'data_count': len(df),
+            'analysis': analysis
+        })
+    except Exception as e:
+        return jsonify({'status': 'error', 'error': str(e)})
+
+
+# View KMeans Iterations Page
+@main.route('/kmeans-iterations')
+def view_kmeans_iterations():
+    """Display KMeans iterations visualization page"""
+    return render_template('kmeans_iterations.html', active_page='kmeans_iterations')
+
+
+
 # Preprocessing KMedoids - GET (load previous results)
 @main.route('/preprocessing/kmedoids')
 def preprocessing_kmedoids():
@@ -179,38 +234,6 @@ def process_kmedoids():
         return jsonify({'status': 'error', 'error': 'Failed to process data'})
     except Exception as e:
         return jsonify({'status': 'error', 'error': str(e)})
-
-
-# Elbow Method
-@main.route('/elbow')
-def elbow_page():
-    return render_template('elbow.html', active_page='elbow')
-
-
-# Calculate Elbow KMeans
-@main.route('/elbow/kmeans', methods=['POST'])
-def elbow_kmeans():
-    try:
-        max_k = request.get_json().get('max_k', 10) if request.is_json else request.form.get('max_k', 10, type=int)
-        results = calculate_elbow_kmeans(k_range=range(2, max_k + 1))
-        if results:
-            return jsonify({'status': 'success', 'results': results})
-        return jsonify({'status': 'error', 'message': 'No data available'})
-    except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
-
-
-# Calculate Elbow KMedoids
-@main.route('/elbow/kmedoids', methods=['POST'])
-def elbow_kmedoids():
-    try:
-        max_k = request.get_json().get('max_k', 10) if request.is_json else request.form.get('max_k', 10, type=int)
-        results = calculate_elbow_kmedoids(k_range=range(2, max_k + 1))
-        if results:
-            return jsonify({'status': 'success', 'results': results})
-        return jsonify({'status': 'error', 'message': 'No data available'})
-    except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
 
 
 # Delete All Data
@@ -260,3 +283,58 @@ def results():
     return render_template('results.html', active_page='results', 
                          kmeans=kmeans, kmedoids=kmedoids,
                          formatted_results=formatted_results)
+
+
+# Davies-Bouldin Index Comparison
+@main.route('/dbi', methods=['GET', 'POST'])
+def dbi_comparison():
+    try:
+        if request.method == 'GET':
+            # Show form
+            return render_template('dbi.html', active_page='dbi')
+        
+        # POST request - process DBI calculation
+        data = request.get_json() if request.is_json else request.form
+        k_min = int(data.get('k_min', 2))
+        k_max = int(data.get('k_max', 10))
+        max_iter = int(data.get('max_iter', 100))
+        
+        # Validate inputs
+        if k_min < 2 or k_max < k_min or k_max > 20:
+            return jsonify({
+                'status': 'error',
+                'message': 'K minimal harus >= 2, K maksimal >= K minimal, dan <= 20'
+            })
+        
+        # Calculate DBI comparison
+        result = calculate_dbi_comparison(k_min=k_min, k_max=k_max, max_iterations=max_iter)
+        
+        if result['status'] != 'success':
+            return jsonify(result)
+        
+        # Render chart
+        chart_base64 = render_dbi_chart(
+            result['list_k'],
+            result['list_dbi_kmeans'],
+            result['list_dbi_kmedoids']
+        )
+        
+        if not chart_base64:
+            return jsonify({
+                'status': 'error',
+                'message': 'Failed to render chart'
+            })
+        
+        return jsonify({
+            'status': 'success',
+            'list_k': result['list_k'],
+            'list_dbi_kmeans': result['list_dbi_kmeans'],
+            'list_dbi_kmedoids': result['list_dbi_kmedoids'],
+            'chart': chart_base64
+        })
+    
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        })

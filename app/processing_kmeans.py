@@ -26,6 +26,7 @@ class KMeansManual:
         self.centroids = None
         self.labels = None
         self.inertia = None
+        self.iteration_history = []
 
     def fit(self, X):
         np.random.seed(self.random_state)
@@ -34,11 +35,27 @@ class KMeansManual:
         # Initialize centroids randomly
         random_indices = np.random.choice(n_samples, self.k, replace=False)
         self.centroids = X[random_indices].copy()
+        
+        # Store initial centroids
+        self.iteration_history.append({
+            'iteration': 0,
+            'centroids': self.centroids.copy(),
+            'distances': None,
+            'labels': None
+        })
 
         for iteration in range(self.max_iterations):
             # Assign clusters
             distances = np.sqrt(((X - self.centroids[:, np.newaxis])**2).sum(axis=2))
             self.labels = np.argmin(distances, axis=0)
+
+            # Store iteration data
+            self.iteration_history.append({
+                'iteration': iteration + 1,
+                'centroids': self.centroids.copy(),
+                'distances': distances.copy(),
+                'labels': self.labels.copy()
+            })
 
             # Update centroids
             new_centroids = np.array([X[self.labels == i].mean(axis=0) if np.sum(self.labels == i) > 0 else self.centroids[i] for i in range(self.k)])
@@ -130,6 +147,10 @@ def analyze_clustering_results(data, labels, centroids):
 
         # Get size range
         size_range = get_size_range(size_str)
+        
+        # Skip if size is Unknown
+        if size_range == 'Unknown':
+            continue
 
         # Determine category type
         category_type = 'standard' if kategori.lower() in ['standar', 'standard'] else 'non_standard'
@@ -141,7 +162,8 @@ def analyze_clustering_results(data, labels, centroids):
                 'sedang': 0,
                 'kurang_laris': 0,
                 'total_terjual': 0,
-                'items': []
+                'items': [],
+                'cluster_totals': {}
             }
 
         # Add to total
@@ -152,17 +174,34 @@ def analyze_clustering_results(data, labels, centroids):
             'size': size_str,
             'jumlah_terjual': jumlah
         })
+        
+        # Sum cluster penjualan for this size range
+        if cluster_id not in analysis[category_type][size_range]['cluster_totals']:
+            analysis[category_type][size_range]['cluster_totals'][cluster_id] = 0
+        analysis[category_type][size_range]['cluster_totals'][cluster_id] += jumlah
 
-    # Categorize each size range as terlaris/sedang/kurang_laris
+    # Categorize based on dominant cluster and remove cluster_totals
     for category_type in ['standard', 'non_standard']:
         for size_range, data_dict in analysis[category_type].items():
-            total = data_dict['total_terjual']
-            if total >= 100:
+            # Get dominant cluster (cluster with highest total penjualan for this size range)
+            dominant_cluster = None
+            if data_dict['cluster_totals']:
+                dominant_cluster = max(data_dict['cluster_totals'], key=data_dict['cluster_totals'].get)
+                data_dict['dominant_cluster'] = dominant_cluster
+            
+            # Determine tier based on cluster ID
+            # C0 = Terlaris, C1 = Sedang, C2 = Kurang Laris
+            if dominant_cluster == 0:
                 data_dict['tier'] = 'terlaris'
-            elif total >= 50:
+            elif dominant_cluster == 1:
                 data_dict['tier'] = 'sedang'
-            else:
+            elif dominant_cluster == 2:
                 data_dict['tier'] = 'kurang_laris'
+            else:
+                data_dict['tier'] = 'kurang_laris'  # Default
+            
+            # Remove cluster_totals from output (no longer needed)
+            del data_dict['cluster_totals']
 
     return analysis
 
@@ -332,3 +371,65 @@ def get_kmeans_result():
     except Exception as e:
         print(f'Error getting KMeans result: {str(e)}')
         return None
+
+
+def get_kmeans_iteration_details(data_df, X_normalized, kmeans_model):
+    """Generate detailed iteration information for KMeans"""
+    iterations = []
+    
+    for iter_data in kmeans_model.iteration_history:
+        iteration_num = iter_data['iteration']
+        centroids = iter_data['centroids']
+        distances = iter_data['distances']
+        labels = iter_data['labels']
+        
+        # Build iteration detail
+        iter_detail = {
+            'iteration': iteration_num,
+            'centroids': [
+                {
+                    'cluster_id': i,
+                    'jumlah_terjual': float(centroids[i][0]),
+                    'total_harga': float(centroids[i][1])
+                }
+                for i in range(len(centroids))
+            ] if distances is not None else None,
+            'cluster_assignments': []
+        }
+        
+        # If distances exist, build assignment details
+        if distances is not None and labels is not None:
+            distance_data = []
+            
+            for idx, (data_idx, row) in enumerate(data_df.iterrows()):
+                kategori = row.get('kategori', 'Unknown')
+                size_str = row.get('size', 'Unknown')
+                size_range = get_size_range(size_str)
+                
+                # Skip unknown sizes
+                if size_range == 'Unknown':
+                    continue
+                
+                # Get distances to all centroids for this point
+                dist_to_clusters = {
+                    f'C{i}': round(float(distances[i][idx]), 2)
+                    for i in range(len(centroids))
+                }
+                
+                # Assigned cluster
+                assigned_cluster = f'C{labels[idx]}'
+                
+                distance_data.append({
+                    'kategori': kategori,
+                    'size': size_range,
+                    'jumlah_terjual': float(row.get('jumlah_terjual', 0)),
+                    'total_harga': float(row.get('total_harga', 0)),
+                    'distances': dist_to_clusters,
+                    'assigned_cluster': assigned_cluster
+                })
+            
+            iter_detail['cluster_assignments'] = distance_data
+        
+        iterations.append(iter_detail)
+    
+    return iterations

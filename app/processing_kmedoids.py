@@ -146,6 +146,10 @@ def analyze_clustering_results(data, labels, medoid_indices):
 
         # Get size range
         size_range = get_size_range(size_str)
+        
+        # Skip if size is Unknown
+        if size_range == 'Unknown':
+            continue
 
         # Determine category type
         category_type = 'standard' if kategori.lower() in ['standar', 'standard'] else 'non_standard'
@@ -157,7 +161,8 @@ def analyze_clustering_results(data, labels, medoid_indices):
                 'sedang': 0,
                 'kurang_laris': 0,
                 'total_terjual': 0,
-                'items': []
+                'items': [],
+                'cluster_totals': {}
             }
 
         # Add to total
@@ -168,17 +173,34 @@ def analyze_clustering_results(data, labels, medoid_indices):
             'size': size_str,
             'jumlah_terjual': jumlah
         })
+        
+        # Sum cluster penjualan for this size range
+        if cluster_id not in analysis[category_type][size_range]['cluster_totals']:
+            analysis[category_type][size_range]['cluster_totals'][cluster_id] = 0
+        analysis[category_type][size_range]['cluster_totals'][cluster_id] += jumlah
 
-    # Categorize each size range as terlaris/sedang/kurang_laris
+    # Categorize based on dominant cluster and remove cluster_totals
     for category_type in ['standard', 'non_standard']:
         for size_range, data_dict in analysis[category_type].items():
-            total = data_dict['total_terjual']
-            if total >= 100:
+            # Get dominant cluster (cluster with highest total penjualan for this size range)
+            dominant_cluster = None
+            if data_dict['cluster_totals']:
+                dominant_cluster = max(data_dict['cluster_totals'], key=data_dict['cluster_totals'].get)
+                data_dict['dominant_cluster'] = dominant_cluster
+            
+            # Determine tier based on cluster ID
+            # C0 = Terlaris, C1 = Sedang, C2 = Kurang Laris
+            if dominant_cluster == 0:
                 data_dict['tier'] = 'terlaris'
-            elif total >= 50:
+            elif dominant_cluster == 1:
                 data_dict['tier'] = 'sedang'
-            else:
+            elif dominant_cluster == 2:
                 data_dict['tier'] = 'kurang_laris'
+            else:
+                data_dict['tier'] = 'kurang_laris'  # Default
+            
+            # Remove cluster_totals from output (no longer needed)
+            del data_dict['cluster_totals']
 
     return analysis
 

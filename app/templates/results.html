@@ -3,180 +3,327 @@
 {% block title %}Hasil Clustering - Arwana Sales Analytics{% endblock %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
+<style>
+    .results-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 2rem;
+    }
+    
+    .results-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    .results-header h1 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .results-header p {
+        font-size: 1.1rem;
+        color: #7f8c8d;
+    }
+    
+    .comparison-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .comparison-card .card-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        font-weight: 600;
+        font-size: 1.2rem;
+        margin: 0;
+    }
+    
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .comparison-table th {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        color: #333;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    .comparison-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .dbi-value {
+        font-family: 'Courier New', monospace;
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-align: center;
+    }
+    
+    .dbi-kmeans {
+        background: #e3f2fd;
+        color: #1976d2;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        display: inline-block;
+    }
+    
+    .dbi-kmedoids {
+        background: #f3e5f5;
+        color: #7b1fa2;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        display: inline-block;
+    }
+    
+    .winner-badge {
+        display: inline-block;
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+    
+    .winner-badge.kmeans {
+        background: #c8e6c9;
+        color: #2e7d32;
+    }
+    
+    .winner-badge.kmedoids {
+        background: #f3e5f5;
+        color: #7b1fa2;
+    }
+    
+    .winner-badge.tie {
+        background: #fff3e0;
+        color: #e65100;
+    }
+    
+    .improvement-section {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-top: 1rem;
+    }
+    
+    .improvement-label {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .improvement-value {
+        font-family: 'Courier New', monospace;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2e7d32;
+    }
+    
+    .info-section {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .info-section h3 {
+        color: #2c3e50;
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .info-section p {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+    
+    .conclusion-banner {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+        padding: 2rem;
+        text-align: center;
+        margin-top: 2rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .conclusion-banner h2 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.8rem;
+    }
+    
+    .conclusion-banner p {
+        margin: 0;
+        font-size: 1.1rem;
+        opacity: 0.95;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #7f8c8d;
+    }
+    
+    .empty-state-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+    
+    .nav-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+    
+    .nav-buttons a {
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-buttons .btn-primary {
+        background: #0d6efd;
+        color: white;
+    }
+    
+    .nav-buttons .btn-primary:hover {
+        background: #0b5ed7;
+    }
+    
+    .nav-buttons .btn-success {
+        background: #198754;
+        color: white;
+    }
+    
+    .nav-buttons .btn-success:hover {
+        background: #157347;
+    }
+    
+    .nav-buttons .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+    
+    .nav-buttons .btn-secondary:hover {
+        background: #5c636a;
+    }
+</style>
 
 <div class="results-container">
     <!-- Header -->
     <div class="results-header">
-        <h1>🔍 Hasil Clustering</h1>
-        <p>Perbandingan KMeans vs KMedoids untuk kategori produk berdasarkan penjualan</p>
+        <h1>📊 Perbandingan DBI</h1>
+        <p>Davies-Bouldin Index: KMeans vs KMedoids</p>
     </div>
 
     {% if formatted_results %}
-        <!-- Comparison Section -->
-        <div class="comparison-section">
-            <!-- KMeans Card -->
-            <div class="method-card method-kmeans">
-                <div class="method-header">
-                    <h2>KMeans Clustering</h2>
-                </div>
-                
-                <div class="metrics-grid">
-                    <div class="metric-box">
-                        <div class="metric-label">Inertia</div>
-                        <div class="metric-value">{{ "%.2f" | format(formatted_results.kmeans.inertia) }}</div>
-                    </div>
-                    <div class="metric-box">
-                        <div class="metric-label">Davies-Bouldin Index</div>
-                        <div class="metric-value">{{ "%.3f" | format(formatted_results.kmeans.dbi) }}</div>
-                    </div>
-                </div>
-
-                <!-- Analysis by Category -->
-                {% for category_type, categories in formatted_results.kmeans.analysis.items() %}
-                    <div class="category-section">
-                        <div class="category-title">
-                            {% if category_type == 'STANDARD' %}
-                                === STANDARD ===
-                            {% else %}
-                                === NON-STANDARD ===
-                            {% endif %}
-                        </div>
-
-                        <!-- Tiers -->
-                        {% for tier_name, items in categories.items() %}
-                            {% if items %}
-                                <div class="tier-container">
-                                    <div class="tier-header {% if tier_name == 'Terlaris' %}tier-terlaris{% elif tier_name == 'Sedang' %}tier-sedang{% else %}tier-kurang{% endif %}">
-                                        <span class="tier-badge">{{ tier_name }}</span>
-                                        <span class="tier-label">{{ tier_name }}</span>
-                                        <span class="tier-count">{{ items|length }} item</span>
-                                    </div>
-                                    
-                                    <div class="items-list">
-                                        {% for item in items %}
-                                            <div class="item-row">
-                                                <div class="item-name">{{ item.kategori }}</div>
-                                                <div class="item-size">{{ item.size_range }}</div>
-                                                <div class="item-value">{{ "%.0f" | format(item.total) }}</div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
+        <!-- DBI Comparison Table -->
+        <div class="comparison-card">
+            <div class="card-header">⚖️ Hasil Perbandingan DBI</div>
+            <div style="padding: 1.5rem;">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">Metrik</th>
+                            <th style="width: 25%;">KMeans</th>
+                            <th style="width: 25%;">KMedoids</th>
+                            <th style="width: 20%;">Pemenang</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight: 500;">Davies-Bouldin Index (DBI)</td>
+                            <td>
+                                <div class="dbi-value dbi-kmeans">
+                                    {{ "%.3f" | format(formatted_results.kmeans.dbi) }}
                                 </div>
-                            {% endif %}
-                        {% endfor %}
-
-                        <div style="text-align: right; margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 5px;">
-                            <strong>DBI Terbaik: {{ "%.3f" | format(formatted_results.kmeans.dbi) }} (KMeans)</strong>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-
-            <!-- KMedoids Card -->
-            <div class="method-card method-kmedoids">
-                <div class="method-header">
-                    <h2>KMedoids Clustering</h2>
-                </div>
-                
-                <div class="metrics-grid">
-                    <div class="metric-box">
-                        <div class="metric-label">Cost</div>
-                        <div class="metric-value">{{ "%.2f" | format(formatted_results.kmedoids.cost) }}</div>
-                    </div>
-                    <div class="metric-box">
-                        <div class="metric-label">Davies-Bouldin Index</div>
-                        <div class="metric-value">{{ "%.3f" | format(formatted_results.kmedoids.dbi) }}</div>
-                    </div>
-                </div>
-
-                <!-- Analysis by Category -->
-                {% for category_type, categories in formatted_results.kmedoids.analysis.items() %}
-                    <div class="category-section">
-                        <div class="category-title">
-                            {% if category_type == 'STANDARD' %}
-                                === STANDARD ===
-                            {% else %}
-                                === NON-STANDARD ===
-                            {% endif %}
-                        </div>
-
-                        <!-- Tiers -->
-                        {% for tier_name, items in categories.items() %}
-                            {% if items %}
-                                <div class="tier-container">
-                                    <div class="tier-header {% if tier_name == 'Terlaris' %}tier-terlaris{% elif tier_name == 'Sedang' %}tier-sedang{% else %}tier-kurang{% endif %}">
-                                        <span class="tier-badge">{{ tier_name }}</span>
-                                        <span class="tier-label">{{ tier_name }}</span>
-                                        <span class="tier-count">{{ items|length }} item</span>
-                                    </div>
-                                    
-                                    <div class="items-list">
-                                        {% for item in items %}
-                                            <div class="item-row">
-                                                <div class="item-name">{{ item.kategori }}</div>
-                                                <div class="item-size">{{ item.size_range }}</div>
-                                                <div class="item-value">{{ "%.0f" | format(item.total) }}</div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
+                            </td>
+                            <td>
+                                <div class="dbi-value dbi-kmedoids">
+                                    {{ "%.3f" | format(formatted_results.kmedoids.dbi) }}
                                 </div>
-                            {% endif %}
-                        {% endfor %}
-
-                        <div style="text-align: right; margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 5px;">
-                            <strong>DBI Terbaik: {{ "%.3f" | format(formatted_results.kmedoids.dbi) }} (KMedoids)</strong>
-                        </div>
-                    </div>
-                {% endfor %}
+                            </td>
+                            <td>
+                                {% if formatted_results.kmeans.dbi < formatted_results.kmedoids.dbi %}
+                                    <span class="winner-badge kmeans">KMeans ✓</span>
+                                {% elif formatted_results.kmedoids.dbi < formatted_results.kmeans.dbi %}
+                                    <span class="winner-badge kmedoids">KMedoids ✓</span>
+                                {% else %}
+                                    <span class="winner-badge tie">Sama</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: 500;">Selisih DBI (Perbedaan)</td>
+                            <td colspan="3">
+                                <div class="improvement-section">
+                                    <div class="improvement-label">Perbedaan nilai DBI:</div>
+                                    <div class="improvement-value">
+                                        {{ "%.3f" | format((formatted_results.kmeans.dbi - formatted_results.kmedoids.dbi)|abs) }}
+                                    </div>
+                                    {% if formatted_results.kmeans.dbi != 0 %}
+                                        <div class="improvement-label" style="margin-top: 0.5rem;">
+                                            Persentase: {{ "%.2f" | format(((formatted_results.kmeans.dbi - formatted_results.kmedoids.dbi)|abs / formatted_results.kmeans.dbi) * 100) }}%
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- Comparison Summary -->
-        <div style="margin-top: 40px; padding: 25px; background: white; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);">
-            <h3 style="color: #2c3e50; margin-bottom: 20px;">📊 Ringkasan Perbandingan</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div>
-                    <p><strong>KMeans</strong></p>
-                    <ul style="list-style: none; padding: 0;">
-                        <li>✓ Inertia: {{ "%.2f" | format(formatted_results.kmeans.inertia) }}</li>
-                        <li>✓ DBI: {{ "%.3f" | format(formatted_results.kmeans.dbi) }}</li>
-                        <li>✓ Algoritma berbasis centroid</li>
-                    </ul>
-                </div>
-                <div>
-                    <p><strong>KMedoids</strong></p>
-                    <ul style="list-style: none; padding: 0;">
-                        <li>✓ Cost: {{ "%.2f" | format(formatted_results.kmedoids.cost) }}</li>
-                        <li>✓ DBI: {{ "%.3f" | format(formatted_results.kmedoids.dbi) }}</li>
-                        <li>✓ Algoritma berbasis medoid (representatif)</li>
-                    </ul>
-                </div>
+        <!-- Conclusion -->
+        {% if formatted_results.kmeans.dbi < formatted_results.kmedoids.dbi %}
+            <div class="conclusion-banner">
+                <h2>🏆 KMeans Lebih Baik</h2>
+                <p>KMeans menghasilkan clustering dengan kualitas lebih baik (DBI lebih rendah) pada dataset ini.</p>
             </div>
-            <p style="margin-top: 20px; color: #7f8c8d; font-size: 0.95rem;">
-                <strong>Nilai DBI lebih rendah menunjukkan clustering yang lebih baik.</strong> 
-                {% if formatted_results.kmeans.dbi < formatted_results.kmedoids.dbi %}
-                    KMeans menghasilkan clustering dengan kualitas lebih baik pada dataset ini.
-                {% else %}
-                    KMedoids menghasilkan clustering dengan kualitas lebih baik pada dataset ini.
-                {% endif %}
-            </p>
+        {% elif formatted_results.kmedoids.dbi < formatted_results.kmeans.dbi %}
+            <div class="conclusion-banner">
+                <h2>🏆 KMedoids Lebih Baik</h2>
+                <p>KMedoids menghasilkan clustering dengan kualitas lebih baik (DBI lebih rendah) pada dataset ini.</p>
+            </div>
+        {% else %}
+            <div class="conclusion-banner">
+                <h2>⚖️ Hasil Sama</h2>
+                <p>Kedua algoritma menghasilkan DBI yang sama pada dataset ini.</p>
+            </div>
+        {% endif %}
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="/" class="btn-secondary">← Dashboard</a>
+            <a href="/preprocessing/kmeans" class="btn-primary">KMeans Preprocessing</a>
+            <a href="/preprocessing/kmedoids" class="btn-success">KMedoids Preprocessing</a>
         </div>
 
     {% else %}
         <div class="empty-state">
             <div class="empty-state-icon">📭</div>
-            <p>Belum ada hasil clustering</p>
-            <p>Silakan jalankan clustering terlebih dahulu di halaman Preprocessing</p>
-            <div style="margin-top: 20px;">
-                <a href="/preprocessing/kmeans" class="btn btn-primary me-2">KMeans Preprocessing</a>
-                <a href="/preprocessing/kmedoids" class="btn btn-success">KMedoids Preprocessing</a>
+            <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">Belum ada hasil clustering</p>
+            <p style="font-size: 1rem; margin-bottom: 1.5rem;">Silakan jalankan clustering terlebih dahulu di halaman Preprocessing</p>
+            <div class="nav-buttons">
+                <a href="/preprocessing/kmeans" class="btn-primary">KMeans Preprocessing</a>
+                <a href="/preprocessing/kmedoids" class="btn-success">KMedoids Preprocessing</a>
             </div>
         </div>
     {% endif %}
 </div>
 
-{% if formatted_results %}
-<script src="{{ url_for('static', filename='js/results.js') }}"></script>
-{% endif %}
 {% endblock %}

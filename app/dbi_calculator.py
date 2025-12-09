@@ -4,21 +4,21 @@ import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')  # Non-GUI backend
 from app.models import Penjualan
-from app.processing_kmeans import KMeansManual, davies_bouldin_index_manual as davies_bouldin_kmeans
+from app.processing_kmeans import KMeansManual, davies_bouldin_index_manual as davies_bouldin_kmeans, aggregate_data_by_size_range
 from app.processing_kmedoids import KMedoidsManual, davies_bouldin_index_manual as davies_bouldin_kmedoids
 import base64
 from io import BytesIO
 
 
 def get_clustering_data():
-    """Get data from database and normalize it - same way as processing_kmeans.py"""
+    """Get data from database, aggregate per 5cm, and normalize it"""
     try:
         # Get data from database
         data = Penjualan.query.all()
         if not data:
             return None, None, None
         
-        # Convert to DataFrame - EXACTLY like processing_kmeans.py
+        # Convert to DataFrame
         df = pd.DataFrame([{
             'id': d.id,
             'kategori': d.kategori,
@@ -30,10 +30,13 @@ def get_clustering_data():
             'kota_tujuan': d.kota_tujuan
         } for d in data])
         
-        # Prepare features for clustering - EXACTLY like processing_kmeans.py
+        # AGGREGATE DATA BY 5CM SIZE RANGE (like processing_kmeans.py does)
+        df = aggregate_data_by_size_range(df)
+        
+        # Prepare features for clustering
         X = df[['jumlah_terjual', 'total_harga']].values.astype(float)
         
-        # Normalize - EXACTLY like processing_kmeans.py
+        # Normalize
         X_mean = X.mean(axis=0)
         X_std = X.std(axis=0)
         X_normalized = (X - X_mean) / (X_std + 1e-8)

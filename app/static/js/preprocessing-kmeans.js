@@ -413,6 +413,39 @@ window.addEventListener('DOMContentLoaded', async function() {
     }
 });
 
+// Reset button handler
+document.getElementById('reset-btn').addEventListener('click', async function() {
+    if (confirm('Apakah Anda yakin ingin mereset semua hasil clustering?')) {
+        try {
+            const response = await fetch('/delete/results', {
+                method: 'POST'
+            });
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                // Hide metrics and results
+                document.getElementById('metrics-container').classList.add('d-none');
+                document.getElementById('final-results-container').classList.add('d-none');
+                document.getElementById('iterations-container').classList.add('d-none');
+                
+                // Clear alert
+                document.getElementById('alert-container').innerHTML = `
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <strong>Reset Berhasil!</strong> Semua hasil clustering telah dihapus.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+                
+                // Clear metric values
+                document.getElementById('inertia-value').textContent = '-';
+                document.getElementById('dbi-value').textContent = '-';
+            }
+        } catch (error) {
+            alert('Error: ' + error.message);
+        }
+    }
+});
+
 // Function to load and display iterations
 async function loadAndDisplayIterations() {
     try {
@@ -506,7 +539,7 @@ function displayIterations(iterations) {
                 html += `
                     <tr>
                         <td>${assignment.kategori}</td>
-                        <td>${assignment.size}</td>
+                        <td>${assignment.size_range}</td>
                         <td>${assignment.jumlah_terjual.toFixed(0)}</td>
                         <td class="distance-value">${assignment.distances['C0'].toFixed(3)}</td>
                         <td class="distance-value">${assignment.distances['C1'].toFixed(3)}</td>

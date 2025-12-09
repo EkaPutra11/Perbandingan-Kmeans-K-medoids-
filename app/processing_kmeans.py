@@ -131,7 +131,30 @@ def get_size_range(size_str):
         return "Unknown"
 
 
-def analyze_clustering_results(data, labels, centroids):
+def aggregate_data_by_size_range(df):
+    """Aggregate data by 5cm size ranges and category before clustering"""
+    # Group by category and size range, sum the values
+    df['size_range'] = df['size'].apply(get_size_range)
+    
+    # Remove rows with Unknown size range
+    df = df[df['size_range'] != 'Unknown'].copy()
+    
+    # Aggregate by kategori and size_range
+    aggregated = df.groupby(['kategori', 'size_range']).agg({
+        'jumlah_terjual': 'sum',
+        'total_harga': 'sum'
+    }).reset_index()
+    
+    # Keep track of original indices for later reference
+    aggregated['original_rows'] = aggregated.apply(
+        lambda row: df[(df['kategori'] == row['kategori']) & (df['size_range'] == row['size_range'])].index.tolist(),
+        axis=1
+    )
+    
+    return aggregated
+
+
+def analyze_clustering_results(data, labels, medoid_indices):
     """Analyze clustering results - Standard and Non-Standard breakdown by 5cm size ranges"""
     analysis = {
         'standard': {},
@@ -206,8 +229,56 @@ def analyze_clustering_results(data, labels, centroids):
     return analysis
 
 
+def analyze_clustering_results_aggregated(df_aggregated, labels, centroids):
+    """Analyze clustering results from aggregated data (already grouped by 5cm size ranges)"""
+    analysis = {
+        'standard': {},
+        'non_standard': {}
+    }
+
+    # Process aggregated data with cluster labels
+    for i, (idx, row) in enumerate(df_aggregated.iterrows()):
+        cluster_id = int(labels[i])
+        kategori = row.get('kategori', 'Unknown')
+        size_range = row.get('size_range', 'Unknown')
+        jumlah = float(row.get('jumlah_terjual', 0)) if row.get('jumlah_terjual') else 0
+        total_harga = float(row.get('total_harga', 0)) if row.get('total_harga') else 0
+
+        # Skip if size is Unknown
+        if size_range == 'Unknown':
+            continue
+
+        # Determine category type
+        category_type = 'standard' if kategori.lower() in ['standar', 'standard'] else 'non_standard'
+
+        # Initialize size range if not exists
+        if size_range not in analysis[category_type]:
+            analysis[category_type][size_range] = {
+                'total_terjual': 0,
+                'total_harga': 0,
+                'items': [],
+                'dominant_cluster': cluster_id,
+                'cluster_id': cluster_id
+            }
+
+        # Add to total
+        analysis[category_type][size_range]['total_terjual'] += jumlah
+        analysis[category_type][size_range]['total_harga'] += total_harga
+        analysis[category_type][size_range]['dominant_cluster'] = cluster_id
+        analysis[category_type][size_range]['cluster_id'] = cluster_id
+        analysis[category_type][size_range]['items'].append({
+            'cluster': cluster_id,
+            'kategori': kategori,
+            'size_range': size_range,
+            'jumlah_terjual': jumlah,
+            'total_harga': total_harga
+        })
+
+    return analysis
+
+
 def process_kmeans_manual(k=3):
-    """Process data using KMeans clustering"""
+    """Process data using KMeans clustering with 5cm size range aggregation"""
     try:
         # Get data from database
         data = Penjualan.query.all()
@@ -226,8 +297,11 @@ def process_kmeans_manual(k=3):
             'kota_tujuan': d.kota_tujuan
         } for d in data])
 
-        # Prepare features for clustering
-        X = df[['jumlah_terjual', 'total_harga']].values.astype(float)
+        # Aggregate data by 5cm size ranges first
+        df_aggregated = aggregate_data_by_size_range(df)
+        
+        # Prepare features for clustering (use aggregated data)
+        X = df_aggregated[['jumlah_terjual', 'total_harga']].values.astype(float)
 
         # Normalize data
         X_mean = X.mean(axis=0)
@@ -242,8 +316,8 @@ def process_kmeans_manual(k=3):
         # Calculate metrics
         davies_bouldin = davies_bouldin_index_manual(X_normalized, labels, kmeans.centroids)
 
-        # Analyze results
-        analysis = analyze_clustering_results(df, labels, kmeans.centroids)
+        # Create analysis from aggregated data with labels
+        analysis = analyze_clustering_results_aggregated(df_aggregated, labels, kmeans.centroids)
         
         # Convert numpy types for JSON serialization
         analysis = convert_numpy_types(analysis)
@@ -254,12 +328,14 @@ def process_kmeans_manual(k=3):
             'inertia': float(kmeans.inertia),
             'davies_bouldin': float(davies_bouldin),
             'n_iter': kmeans.max_iterations,
-            'n_samples': len(data),
+            'n_samples': len(df_aggregated),
             'centroids': kmeans.centroids,
             'data': df,
+            'data_aggregated': df_aggregated,
             'analysis': analysis,
             'X_mean': X_mean,
-            'X_std': X_std
+            'X_std': X_std,
+            'X_normalized': X_normalized
         }
     except Exception as e:
         print(f'Error processing KMeans: {str(e)}')
@@ -285,6 +361,7 @@ def save_kmeans_manual_result(result):
         kmeans_result = result['kmeans']
         labels = result['labels']
         data = result['data']
+        data_aggregated = result.get('data_aggregated', data)  # Use aggregated data if available
         analysis = result['analysis']
 
         cluster_dist = {}
@@ -309,19 +386,29 @@ def save_kmeans_manual_result(result):
         db.session.add(result_record)
         db.session.flush()
 
-        # Save cluster details
-        for idx, item in enumerate(data.itertuples()):
+        # Prepare data for distance calculation
+        X_normalized = result['X_normalized'] if 'X_normalized' in result else (result['data_aggregated'][['jumlah_terjual', 'total_harga']].values.astype(float) - result['X_mean']) / (result['X_std'] + 1e-8)
+        centroids = result['centroids']
+
+        # Save cluster details with distance to centroid - iterate using aggregated data
+        for idx, item in enumerate(data_aggregated.itertuples()):
+            # Calculate distance from point to its centroid
+            point = X_normalized[idx]
+            centroid = centroids[labels[idx]]
+            distance = np.sqrt(np.sum((point - centroid) ** 2))
+            
             detail = KMeansClusterDetail(
                 kmeans_result_id=result_record.id,
-                penjualan_id=item.id,
+                penjualan_id=None,  # Aggregated data doesn't have individual penjualan_id
                 cluster_id=int(labels[idx]),
                 jumlah_terjual=int(item.jumlah_terjual) if item.jumlah_terjual else 0,
-                harga_satuan=float(item.harga_satuan) if item.harga_satuan else 0,
+                harga_satuan=0,  # Aggregated data
                 total_harga=float(item.total_harga) if item.total_harga else 0,
                 kategori=item.kategori,
-                size=item.size,
-                nama_penjual=item.nama_penjual,
-                kota_tujuan=item.kota_tujuan
+                size=item.size_range if hasattr(item, 'size_range') else item.size,
+                nama_penjual='Aggregated',
+                kota_tujuan='Aggregated',
+                distance_to_centroid=float(distance)
             )
             db.session.add(detail)
 

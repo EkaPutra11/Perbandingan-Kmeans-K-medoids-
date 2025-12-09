@@ -39,6 +39,7 @@
     .control-card .card-header h5 {
         font-weight: 600;
         margin: 0;
+        color: white;
     }
     
     .form-control {
@@ -105,85 +106,19 @@
         margin: 0;
         color: #333;
     }
-    
-    .nav-tabs .nav-link {
-        color: #6c757d;
-        border: none;
-        border-bottom: 3px solid transparent;
-        font-weight: 500;
-        margin-bottom: -2px;
-    }
-    
-    .nav-tabs .nav-link:hover {
-        color: #198754;
-        border-bottom-color: #198754;
-    }
-    
-    .nav-tabs .nav-link.active {
-        color: #198754;
-        background-color: transparent;
-        border-bottom-color: #198754;
-    }
-    
-    .chart-container {
-        position: relative;
-        height: 400px;
-        margin: 1rem 0;
-    }
-    
-    .sidebar-card {
-        border: none;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        margin-bottom: 1.5rem;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    
-    .sidebar-card.info-card {
-        background: linear-gradient(135deg, #198754 0%, #146c43 100%);
-        color: white;
-    }
-    
-    .sidebar-card.legend-card {
-        background: linear-gradient(135deg, #ffc107 0%, #ffb700 100%);
-        color: #333;
-    }
-    
-    .sidebar-card .card-header {
-        background: rgba(0,0,0,0.1);
-        border: none;
-        padding: 1rem;
-    }
-    
-    .sidebar-card .card-header h5 {
-        font-weight: 600;
-        margin: 0;
-    }
-    
-    .sidebar-card .card-body {
-        padding: 1rem;
-    }
-    
-    .sidebar-card p {
-        margin-bottom: 0.7rem;
-        font-size: 0.9rem;
-    }
-    
-    .sidebar-card ul {
-        padding-left: 1.2rem;
-        margin-bottom: 0;
-    }
-    
-    .sidebar-card li {
-        margin-bottom: 0.5rem;
-        font-size: 0.9rem;
-    }
-    
+
     .btn-success-large {
         padding: 0.75rem 1.5rem;
         font-weight: 600;
         border-radius: 6px;
         border: none;
+        background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+        color: white;
+    }
+
+    .btn-success-large:hover {
+        background: linear-gradient(135deg, #146c43 0%, #135438 100%);
+        color: white;
     }
     
     .status-success .spinner-border {
@@ -193,12 +128,184 @@
     .status-loading .spinner-border {
         color: #198754 !important;
     }
+
+    /* === ITERATIONS STYLES === */
+    .iteration-section {
+        margin-top: 2rem;
+    }
+
+    .iteration-card {
+        border: 2px solid #e9ecef;
+        border-left: 5px solid #198754;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .iteration-header {
+        background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+        color: white;
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .iteration-content {
+        padding: 1.5rem;
+    }
+
+    .medoid-section {
+        margin-bottom: 2rem;
+    }
+
+    .medoid-title {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+    }
+
+    .medoid-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .medoid-box {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .medoid-label {
+        display: inline-block;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem;
+        color: white;
+    }
+
+    .medoid-label.m0 {
+        background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+    }
+
+    .medoid-label.m1 {
+        background: linear-gradient(135deg, #ffc107 0%, #ffb700 100%);
+        color: #333;
+    }
+
+    .medoid-label.m2 {
+        background: linear-gradient(135deg, #dc3545 0%, #bb2d3b 100%);
+    }
+
+    .medoid-value {
+        font-weight: 600;
+        color: #198754;
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .medoid-label-small {
+        font-size: 0.75rem;
+        color: #6c757d;
+        text-transform: uppercase;
+    }
+
+    .cluster-info {
+        background: #f8f9fa;
+        border-left: 4px solid #198754;
+        padding: 1rem;
+        border-radius: 6px;
+        margin-top: 1rem;
+    }
+
+    .cluster-info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .final-results-section {
+        margin-top: 2rem;
+    }
+
+    .final-results-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        background: white;
+        margin-bottom: 1.5rem;
+    }
+
+    .final-results-table thead {
+        background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+        color: white;
+    }
+
+    .final-results-table th {
+        padding: 0.75rem;
+        text-align: left;
+        font-weight: 600;
+        border: 1px solid #dee2e6;
+    }
+
+    .final-results-table td {
+        padding: 0.75rem;
+        border: 1px solid #dee2e6;
+    }
+
+    .final-results-table tbody tr:nth-child(even) {
+        background: #f8f9fa;
+    }
+
+    .summary-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .summary-stat {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 6px;
+        padding: 1rem;
+        text-align: center;
+        border: 1px solid #dee2e6;
+    }
+
+    .summary-stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #198754;
+        margin-bottom: 0.5rem;
+    }
+
+    .summary-stat-label {
+        font-size: 0.85rem;
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .form-label {
+        font-weight: 500;
+    }
+
+    .d-none {
+        display: none !important;
+    }
 </style>
 
 <div class="preprocessing-header">
     <div class="container">
         <h1>📊 K-Medoids Clustering</h1>
-        <p>Implementasi PAM (Partitioning Around Medoids) dengan pengukuran kualitas Davies-Bouldin Index</p>
+        <p>Manual K-Medoids (PAM) implementation dengan pengukuran kualitas Davies-Bouldin Index</p>
     </div>
 </div>
 
@@ -214,32 +321,33 @@
                     <form id="kmedoids-form" method="POST">
                         <div class="row">
                             <div class="col-md-6">
-                                <label for="k-value" class="form-label fw-500">Jumlah Cluster (K)</label>
+                                <label for="k-value" class="form-label">Jumlah Cluster (K)</label>
                                 <input type="number" class="form-control" id="k-value" name="k" value="3" min="2" max="10">
                                 <small class="text-muted">Tentukan jumlah cluster yang diinginkan (2-10)</small>
                             </div>
-                            <div class="col-md-6 d-flex align-items-end">
-                                <button type="button" class="btn btn-success btn-success-large w-100" id="run-btn">
+                            <div class="col-md-6 d-flex align-items-end gap-2">
+                                <button type="button" class="btn btn-success btn-success-large flex-grow-1" id="run-btn">
                                     <span id="btn-text">▶️ Jalankan Clustering</span>
                                     <span id="spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-danger" id="reset-btn">
+                                    🔄 Reset
                                 </button>
                             </div>
                         </div>
                     </form>
                     <div id="alert-container" class="mt-3"></div>
                     
-                    <!-- Status Container -->
+                    <!-- Status Display -->
                     <div id="status-container" class="mt-3 d-none">
                         <div class="alert alert-info status-loading mb-0">
                             <div class="d-flex align-items-center">
-                                <div id="status-spinner" class="me-3">
-                                    <div class="spinner-border spinner-border-sm text-success" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
+                                <div class="spinner-border spinner-border-sm me-3" role="status" id="status-spinner">
+                                    <span class="visually-hidden">Processing...</span>
                                 </div>
                                 <div>
-                                    <h6 id="status-text" class="mb-1">Menjalankan KMedoids Clustering...</h6>
-                                    <small id="status-message" class="text-muted">Mohon tunggu...</small>
+                                    <strong id="status-text">Processing...</strong>
+                                    <p id="status-message" class="mb-0 mt-1 small"></p>
                                 </div>
                             </div>
                         </div>
@@ -263,60 +371,49 @@
                 </div>
             </div>
 
-            <!-- Analysis Breakdown -->
-            <div id="results-container" class="d-none">
+            <!-- Iterations Visualization -->
+            <div id="iterations-container" class="d-none iteration-section">
                 <div class="results-card">
                     <div class="card-header">
-                        <h5>📋 Analisis Cluster per Kategori & Range Ukuran</h5>
+                        <h5>📊 Proses K-Medoids Iterasi Detail</h5>
                     </div>
                     <div class="card-body">
-                        <ul class="nav nav-tabs mb-3" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#standard-tab">✓ Standard</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#non-standard-tab">✗ Non-Standard</a>
-                            </li>
-                        </ul>
-
-                        <div class="tab-content">
-                            <div id="standard-tab" class="tab-pane fade show active">
-                                <div id="standard-content">
-                                    <p class="text-muted text-center">Tidak ada data</p>
-                                </div>
-                            </div>
-
-                            <div id="non-standard-tab" class="tab-pane fade">
-                                <div id="non-standard-content">
-                                    <p class="text-muted text-center">Tidak ada data</p>
-                                </div>
-                            </div>
-                        </div>
+                        <div id="iterations-list"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Chart -->
-            <div id="chart-container" class="d-none">
+            <!-- Final Results Section -->
+            <div id="final-results-container" class="d-none final-results-section">
                 <div class="results-card">
                     <div class="card-header">
-                        <h5>📈 Distribusi Cluster</h5>
+                        <h5>✅ Hasil Cluster K-Medoids Final</h5>
                     </div>
                     <div class="card-body">
-                        <div class="chart-container">
-                            <canvas id="cluster-chart"></canvas>
+                        <div class="table-responsive">
+                            <table class="final-results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Kategori</th>
+                                        <th>Size Range</th>
+                                        <th>Jumlah Terjual</th>
+                                        <th>Cluster</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="final-results-tbody">
+                                </tbody>
+                            </table>
                         </div>
+
+                        <h6 style="margin-top: 2rem; font-weight: 600;">📈 Ringkasan Cluster</h6>
+                        <div class="summary-stats" id="summary-stats"></div>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
 </div>
 
-<!-- Chart.js Library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-
 <script src="{{ url_for('static', filename='js/preprocessing-kmedoids.js') }}"></script>
 {% endblock %}

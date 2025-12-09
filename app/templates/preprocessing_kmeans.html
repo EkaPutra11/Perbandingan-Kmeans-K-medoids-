@@ -449,10 +449,13 @@
                                 <input type="number" class="form-control" id="k-value" name="k" value="3" min="2" max="10">
                                 <small class="text-muted">Tentukan jumlah cluster yang diinginkan (2-10)</small>
                             </div>
-                            <div class="col-md-6 d-flex align-items-end">
-                                <button type="button" class="btn btn-primary btn-primary-large w-100" id="run-btn">
+                            <div class="col-md-6 d-flex align-items-end gap-2">
+                                <button type="button" class="btn btn-primary btn-primary-large flex-grow-1" id="run-btn">
                                     <span id="btn-text">▶️ Jalankan Clustering</span>
                                     <span id="spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-danger" id="reset-btn">
+                                    🔄 Reset
                                 </button>
                             </div>
                         </div>

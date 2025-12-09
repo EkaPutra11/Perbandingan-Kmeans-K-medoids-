@@ -26,6 +26,7 @@ class KMedoidsManual:
         self.medoids = None
         self.labels = None
         self.cost = None
+        self.iteration_history = []  # Track iteration history
 
     def fit(self, X):
         np.random.seed(self.random_state)
@@ -34,6 +35,7 @@ class KMedoidsManual:
         # Initialize medoids randomly
         medoid_indices = np.random.choice(n_samples, self.k, replace=False)
         self.medoids = medoid_indices.copy()
+        self.iteration_history = []
 
         for iteration in range(self.max_iterations):
             # Assign clusters
@@ -42,6 +44,16 @@ class KMedoidsManual:
 
             # Calculate current cost
             old_cost = np.sum(np.min(distances, axis=1))
+
+            # Store iteration history
+            iteration_data = {
+                'iteration': int(iteration),
+                'medoids': [int(m) for m in self.medoids],
+                'medoid_points': X[self.medoids].copy().tolist(),
+                'labels': self.labels.copy().tolist(),
+                'cost': float(old_cost)
+            }
+            self.iteration_history.append(iteration_data)
 
             # Try swapping medoids - OPTIMIZED: limit candidates to 10 random non-medoids
             improved = False
@@ -130,7 +142,31 @@ def get_size_range(size_str):
         return "Unknown"
 
 
+def aggregate_data_by_size_range(df):
+    """Aggregate data by 5cm size ranges and category before clustering"""
+    # Group by category and size range, sum the values
+    df['size_range'] = df['size'].apply(get_size_range)
+    
+    # Remove rows with Unknown size range
+    df = df[df['size_range'] != 'Unknown'].copy()
+    
+    # Aggregate by kategori and size_range
+    aggregated = df.groupby(['kategori', 'size_range']).agg({
+        'jumlah_terjual': 'sum',
+        'total_harga': 'sum'
+    }).reset_index()
+    
+    # Keep track of original indices for later reference
+    aggregated['original_rows'] = aggregated.apply(
+        lambda row: df[(df['kategori'] == row['kategori']) & (df['size_range'] == row['size_range'])].index.tolist(),
+        axis=1
+    )
+    
+    return aggregated
+
+
 def analyze_clustering_results(data, labels, medoid_indices):
+
     """Analyze clustering results - Standard and Non-Standard breakdown by 5cm size ranges"""
     analysis = {
         'standard': {},
@@ -205,8 +241,56 @@ def analyze_clustering_results(data, labels, medoid_indices):
     return analysis
 
 
+def analyze_clustering_results_aggregated(df_aggregated, labels, medoid_indices):
+    """Analyze clustering results from aggregated data (already grouped by 5cm size ranges)"""
+    analysis = {
+        'standard': {},
+        'non_standard': {}
+    }
+
+    # Process aggregated data with cluster labels
+    for i, (idx, row) in enumerate(df_aggregated.iterrows()):
+        cluster_id = int(labels[i])
+        kategori = row.get('kategori', 'Unknown')
+        size_range = row.get('size_range', 'Unknown')
+        jumlah = float(row.get('jumlah_terjual', 0)) if row.get('jumlah_terjual') else 0
+        total_harga = float(row.get('total_harga', 0)) if row.get('total_harga') else 0
+
+        # Skip if size is Unknown
+        if size_range == 'Unknown':
+            continue
+
+        # Determine category type
+        category_type = 'standard' if kategori.lower() in ['standar', 'standard'] else 'non_standard'
+
+        # Initialize size range if not exists
+        if size_range not in analysis[category_type]:
+            analysis[category_type][size_range] = {
+                'total_terjual': 0,
+                'total_harga': 0,
+                'items': [],
+                'dominant_cluster': cluster_id,
+                'cluster_id': cluster_id
+            }
+
+        # Add to total
+        analysis[category_type][size_range]['total_terjual'] += jumlah
+        analysis[category_type][size_range]['total_harga'] += total_harga
+        analysis[category_type][size_range]['dominant_cluster'] = cluster_id
+        analysis[category_type][size_range]['cluster_id'] = cluster_id
+        analysis[category_type][size_range]['items'].append({
+            'cluster': cluster_id,
+            'kategori': kategori,
+            'size_range': size_range,
+            'jumlah_terjual': jumlah,
+            'total_harga': total_harga
+        })
+
+    return analysis
+
+
 def process_kmedoids_manual(k=3):
-    """Process data using KMedoids clustering"""
+    """Process data using KMedoids clustering with 5cm size range aggregation"""
     try:
         # Get data from database
         data = Penjualan.query.all()
@@ -225,8 +309,11 @@ def process_kmedoids_manual(k=3):
             'kota_tujuan': d.kota_tujuan
         } for d in data])
 
-        # Prepare features for clustering
-        X = df[['jumlah_terjual', 'total_harga']].values.astype(float)
+        # Aggregate data by 5cm size ranges first
+        df_aggregated = aggregate_data_by_size_range(df)
+        
+        # Prepare features for clustering (use aggregated data)
+        X = df_aggregated[['jumlah_terjual', 'total_harga']].values.astype(float)
 
         # Normalize data
         X_mean = X.mean(axis=0)
@@ -241,8 +328,8 @@ def process_kmedoids_manual(k=3):
         # Calculate metrics
         davies_bouldin = davies_bouldin_index_manual(X_normalized, labels, kmedoids.medoids)
 
-        # Analyze results
-        analysis = analyze_clustering_results(df, labels, kmedoids.medoids)
+        # Create analysis from aggregated data with labels
+        analysis = analyze_clustering_results_aggregated(df_aggregated, labels, kmedoids.medoids)
         
         # Convert numpy types for JSON serialization
         analysis = convert_numpy_types(analysis)
@@ -253,12 +340,14 @@ def process_kmedoids_manual(k=3):
             'cost': float(kmedoids.cost),
             'davies_bouldin': float(davies_bouldin),
             'n_iter': kmedoids.max_iterations,
-            'n_samples': len(data),
+            'n_samples': len(df_aggregated),
             'medoids': kmedoids.medoids,
             'data': df,
+            'data_aggregated': df_aggregated,
             'analysis': analysis,
             'X_mean': X_mean,
-            'X_std': X_std
+            'X_std': X_std,
+            'X_normalized': X_normalized
         }
     except Exception as e:
         print(f'Error processing KMedoids: {str(e)}')
@@ -284,6 +373,7 @@ def save_kmedoids_manual_result(result):
         kmedoids_result = result['kmedoids']
         labels = result['labels']
         data = result['data']
+        data_aggregated = result['data_aggregated']
         analysis = result['analysis']
 
         cluster_dist = {}
@@ -309,21 +399,32 @@ def save_kmedoids_manual_result(result):
         db.session.add(result_record)
         db.session.flush()
 
-        # Save cluster details
-        for idx, item in enumerate(data.itertuples()):
+        # Prepare data for distance calculation
+        X_normalized = result['X_normalized']
+        
+        # Save cluster details from aggregated data
+        for idx, (agg_idx, agg_row) in enumerate(data_aggregated.iterrows()):
             is_medoid = idx in kmedoids_result.medoids
+            
+            # Calculate distance from point to its medoid
+            point = X_normalized[idx]
+            medoid_idx = kmedoids_result.medoids[labels[idx]]
+            medoid_point = X_normalized[medoid_idx]
+            distance = np.sqrt(np.sum((point - medoid_point) ** 2))
+            
             detail = KMedoidsClusterDetail(
                 kmedoids_result_id=result_record.id,
-                penjualan_id=item.id,
+                penjualan_id=None,  # No single ID for aggregated data
                 cluster_id=int(labels[idx]),
-                jumlah_terjual=int(item.jumlah_terjual) if item.jumlah_terjual else 0,
-                harga_satuan=float(item.harga_satuan) if item.harga_satuan else 0,
-                total_harga=float(item.total_harga) if item.total_harga else 0,
-                kategori=item.kategori,
-                size=item.size,
-                nama_penjual=item.nama_penjual,
-                kota_tujuan=item.kota_tujuan,
-                is_medoid=is_medoid
+                jumlah_terjual=int(agg_row['jumlah_terjual']) if agg_row['jumlah_terjual'] else 0,
+                harga_satuan=0,  # Not applicable for aggregated data
+                total_harga=float(agg_row['total_harga']) if agg_row['total_harga'] else 0,
+                kategori=agg_row['kategori'],
+                size=agg_row['size_range'],
+                nama_penjual='Aggregated',  # Placeholder
+                kota_tujuan='Aggregated',  # Placeholder
+                is_medoid=is_medoid,
+                distance_to_medoid=float(distance)
             )
             db.session.add(detail)
 

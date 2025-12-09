@@ -146,7 +146,8 @@ def process_kmeans():
 def kmeans_iterations():
     """Get detailed iteration steps for KMeans clustering"""
     try:
-        from app.processing_kmeans import KMeansManual, analyze_clustering_results, convert_numpy_types
+        from app.processing_kmeans import KMeansManual, analyze_clustering_results, aggregate_data_by_size_range, convert_numpy_types
+        from scipy.spatial.distance import euclidean
         import numpy as np
         
         # Get all data
@@ -163,8 +164,11 @@ def kmeans_iterations():
             'total_harga': float(d.total_harga) if d.total_harga else 0
         } for d in data])
         
-        # Prepare features for clustering
-        X = df[['jumlah_terjual', 'total_harga']].values.astype(float)
+        # Aggregate data by 5cm size ranges like in process_kmeans_manual
+        df_aggregated = aggregate_data_by_size_range(df)
+        
+        # Prepare features for clustering (aggregated data)
+        X = df_aggregated[['jumlah_terjual', 'total_harga']].values.astype(float)
         
         # Normalize data
         X_mean = X.mean(axis=0)
@@ -175,21 +179,61 @@ def kmeans_iterations():
         kmeans = KMeansManual(k=3, max_iterations=100, random_state=42)
         kmeans.fit(X_normalized)
         
-        # Get iteration details
-        iterations = get_kmeans_iteration_details(df, X_normalized, kmeans)
-        
-        # Get analysis
-        analysis = analyze_clustering_results(df, kmeans.labels, kmeans.centroids)
-        analysis = convert_numpy_types(analysis)
+        # Enrich iteration history with cluster assignments and distances
+        iterations = []
+        if kmeans.iteration_history:
+            for iter_data in kmeans.iteration_history:
+                # Skip initial iteration (no labels yet)
+                if iter_data['labels'] is None:
+                    continue
+                
+                # Calculate distances from each point to each centroid
+                centroids = iter_data['centroids']
+                labels = iter_data['labels']
+                
+                # Format centroids as objects with cluster info
+                centroids_formatted = []
+                for c_id, centroid in enumerate(centroids):
+                    centroids_formatted.append({
+                        'cluster_id': int(c_id),
+                        'jumlah_terjual': float(centroid[0]),  # First feature
+                        'total_harga': float(centroid[1])      # Second feature
+                    })
+                
+                cluster_assignments = []
+                for idx, row in df_aggregated.iterrows():
+                    distances = {}
+                    for c_id, centroid in enumerate(centroids):
+                        dist = euclidean(X_normalized[idx], centroid)
+                        distances[f'C{c_id}'] = float(dist)
+                    
+                    cluster_assignments.append({
+                        'kategori': row['kategori'],
+                        'size_range': row['size_range'],
+                        'jumlah_terjual': int(row['jumlah_terjual']),
+                        'total_harga': float(row['total_harga']),
+                        'distances': distances,
+                        'assigned_cluster': f"C{int(labels[idx])}"
+                    })
+                
+                # Convert for JSON serialization
+                iter_data_copy = iter_data.copy()
+                iter_data_copy['centroids'] = centroids_formatted
+                iter_data_copy['labels'] = labels.tolist() if hasattr(labels, 'tolist') else labels
+                if iter_data_copy.get('distances') is not None:
+                    iter_data_copy['distances'] = iter_data_copy['distances'].tolist() if hasattr(iter_data_copy['distances'], 'tolist') else iter_data_copy['distances']
+                iter_data_copy['cluster_assignments'] = cluster_assignments
+                iterations.append(iter_data_copy)
         
         return jsonify({
             'status': 'success',
             'iterations': iterations,
             'total_iterations': len(iterations),
-            'data_count': len(df),
-            'analysis': analysis
+            'data_count': len(df_aggregated)
         })
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return jsonify({'status': 'error', 'error': str(e)})
 
 
@@ -200,10 +244,43 @@ def view_kmeans_iterations():
     return render_template('kmeans_iterations.html', active_page='kmeans_iterations')
 
 
-
 # Preprocessing KMedoids - GET (load previous results)
 @main.route('/preprocessing/kmedoids')
 def preprocessing_kmedoids():
+    # Check if JSON is requested
+    if request.headers.get('Accept') == 'application/json':
+        results = get_kmedoids_result()
+        if results:
+            # Get metadata from database
+            last_result = KMedoidsResult.query.order_by(KMedoidsResult.created_at.desc()).first()
+            if last_result:
+                # Format results array for frontend
+                results_array = [
+                    {
+                        'id': d['id'],
+                        'cluster_id': d['cluster_id'],
+                        'kategori': d['kategori'],
+                        'size_range': d['size'],
+                        'jumlah_terjual': d['jumlah_terjual'],
+                        'total_harga': d['total_harga'],
+                        'is_medoid': d['is_medoid']
+                    } for d in results.get('details', [])
+                ]
+                
+                return jsonify({
+                    'status': 'success',
+                    'cost': float(last_result.cost),
+                    'davies_bouldin': float(last_result.davies_bouldin_index),
+                    'results': results_array
+                })
+        return jsonify({
+            'status': 'success',
+            'cost': None,
+            'davies_bouldin': None,
+            'results': []
+        })
+    
+    # Otherwise render template
     results = get_kmedoids_result()
     return render_template('preprocessing_kmedoids.html', active_page='kmedoids', results=results)
 
@@ -216,6 +293,7 @@ def process_kmedoids():
         result = process_kmedoids_manual(k=k)
         if result:
             save_kmedoids_manual_result(result)
+            
             # Get cluster distribution from result directly
             labels = result.get('labels', [])
             import numpy as np
@@ -223,7 +301,7 @@ def process_kmedoids():
             for i in range(k):
                 count = int(np.sum(labels == i)) if hasattr(labels, '__iter__') else 0
                 cluster_dist[str(i)] = count
-                
+            
             return jsonify({
                 'status': 'success',
                 'cost': float(result.get('cost', 0)),
@@ -234,6 +312,96 @@ def process_kmedoids():
         return jsonify({'status': 'error', 'error': 'Failed to process data'})
     except Exception as e:
         return jsonify({'status': 'error', 'error': str(e)})
+
+
+# Preprocessing KMedoids - GET iteration details
+@main.route('/preprocessing/kmedoids/iterations', methods=['GET'])
+def kmedoids_iterations():
+    """Get detailed iteration steps for KMedoids clustering with aggregated data"""
+    try:
+        from app.processing_kmedoids import KMedoidsManual, aggregate_data_by_size_range
+        import numpy as np
+        from scipy.spatial.distance import euclidean
+        
+        # Get all data
+        data = Penjualan.query.all()
+        if not data:
+            return jsonify({'status': 'error', 'message': 'No data available'})
+        
+        # Convert to DataFrame
+        df = pd.DataFrame([{
+            'id': d.id,
+            'kategori': d.kategori,
+            'size': d.size,
+            'jumlah_terjual': float(d.jumlah_terjual),
+            'total_harga': float(d.total_harga) if d.total_harga else 0
+        } for d in data])
+        
+        # Aggregate data by 5cm size ranges like in process_kmedoids_manual
+        df_aggregated = aggregate_data_by_size_range(df)
+        
+        # Prepare features for clustering (aggregated data)
+        X = df_aggregated[['jumlah_terjual', 'total_harga']].values.astype(float)
+        
+        # Normalize data
+        X_mean = X.mean(axis=0)
+        X_std = X.std(axis=0)
+        X_normalized = (X - X_mean) / (X_std + 1e-8)
+        
+        # Run KMedoids with tracking
+        kmedoids = KMedoidsManual(k=3, max_iterations=100, random_state=42)
+        kmedoids.fit(X_normalized)
+        
+        # Enrich iteration history with cluster assignments and distances
+        iterations = []
+        if kmedoids.iteration_history:
+            for iter_data in kmedoids.iteration_history:
+                # Calculate distances from each point to each medoid
+                medoid_points = iter_data['medoid_points']
+                labels = iter_data['labels']
+                
+                # Format medoids as objects with cluster info
+                medoids_formatted = []
+                for c_id, medoid in enumerate(medoid_points):
+                    medoids_formatted.append({
+                        'cluster_id': int(c_id),
+                        'jumlah_terjual': float(medoid[0]),  # First feature
+                        'total_harga': float(medoid[1])      # Second feature
+                    })
+                
+                cluster_assignments = []
+                for idx, row in df_aggregated.iterrows():
+                    distances = {}
+                    for c_id, medoid_point in enumerate(medoid_points):
+                        dist = euclidean(X_normalized[idx], medoid_point)
+                        distances[f'C{c_id}'] = float(dist)
+                    
+                    cluster_assignments.append({
+                        'kategori': row['kategori'],
+                        'size_range': row['size_range'],
+                        'jumlah_terjual': int(row['jumlah_terjual']),
+                        'total_harga': float(row['total_harga']),
+                        'distances': distances,
+                        'assigned_cluster': f"C{int(labels[idx])}"
+                    })
+                
+                # Convert to JSON-serializable format
+                iter_data_copy = iter_data.copy()
+                iter_data_copy['medoid_points'] = medoids_formatted
+                iter_data_copy['labels'] = labels.tolist() if hasattr(labels, 'tolist') else labels
+                iter_data_copy['cluster_assignments'] = cluster_assignments
+                iterations.append(iter_data_copy)
+        
+        return jsonify({
+            'status': 'success',
+            'iterations': iterations,
+            'total_iterations': len(iterations),
+            'data_count': len(df_aggregated)
+        })
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({'status': 'error', 'error': str(e), 'message': 'Failed to get iterations'})
 
 
 # Delete All Data

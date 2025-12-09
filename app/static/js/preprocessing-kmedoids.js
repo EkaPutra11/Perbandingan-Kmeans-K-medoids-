@@ -285,7 +285,8 @@ function renderIterations(iterations) {
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
             `;
 
-            iteration.medoid_points.forEach((medoidPoint, clusterId) => {
+            iteration.medoid_points.forEach((medoidPoint) => {
+                const clusterId = medoidPoint.cluster_id;
                 const tierColors = { '0': '#198754', '1': '#ffc107', '2': '#dc3545' };
                 const tierBgColors = { '0': '#d1e7dd', '1': '#fff3cd', '2': '#f8d7da' };
                 const tierColor = tierColors[String(clusterId)] || '#198754';
@@ -298,11 +299,11 @@ function renderIterations(iterations) {
                         </div>
                         <div style="margin-bottom: 1.5rem;">
                             <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 0.4rem;">Jumlah Terjual</div>
-                            <div style="font-size: 1.5rem; font-weight: 700; color: ${tierColor}; font-family: 'Courier New', monospace;">${parseFloat(medoidPoint[0]).toFixed(2)}</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: ${tierColor}; font-family: 'Courier New', monospace;">${parseFloat(medoidPoint.jumlah_terjual).toFixed(2)}</div>
                         </div>
                         <div>
                             <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 0.4rem;">Total Harga</div>
-                            <div style="font-size: 1.5rem; font-weight: 700; color: ${tierColor}; font-family: 'Courier New', monospace;">${parseFloat(medoidPoint[1]).toFixed(2)}</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; color: ${tierColor}; font-family: 'Courier New', monospace;">${parseFloat(medoidPoint.total_harga).toFixed(2)}</div>
                         </div>
                     </div>
                 `;
@@ -393,8 +394,7 @@ window.addEventListener('DOMContentLoaded', async function() {
         console.error('Error loading results:', error);
     }
 
-    // Load iterations
-    await loadAndDisplayIterations();
+    // Do NOT load iterations automatically - only load when user runs clustering
 });
 
 // Reset button handler
@@ -430,3 +430,5 @@ document.getElementById('reset-btn').addEventListener('click', async function() 
     }
 });
 
+// Restore state on page load (after all functions are defined)
+// REMOVED - localStorage approach removed for simplicity

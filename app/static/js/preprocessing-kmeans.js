@@ -571,3 +571,5 @@ function displayIterations(iterations) {
 
     iterationsList.innerHTML = html;
 }
+// Restore state on page load (after all functions are defined)
+// REMOVED - localStorage approach removed for simplicity

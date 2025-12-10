@@ -1,6 +1,12 @@
+.upload-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
 .upload-container {
     max-width: 600px;
-    margin: 50px auto;
+    margin: 0 auto 3rem;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0,0,0,0.1);
@@ -63,4 +69,243 @@
 
 .alert {
     margin-top: 15px;
+}
+
+/* Data Table Section */
+.data-section {
+    margin-top: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.data-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 1.5rem;
+    color: white;
+}
+
+.data-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.data-body {
+    padding: 1.5rem;
+}
+
+/* Table Controls */
+.table-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 250px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.filter-box select {
+    padding: 0.6rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filter-box select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.export-btn {
+    padding: 0.6rem 1.5rem;
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.export-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(17, 153, 142, 0.3);
+}
+
+/* Data Table */
+.data-table-wrapper {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.data-table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.data-table thead th {
+    padding: 1rem;
+    font-weight: 600;
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.data-table thead th:first-child {
+    text-align: center;
+    width: 80px;
+}
+
+.data-table thead th:nth-child(4),
+.data-table thead th:nth-child(5) {
+    text-align: center;
+}
+
+.data-table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.3s;
+}
+
+.data-table tbody tr:hover {
+    background: #f8f9ff;
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+.data-table tbody td {
+    padding: 1rem;
+}
+
+.data-table tbody td:first-child {
+    text-align: center;
+    font-weight: 600;
+    color: #667eea;
+}
+
+.data-table tbody td:nth-child(2) {
+    font-weight: 600;
+    color: #333;
+}
+
+.data-table tbody td:nth-child(3) {
+    color: #666;
+}
+
+.data-table tbody td:nth-child(4) {
+    text-align: center;
+    font-weight: 600;
+    color: #11998e;
+}
+
+.data-table tbody td:nth-child(5) {
+    text-align: right;
+    font-weight: 600;
+    color: #764ba2;
+    font-family: 'Courier New', monospace;
+}
+
+/* Pagination */
+.table-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.pagination-info {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.pagination-info strong {
+    color: #333;
+    font-weight: 600;
+}
+
+.pagination-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.pagination-controls button {
+    padding: 0.5rem 1rem;
+    border: 2px solid #667eea;
+    background: white;
+    color: #667eea;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.pagination-controls button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Empty State */
+.table-empty {
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+}
+
+.table-empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.table-empty p:first-of-type {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-weight: 600;
+}
+
+.table-empty p:last-of-type {
+    font-size: 0.9rem;
+    color: #999;
 }

@@ -143,3 +143,123 @@ async function deleteAllResults() {
 
 // Load stats on page load
 window.addEventListener('load', loadStatistics);
+
+// ============ TABLE FUNCTIONALITY ============
+let currentPage = 1;
+const itemsPerPage = 10;
+let filteredData = [];
+
+// Initialize table
+function initTable() {
+    const table = document.getElementById('dataTable');
+    if (table) {
+        filterTable();
+    }
+}
+
+// Filter and search table
+function filterTable() {
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const tableBody = document.getElementById('tableBody');
+    
+    if (!searchInput || !categoryFilter || !tableBody) {
+        return;
+    }
+    
+    const searchText = searchInput.value.toLowerCase();
+    const categoryValue = categoryFilter.value;
+    const rows = tableBody.querySelectorAll('tr');
+    
+    filteredData = [];
+    
+    rows.forEach(row => {
+        const kategori = row.getAttribute('data-kategori');
+        const text = row.textContent.toLowerCase();
+        
+        const matchCategory = !categoryValue || 
+            (categoryValue === 'Standard' && kategori === 'Standard') ||
+            (categoryValue === 'Non-Standard' && kategori !== 'Standard');
+        
+        const matchSearch = !searchText || text.includes(searchText);
+        
+        if (matchCategory && matchSearch) {
+            filteredData.push(row);
+        }
+    });
+    
+    currentPage = 1;
+    updateTableDisplay();
+}
+
+// Update table display
+function updateTableDisplay() {
+    const tableBody = document.getElementById('tableBody');
+    if (!tableBody) return;
+    
+    const rows = tableBody.querySelectorAll('tr');
+    rows.forEach(row => row.style.display = 'none');
+    
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    
+    for (let i = start; i < end && i < filteredData.length; i++) {
+        filteredData[i].style.display = '';
+    }
+    
+    // Update pagination
+    const pageInfo = document.getElementById('pageInfo');
+    if (pageInfo) {
+        pageInfo.textContent = `${start + 1}-${Math.min(end, filteredData.length)}`;
+    }
+    
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (prevBtn) prevBtn.disabled = currentPage === 1;
+    if (nextBtn) nextBtn.disabled = end >= filteredData.length;
+}
+
+// Pagination
+function prevPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        updateTableDisplay();
+    }
+}
+
+function nextPage() {
+    const maxPage = Math.ceil(filteredData.length / itemsPerPage);
+    if (currentPage < maxPage) {
+        currentPage++;
+        updateTableDisplay();
+    }
+}
+
+// Search event
+window.addEventListener('load', function() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keyup', filterTable);
+    }
+    initTable();
+});
+
+// Export to CSV
+function exportTable() {
+    let csv = 'ID,Kategori,Ukuran,Jumlah Terjual,Total Harga\n';
+    
+    const tableBody = document.getElementById('tableBody');
+    if (!tableBody) return;
+    
+    const rows = tableBody.querySelectorAll('tr');
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const rowData = Array.from(cells).slice(0, 5).map(cell => '"' + cell.textContent.trim() + '"').join(',');
+        csv += rowData + '\n';
+    });
+    
+    const link = document.createElement('a');
+    link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    link.download = 'data_penjualan_' + new Date().toISOString().slice(0, 10) + '.csv';
+    link.click();
+}

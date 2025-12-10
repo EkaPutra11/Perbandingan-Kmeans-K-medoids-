@@ -5,10 +5,11 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
 
-<div class="upload-container bg-white">
-    <h2 class="mb-4 text-center">Upload Data CSV</h2>
-            
-            <form id="uploadForm" enctype="multipart/form-data">
+<div class="upload-wrapper">
+    <div class="upload-container bg-white">
+        <h2 class="mb-4 text-center">Upload Data CSV</h2>
+                
+        <form id="uploadForm" enctype="multipart/form-data">
                 <div class="file-input-wrapper">
                     <label for="fileInput" class="file-input-label">
                         📁 Pilih File CSV atau Drag & Drop di sini
@@ -38,6 +39,76 @@
                 <p><strong>Kategori Standard:</strong> <span id="standardCount">0</span></p>
                 <p><strong>Kategori Non-Standard:</strong> <span id="nonStandardCount">0</span></p>
             </div>
+        </form>
+
+        <div id="alertContainer"></div>
+    </div>
+
+    <!-- Data Table Section -->
+    <div class="data-section">
+        <div class="data-header">
+            <h3>📋 Data Penjualan</h3>
+        </div>
+        <div class="data-body">
+            {% if data_table and data_table|length > 0 %}
+                <!-- Table Controls -->
+                <div class="table-controls">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="🔍 Cari kategori atau ukuran...">
+                    </div>
+                    <div class="filter-box">
+                        <select id="categoryFilter" onchange="filterTable()">
+                            <option value="">Semua Kategori</option>
+                            <option value="Standard">Standard</option>
+                            <option value="Non-Standard">Non-Standard</option>
+                        </select>
+                    </div>
+                    <button class="export-btn" onclick="exportTable()">📥 Export CSV</button>
+                </div>
+
+                <!-- Data Table -->
+                <div class="data-table-wrapper">
+                    <table class="data-table" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Kategori</th>
+                                <th>Ukuran</th>
+                                <th>Jumlah Terjual</th>
+                                <th>Total Harga</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            {% for item in data_table %}
+                            <tr data-kategori="{{ item['Kategori'] }}">
+                                <td data-label="ID">{{ item['ID'] }}</td>
+                                <td data-label="Kategori">{{ item['Kategori'] }}</td>
+                                <td data-label="Ukuran">{{ item['Ukuran'] }}</td>
+                                <td data-label="Jumlah Terjual">{{ item['Jumlah Terjual'] }}</td>
+                                <td data-label="Total Harga">{{ item['Total Harga'] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="table-pagination">
+                    <div class="pagination-info">
+                        Menampilkan <strong id="pageInfo">1-{{ [data_table|length, 10]|min }}</strong> dari <strong>{{ data_table|length }}</strong> records
+                    </div>
+                    <div class="pagination-controls">
+                        <button onclick="prevPage()" id="prevBtn">← Previous</button>
+                        <button onclick="nextPage()" id="nextBtn">Next →</button>
+                    </div>
+                </div>
+            {% else %}
+                <div class="table-empty">
+                    <div class="table-empty-icon">📭</div>
+                    <p>Belum ada data penjualan</p>
+                    <p>Silakan upload data CSV terlebih dahulu</p>
+                </div>
+            {% endif %}
         </div>
     </div>
 

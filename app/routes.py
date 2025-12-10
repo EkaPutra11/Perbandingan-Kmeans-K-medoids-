@@ -34,7 +34,21 @@ def index():
 # Upload Data
 @main.route('/upload')
 def upload_file():
-    return render_template('upload.html', active_page='upload')
+    # Get all data for table
+    data = Penjualan.query.all()
+    
+    # Format data for table
+    data_table = []
+    for idx, item in enumerate(data, start=1):
+        data_table.append({
+            'ID': idx,
+            'Kategori': item.kategori,
+            'Ukuran': item.size,
+            'Jumlah Terjual': item.jumlah_terjual,
+            'Total Harga': f"Rp {item.total_harga:,.0f}" if item.total_harga else "Rp 0"
+        })
+    
+    return render_template('upload.html', active_page='upload', data_table=data_table)
 
 
 # Upload CSV File

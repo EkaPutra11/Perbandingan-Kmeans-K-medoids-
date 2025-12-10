@@ -464,7 +464,7 @@ document.getElementById('reset-btn').addEventListener('click', async function() 
                 
                 // Clear alert
                 document.getElementById('alert-container').innerHTML = `
-                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <strong>Reset Berhasil!</strong> Semua hasil clustering telah dihapus.
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
@@ -473,9 +473,22 @@ document.getElementById('reset-btn').addEventListener('click', async function() 
                 // Clear metric values
                 document.getElementById('inertia-value').textContent = '-';
                 document.getElementById('dbi-value').textContent = '-';
+            } else {
+                // Show error message
+                document.getElementById('alert-container').innerHTML = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error!</strong> ${data.message || 'Gagal menghapus hasil clustering'}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
             }
         } catch (error) {
-            alert('Error: ' + error.message);
+            document.getElementById('alert-container').innerHTML = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error!</strong> ${error.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
         }
     }
 });

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify, current_app
-from app.processing_kmeans import process_kmeans_manual, save_kmeans_manual_result, get_kmeans_result, get_kmeans_iteration_details
+from app.processing_kmeans import process_kmeans_manual, save_kmeans_manual_result, get_kmeans_result, get_kmeans_iteration_details, save_kmeans_final_result
 from app.processing_kmedoids import process_kmedoids_manual, save_kmedoids_manual_result, get_kmedoids_result
 from app.dbi_calculator import calculate_dbi_comparison, render_dbi_chart
 from app.analysis_formatter import format_results_display, get_data_table, format_category_analysis
@@ -16,6 +16,9 @@ main = Blueprint('main', __name__)
 # Dashboard
 @main.route('/')
 def index():
+    from app.models import KMeansFinalResult
+    import numpy as np
+    
     # Get stats
     total_records = Penjualan.query.count()
     standard_count = Penjualan.query.filter_by(kategori='Standard').count()
@@ -24,11 +27,80 @@ def index():
     # Get data table
     data_table = get_data_table()
     
+    # Get clustering results from kmeans_final_result
+    clustering_results = []
+    tier_mapping = {}  # Map cluster_id to tier name
+    
+    try:
+        # Check if there's any data in kmeans_final_result
+        has_final_results = KMeansFinalResult.query.first() is not None
+        
+        if has_final_results:
+            # Get latest kmeans result to determine tier mapping
+            latest_kmeans = KMeansResult.query.order_by(KMeansResult.created_at.desc()).first()
+            
+            if latest_kmeans:
+                # Calculate tier from cluster details (normalized data)
+                cluster_details = KMeansClusterDetail.query.filter_by(
+                    kmeans_result_id=latest_kmeans.id
+                ).all()
+                
+                # Calculate average for each cluster to determine tier
+                cluster_totals = {}
+                cluster_counts = {}
+                
+                for detail in cluster_details:
+                    cid = detail.cluster_id
+                    if cid not in cluster_totals:
+                        cluster_totals[cid] = 0
+                        cluster_counts[cid] = 0
+                    cluster_totals[cid] += detail.jumlah_terjual
+                    cluster_counts[cid] += 1
+                
+                # Calculate average and rank
+                cluster_scores = []
+                for cid in cluster_totals:
+                    avg = cluster_totals[cid] / cluster_counts[cid] if cluster_counts[cid] > 0 else 0
+                    cluster_scores.append({'cluster_id': cid, 'score': avg})
+                
+                # Sort by score descending
+                cluster_scores.sort(key=lambda x: x['score'], reverse=True)
+                
+                # Assign tiers
+                if len(cluster_scores) >= 3:
+                    tier_mapping[cluster_scores[0]['cluster_id']] = 'Terlaris'
+                    tier_mapping[cluster_scores[1]['cluster_id']] = 'Sedang'
+                    tier_mapping[cluster_scores[2]['cluster_id']] = 'Kurang Laris'
+                
+                print(f"Tier mapping: {tier_mapping}")
+                
+                # Get final results with tier
+                final_results = KMeansFinalResult.query.filter_by(
+                    kmeans_result_id=latest_kmeans.id
+                ).all()
+                
+                print(f"Found {len(final_results)} records in kmeans_final_result")
+                
+                for result in final_results:
+                    tier = tier_mapping.get(result.cluster_id, 'Unknown')
+                    clustering_results.append({
+                        'kategori': result.kategori,
+                        'size_range': result.size_range,
+                        'jumlah_terjual': result.jumlah_terjual,
+                        'cluster_id': result.cluster_id,
+                        'tier': tier
+                    })
+    except Exception as e:
+        print(f"Error loading clustering results: {e}")
+        import traceback
+        traceback.print_exc()
+    
     return render_template('index.html', active_page='dashboard', 
                          total_records=total_records,
                          standard_count=standard_count,
                          non_standard_count=non_standard_count,
-                         data_table=data_table)
+                         data_table=data_table,
+                         clustering_results=clustering_results)
 
 
 # Upload Data
@@ -135,6 +207,12 @@ def process_kmeans():
         result = process_kmeans_manual(k=k)
         if result:
             save_kmeans_manual_result(result)
+            
+            # Save to kmeans_final_result table
+            latest_result = KMeansResult.query.order_by(KMeansResult.created_at.desc()).first()
+            if latest_result:
+                save_kmeans_final_result(latest_result.id)
+            
             # Get cluster distribution from result directly
             labels = result.get('labels', [])
             import numpy as np
@@ -435,12 +513,16 @@ def delete_data():
 @main.route('/delete/results', methods=['POST'])
 def delete_results():
     try:
-        # Delete KMeans results and details
-        KMeansClusterDetail.query.delete()
-        KMeansResult.query.delete()
+        from app.models import KMeansFinalResult
         
-        # Delete KMedoids results and details
+        # Delete in correct order to avoid foreign key constraints
+        # 1. Delete child tables first
+        KMeansFinalResult.query.delete()  # Delete final results first!
+        KMeansClusterDetail.query.delete()
         KMedoidsClusterDetail.query.delete()
+        
+        # 2. Delete parent tables
+        KMeansResult.query.delete()
         KMedoidsResult.query.delete()
         
         db.session.commit()

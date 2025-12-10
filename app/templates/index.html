@@ -36,5 +36,148 @@
         </div>
     </div>
 
+    <!-- Clustering Results Section -->
+    {% if clustering_results and clustering_results|length > 0 %}
+    <div class="clustering-section" style="margin-top: 2rem;">
+        <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div>
+                <h2 style="font-size: 1.5rem; font-weight: 700; color: #2c3e50; margin: 0;">
+                    🎯 Hasil Analisis Clustering K-Means
+                </h2>
+                <p style="color: #7f8c8d; margin: 0.5rem 0 0 0;">
+                    Kategori produk berdasarkan tingkat penjualan
+                </p>
+            </div>
+            <div class="filter-controls" style="display: flex; align-items: center; gap: 1rem;">
+                <label for="tierFilter" style="font-weight: 600; color: #2c3e50;">Filter Kategori:</label>
+                <select id="tierFilter" class="form-select" style="width: 200px; border: 2px solid #e0e0e0; border-radius: 8px; padding: 0.5rem 1rem;">
+                    <option value="all">Semua Kategori</option>
+                    <option value="Terlaris">⭐ Terlaris</option>
+                    <option value="Sedang">📊 Sedang</option>
+                    <option value="Kurang Laris">📉 Kurang Laris</option>
+                </select>
+                <button id="applyFilterBtn" class="btn btn-primary" style="padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <i class="bi bi-check-circle"></i> Terapkan Filter
+                </button>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="tier-summary-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+            <div class="tier-card tier-terlaris" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border: 2px solid #28a745; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 3rem;">⭐</div>
+                    <div>
+                        <div style="font-size: 0.875rem; color: #155724; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Terlaris</div>
+                        <div id="count-terlaris" style="font-size: 2rem; font-weight: 700; color: #28a745;">0</div>
+                        <div style="font-size: 0.75rem; color: #155724;">Produk</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tier-card tier-sedang" style="background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%); border: 2px solid #ffc107; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 3rem;">📊</div>
+                    <div>
+                        <div style="font-size: 0.875rem; color: #856404; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Sedang</div>
+                        <div id="count-sedang" style="font-size: 2rem; font-weight: 700; color: #ffc107;">0</div>
+                        <div style="font-size: 0.75rem; color: #856404;">Produk</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tier-card tier-kurang" style="background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); border: 2px solid #dc3545; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 3rem;">📉</div>
+                    <div>
+                        <div style="font-size: 0.875rem; color: #721c24; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Kurang Laris</div>
+                        <div id="count-kurang" style="font-size: 2rem; font-weight: 700; color: #dc3545;">0</div>
+                        <div style="font-size: 0.75rem; color: #721c24;">Produk</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="table-container" style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
+            <div class="table-responsive">
+                <table class="table table-hover" id="clusteringTable" style="margin: 0;">
+                    <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                        <tr>
+                            <th style="padding: 1rem; font-weight: 600; text-align: center; width: 80px;">NO</th>
+                            <th style="padding: 1rem; font-weight: 600;">KATEGORI</th>
+                            <th style="padding: 1rem; font-weight: 600;">SIZE RANGE</th>
+                            <th style="padding: 1rem; font-weight: 600; text-align: right;">JUMLAH TERJUAL</th>
+                            <th style="padding: 1rem; font-weight: 600; text-align: center;">CLUSTER</th>
+                            <th style="padding: 1rem; font-weight: 600; text-align: center;">KATEGORI PENJUALAN</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clusteringTableBody">
+                        {% for item in clustering_results %}
+                        <tr class="cluster-row" data-tier="{{ item.tier }}" style="border-bottom: 1px solid #e9ecef; transition: all 0.3s ease;">
+                            <td style="padding: 1rem; text-align: center; font-weight: 600; color: #6c757d;">{{ loop.index }}</td>
+                            <td style="padding: 1rem; font-weight: 500;">{{ item.kategori }}</td>
+                            <td style="padding: 1rem; color: #495057;">{{ item.size_range }}</td>
+                            <td style="padding: 1rem; text-align: right; font-family: 'Courier New', monospace; font-weight: 600;">{{ item.jumlah_terjual }}</td>
+                            <td style="padding: 1rem; text-align: center;">
+                                <span class="badge" style="padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.875rem; font-weight: 600;
+                                    {% if item.cluster_id == 0 %}background-color: #17a2b8; color: white;
+                                    {% elif item.cluster_id == 1 %}background-color: #ffc107; color: #333;
+                                    {% else %}background-color: #dc3545; color: white;{% endif %}">
+                                    C{{ item.cluster_id }}
+                                </span>
+                            </td>
+                            <td style="padding: 1rem; text-align: center;">
+                                {% if item.tier == 'Terlaris' %}
+                                <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background-color: #d4edda; color: #155724; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">
+                                    <span>⭐</span> Terlaris
+                                </span>
+                                {% elif item.tier == 'Sedang' %}
+                                <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background-color: #fff3cd; color: #856404; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">
+                                    <span>📊</span> Sedang
+                                </span>
+                                {% elif item.tier == 'Kurang Laris' %}
+                                <span style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background-color: #f8d7da; color: #721c24; border-radius: 20px; font-weight: 600; font-size: 0.875rem;">
+                                    <span>📉</span> Kurang Laris
+                                </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" style="display: none; text-align: center; padding: 3rem; color: #6c757d;">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">🔍</div>
+                <h4 style="font-weight: 600; margin-bottom: 0.5rem;">Tidak Ada Data</h4>
+                <p style="margin: 0;">Tidak ada produk yang sesuai dengan filter yang dipilih</p>
+            </div>
+        </div>
+
+        <!-- Info Text -->
+        <div style="margin-top: 1.5rem; padding: 1rem; background-color: #e7f3ff; border-left: 4px solid #2196F3; border-radius: 4px;">
+            <p style="margin: 0; color: #0d47a1; font-size: 0.875rem;">
+                <strong>💡 Info:</strong> Data ini diambil dari hasil clustering K-Means terakhir. 
+                Kategori penjualan ditentukan berdasarkan nilai centroid (pusat cluster) dari iterasi terakhir.
+            </p>
+        </div>
+    </div>
+    {% else %}
+    <!-- No Data State -->
+    <div class="no-clustering-data" style="margin-top: 2rem; text-align: center; padding: 3rem; background: #f8f9fa; border-radius: 12px;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">📊</div>
+        <h3 style="font-weight: 600; color: #495057; margin-bottom: 0.5rem;">Belum Ada Hasil Clustering</h3>
+        <p style="color: #6c757d; margin-bottom: 1.5rem;">Jalankan clustering K-Means terlebih dahulu untuk melihat analisis produk</p>
+        <a href="{{ url_for('main.preprocessing_kmeans') }}" class="btn btn-primary btn-lg" style="padding: 0.75rem 2rem; border-radius: 8px;">
+            <i class="bi bi-play-circle"></i> Mulai Clustering
+        </a>
+    </div>
+    {% endif %}
+
 </div>
+
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+<script src="{{ url_for('static', filename='js/clustering-filter.js') }}"></script>
 {% endblock %}

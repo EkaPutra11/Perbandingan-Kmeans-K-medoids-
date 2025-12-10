@@ -414,15 +414,11 @@ def save_kmedoids_manual_result(result):
             
             detail = KMedoidsClusterDetail(
                 kmedoids_result_id=result_record.id,
-                penjualan_id=None,  # No single ID for aggregated data
                 cluster_id=int(labels[idx]),
                 jumlah_terjual=int(agg_row['jumlah_terjual']) if agg_row['jumlah_terjual'] else 0,
-                harga_satuan=0,  # Not applicable for aggregated data
                 total_harga=float(agg_row['total_harga']) if agg_row['total_harga'] else 0,
                 kategori=agg_row['kategori'],
                 size=agg_row['size_range'],
-                nama_penjual='Aggregated',  # Placeholder
-                kota_tujuan='Aggregated',  # Placeholder
                 is_medoid=is_medoid,
                 distance_to_medoid=float(distance)
             )
@@ -466,10 +462,7 @@ def get_kmedoids_result():
                 'kategori': d.kategori,
                 'size': d.size,
                 'jumlah_terjual': d.jumlah_terjual,
-                'harga_satuan': float(d.harga_satuan) if d.harga_satuan else 0,
                 'total_harga': float(d.total_harga) if d.total_harga else 0,
-                'nama_penjual': d.nama_penjual,
-                'kota_tujuan': d.kota_tujuan,
                 'is_medoid': d.is_medoid
             } for d in details]
         }

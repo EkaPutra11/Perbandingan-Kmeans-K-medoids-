@@ -43,6 +43,12 @@ document.getElementById('run-btn').addEventListener('click', async function() {
                 parseFloat(data.davies_bouldin).toFixed(3);
             document.getElementById('metrics-container').classList.remove('d-none');
 
+            // Display final results from clustering response
+            if (data.analysis) {
+                displayFinalResults(data.analysis);
+                document.getElementById('final-results-container').classList.remove('d-none');
+            }
+
             // Load and display iterations
             await loadAndDisplayIterations();
 
@@ -455,12 +461,6 @@ async function loadAndDisplayIterations() {
         if (data.status === 'success') {
             displayIterations(data.iterations);
             document.getElementById('iterations-container').classList.remove('d-none');
-            
-            // Display final results if analysis is available
-            if (data.analysis) {
-                displayFinalResults(data.analysis);
-                document.getElementById('final-results-container').classList.remove('d-none');
-            }
         }
     } catch (error) {
         console.error('Error loading iterations:', error);

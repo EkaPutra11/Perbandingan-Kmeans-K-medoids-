@@ -399,15 +399,11 @@ def save_kmeans_manual_result(result):
             
             detail = KMeansClusterDetail(
                 kmeans_result_id=result_record.id,
-                penjualan_id=None,  # Aggregated data doesn't have individual penjualan_id
                 cluster_id=int(labels[idx]),
                 jumlah_terjual=int(item.jumlah_terjual) if item.jumlah_terjual else 0,
-                harga_satuan=0,  # Aggregated data
                 total_harga=float(item.total_harga) if item.total_harga else 0,
                 kategori=item.kategori,
                 size=item.size_range if hasattr(item, 'size_range') else item.size,
-                nama_penjual='Aggregated',
-                kota_tujuan='Aggregated',
                 distance_to_centroid=float(distance)
             )
             db.session.add(detail)
@@ -449,10 +445,7 @@ def get_kmeans_result():
                 'kategori': d.kategori,
                 'size': d.size,
                 'jumlah_terjual': d.jumlah_terjual,
-                'harga_satuan': float(d.harga_satuan) if d.harga_satuan else 0,
-                'total_harga': float(d.total_harga) if d.total_harga else 0,
-                'nama_penjual': d.nama_penjual,
-                'kota_tujuan': d.kota_tujuan
+                'total_harga': float(d.total_harga) if d.total_harga else 0
             } for d in details]
         }
     except Exception as e:

@@ -70,19 +70,12 @@ class KMeansClusterDetail(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     kmeans_result_id = db.Column(db.Integer, db.ForeignKey('kmeans_result.id'), nullable=False)
-    penjualan_id = db.Column(db.Integer, db.ForeignKey('penjualan.id'), nullable=True)
     cluster_id = db.Column(db.Integer, nullable=False)
-    cluster = db.Column(db.String(50))
     kategori = db.Column(db.String(100))
     size = db.Column(db.String(50))
     jumlah_terjual = db.Column(db.Integer)
-    harga_satuan = db.Column(db.Numeric(15, 0))
     total_harga = db.Column(db.Numeric(18, 0))
-    nama_penjual = db.Column(db.String(100))
-    kota_tujuan = db.Column(db.String(100))
     distance_to_centroid = db.Column(db.Float)
-
-    penjualan = db.relationship('Penjualan', backref='kmeans_clusters')
 
 
 class KMedoidsClusterDetail(db.Model):
@@ -90,17 +83,10 @@ class KMedoidsClusterDetail(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     kmedoids_result_id = db.Column(db.Integer, db.ForeignKey('kmedoids_result.id'), nullable=False)
-    penjualan_id = db.Column(db.Integer, db.ForeignKey('penjualan.id'), nullable=True)
     cluster_id = db.Column(db.Integer, nullable=False)
-    cluster = db.Column(db.String(50))
     kategori = db.Column(db.String(100))
     size = db.Column(db.String(50))
     jumlah_terjual = db.Column(db.Integer)
-    harga_satuan = db.Column(db.Numeric(15, 0))
     total_harga = db.Column(db.Numeric(18, 0))
-    nama_penjual = db.Column(db.String(100))
-    kota_tujuan = db.Column(db.String(100))
     distance_to_medoid = db.Column(db.Float)
     is_medoid = db.Column(db.Boolean)
-
-    penjualan = db.relationship('Penjualan', backref='kmedoids_clusters')

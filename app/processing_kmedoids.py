@@ -19,7 +19,7 @@ def convert_numpy_types(obj):
 
 
 class KMedoidsManual:
-    def __init__(self, k=3, max_iterations=100, random_state=42):
+    def __init__(self, k=3, max_iterations=10, random_state=42):
         self.k = k
         self.max_iterations = max_iterations
         self.random_state = random_state
@@ -27,23 +27,59 @@ class KMedoidsManual:
         self.labels = None
         self.cost = None
         self.iteration_history = []  # Track iteration history
+        self.distance_matrix = None  # Cache distance matrix
+        self.n_iter = 0  # Track actual iterations used
+
+    def _compute_distance_matrix(self, X):
+        """Compute and cache the distance matrix once"""
+        n_samples = X.shape[0]
+        dist_matrix = np.zeros((n_samples, n_samples))
+        for i in range(n_samples):
+            for j in range(i, n_samples):
+                dist = np.sum(np.abs(X[i] - X[j]))
+                dist_matrix[i, j] = dist
+                dist_matrix[j, i] = dist
+        return dist_matrix
+
+    def _medoid_initialization(self, X, distance_matrix):
+        """Initialize medoids using total minimum distance approach (similar to K-Medoids++)"""
+        np.random.seed(self.random_state)
+        n_samples = X.shape[0]
+        medoids = []
+        
+        # Choose first medoid: point with minimum total distance to all other points
+        total_distances = distance_matrix.sum(axis=1)
+        first_medoid = np.argmin(total_distances)
+        medoids.append(first_medoid)
+        
+        # Choose remaining k-1 medoids
+        for _ in range(self.k - 1):
+            # Calculate distance to nearest medoid for each point
+            min_distances = np.min(distance_matrix[medoids], axis=0)
+            # Choose point with maximum distance to nearest medoid
+            next_medoid = np.argmax(min_distances)
+            medoids.append(next_medoid)
+        
+        return np.array(medoids)
 
     def fit(self, X):
         np.random.seed(self.random_state)
         n_samples = X.shape[0]
 
-        # Initialize medoids randomly
-        medoid_indices = np.random.choice(n_samples, self.k, replace=False)
-        self.medoids = medoid_indices.copy()
-        self.iteration_history = []
+        # Compute distance matrix once and cache it
+        self.distance_matrix = self._compute_distance_matrix(X)
+
+        # Initialize medoids using smart initialization
+        self.medoids = self._medoid_initialization(X, self.distance_matrix)
+        old_medoids = None
 
         for iteration in range(self.max_iterations):
-            # Assign clusters
-            distances = np.abs(X[self.medoids, :] - X[:, np.newaxis, :]).sum(axis=2)
+            # Assign clusters using cached distance matrix
+            distances = self.distance_matrix[self.medoids].T
             self.labels = np.argmin(distances, axis=1)
 
             # Calculate current cost
-            old_cost = np.sum(np.min(distances, axis=1))
+            current_cost = np.sum(np.min(distances, axis=1))
 
             # Store iteration history
             iteration_data = {
@@ -51,11 +87,20 @@ class KMedoidsManual:
                 'medoids': [int(m) for m in self.medoids],
                 'medoid_points': X[self.medoids].copy().tolist(),
                 'labels': self.labels.copy().tolist(),
-                'cost': float(old_cost)
+                'cost': float(current_cost)
             }
             self.iteration_history.append(iteration_data)
 
-            # Try swapping medoids - OPTIMIZED: limit candidates to 10 random non-medoids
+            # Check convergence: if medoids haven't changed
+            if old_medoids is not None and np.array_equal(self.medoids, old_medoids):
+                self.n_iter = iteration
+                self.cost = current_cost
+                print(f"K-Medoids converged at iteration {iteration}")
+                return
+            
+            old_medoids = self.medoids.copy()
+
+            # Try swapping medoids - optimized version
             improved = False
             medoid_set = set(self.medoids)
             non_medoids = [i for i in range(n_samples) if i not in medoid_set]
@@ -63,37 +108,41 @@ class KMedoidsManual:
             if len(non_medoids) == 0:
                 break
 
-            # Limit swap attempts to 10 random candidates
-            max_swap_attempts = min(len(non_medoids), 10)
-            swap_candidates = np.random.choice(non_medoids, size=max_swap_attempts, replace=False)
+            # Limit swap attempts for efficiency
+            max_swap_attempts = min(len(non_medoids), min(10, n_samples // 5))
+            if max_swap_attempts > 0:
+                swap_candidates = np.random.choice(non_medoids, size=max_swap_attempts, replace=False)
 
-            for new_medoid in swap_candidates:
-                for i, old_medoid in enumerate(self.medoids):
-                    # Try swapping
-                    self.medoids[i] = new_medoid
-                    
-                    # Calculate new cost
-                    distances = np.abs(X[self.medoids, :] - X[:, np.newaxis, :]).sum(axis=2)
-                    new_cost = np.sum(np.min(distances, axis=1))
+                for new_medoid in swap_candidates:
+                    for i, old_medoid in enumerate(self.medoids):
+                        # Try swapping using cached distances
+                        self.medoids[i] = new_medoid
+                        distances = self.distance_matrix[self.medoids].T
+                        new_cost = np.sum(np.min(distances, axis=1))
 
-                    # Keep if better
-                    if new_cost < old_cost:
-                        old_cost = new_cost
-                        improved = True
+                        # Keep if better
+                        if new_cost < current_cost:
+                            current_cost = new_cost
+                            improved = True
+                            break
+                        else:
+                            self.medoids[i] = old_medoid
+
+                    if improved:
                         break
-                    else:
-                        self.medoids[i] = old_medoid
-
-                if improved:
-                    break
 
             if not improved:
-                break
+                self.n_iter = iteration + 1
+                self.cost = current_cost
+                print(f"K-Medoids converged at iteration {iteration + 1} (no improvement)")
+                return
 
         # Final assignment
-        distances = np.abs(X[self.medoids, :] - X[:, np.newaxis, :]).sum(axis=2)
+        self.n_iter = self.max_iterations
+        distances = self.distance_matrix[self.medoids].T
         self.labels = np.argmin(distances, axis=1)
         self.cost = np.sum(np.min(distances, axis=1))
+        print(f"K-Medoids reached max iterations: {self.max_iterations}")
 
     def predict(self, X):
         distances = np.abs(X[self.medoids, :] - X[:, np.newaxis, :]).sum(axis=2)
@@ -320,8 +369,8 @@ def process_kmedoids_manual(k=3):
         X_std = X.std(axis=0)
         X_normalized = (X - X_mean) / (X_std + 1e-8)
 
-        # Perform KMedoids
-        kmedoids = KMedoidsManual(k=k, max_iterations=100, random_state=42)
+        # Perform KMedoids with optimized parameters
+        kmedoids = KMedoidsManual(k=k, max_iterations=10, random_state=42)
         kmedoids.fit(X_normalized)
         labels = kmedoids.labels
 
@@ -339,7 +388,7 @@ def process_kmedoids_manual(k=3):
             'labels': labels,
             'cost': float(kmedoids.cost),
             'davies_bouldin': float(davies_bouldin),
-            'n_iter': kmedoids.max_iterations,
+            'n_iter': kmedoids.n_iter,  # Use actual iterations instead of max
             'n_samples': len(df_aggregated),
             'medoids': kmedoids.medoids,
             'data': df,
@@ -386,7 +435,7 @@ def save_kmedoids_manual_result(result):
             davies_bouldin_index=float(result['davies_bouldin']),
             n_iter=result['n_iter'],
             n_samples=result['n_samples'],
-            max_iterations=100,
+            max_iterations=10,
             random_state=42,
             medoids=kmedoids_result.medoids.tolist(),
             cluster_distribution=cluster_dist,

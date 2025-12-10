@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from app.models import db, Penjualan, KMeansResult, KMeansClusterDetail
+from app.models import db, Penjualan, KMeansResult, KMeansClusterDetail, KMeansFinalResult
 
 
 def convert_numpy_types(obj):
@@ -19,22 +19,43 @@ def convert_numpy_types(obj):
 
 
 class KMeansManual:
-    def __init__(self, k=3, max_iterations=100, random_state=42):
+    def __init__(self, k=3, max_iterations=10, random_state=42, tol=1e-4):
         self.k = k
         self.max_iterations = max_iterations
         self.random_state = random_state
+        self.tol = tol
         self.centroids = None
         self.labels = None
         self.inertia = None
         self.iteration_history = []
+        self.n_iter = 0  # Track actual iterations used
+
+    def _kmeans_plusplus_init(self, X):
+        """K-Means++ initialization for better centroid selection"""
+        np.random.seed(self.random_state)
+        n_samples = X.shape[0]
+        centroids = []
+        
+        # Choose first centroid randomly
+        first_idx = np.random.randint(n_samples)
+        centroids.append(X[first_idx].copy())
+        
+        # Choose remaining k-1 centroids
+        for _ in range(self.k - 1):
+            # Calculate distance to nearest centroid
+            distances = np.array([np.min([np.linalg.norm(x - c) for c in centroids]) for x in X])
+            distances_sq = distances ** 2
+            
+            # Choose next centroid with probability proportional to distance squared
+            probabilities = distances_sq / distances_sq.sum()
+            next_idx = np.random.choice(n_samples, p=probabilities)
+            centroids.append(X[next_idx].copy())
+        
+        return np.array(centroids)
 
     def fit(self, X):
-        np.random.seed(self.random_state)
-        n_samples, n_features = X.shape
-
-        # Initialize centroids randomly
-        random_indices = np.random.choice(n_samples, self.k, replace=False)
-        self.centroids = X[random_indices].copy()
+        # Initialize centroids using K-Means++
+        self.centroids = self._kmeans_plusplus_init(X)
         
         # Store initial centroids
         self.iteration_history.append({
@@ -58,15 +79,25 @@ class KMeansManual:
             })
 
             # Update centroids
-            new_centroids = np.array([X[self.labels == i].mean(axis=0) if np.sum(self.labels == i) > 0 else self.centroids[i] for i in range(self.k)])
+            new_centroids = np.array([
+                X[self.labels == i].mean(axis=0) if np.sum(self.labels == i) > 0 else self.centroids[i] 
+                for i in range(self.k)
+            ])
 
-            # Check convergence
-            if np.allclose(self.centroids, new_centroids):
+            # Check convergence - if centroids don't change significantly
+            centroid_shift = np.max(np.abs(new_centroids - self.centroids))
+            if centroid_shift < self.tol:
+                self.n_iter = iteration + 1
+                self.centroids = new_centroids
+                print(f"K-Means converged at iteration {iteration + 1}")
                 break
 
             self.centroids = new_centroids
+        else:
+            self.n_iter = self.max_iterations
+            print(f"K-Means reached max iterations: {self.max_iterations}")
 
-        # Calculate inertia
+        # Calculate final inertia
         distances = np.sqrt(((X - self.centroids[self.labels])**2).sum(axis=1))
         self.inertia = np.sum(distances**2)
 
@@ -308,8 +339,8 @@ def process_kmeans_manual(k=3):
         X_std = X.std(axis=0)
         X_normalized = (X - X_mean) / (X_std + 1e-8)
 
-        # Perform KMeans
-        kmeans = KMeansManual(k=k, max_iterations=100, random_state=42)
+        # Perform KMeans with optimized parameters
+        kmeans = KMeansManual(k=k, max_iterations=10, random_state=42)
         kmeans.fit(X_normalized)
         labels = kmeans.labels
 
@@ -327,7 +358,7 @@ def process_kmeans_manual(k=3):
             'labels': labels,
             'inertia': float(kmeans.inertia),
             'davies_bouldin': float(davies_bouldin),
-            'n_iter': kmeans.max_iterations,
+            'n_iter': kmeans.n_iter,  # Use actual iterations instead of max
             'n_samples': len(df_aggregated),
             'centroids': kmeans.centroids,
             'data': df,
@@ -374,7 +405,7 @@ def save_kmeans_manual_result(result):
             davies_bouldin_index=float(result['davies_bouldin']),
             n_iter=result['n_iter'],
             n_samples=result['n_samples'],
-            max_iterations=100,
+            max_iterations=10,
             random_state=42,
             cluster_distribution=cluster_dist,
             analysis_data=analysis,
@@ -450,6 +481,69 @@ def get_kmeans_result():
         }
     except Exception as e:
         print(f'Error getting KMeans result: {str(e)}')
+        return None
+
+
+def save_kmeans_final_result(kmeans_result_id):
+    """Save final K-Means result to kmeans_final_result table"""
+    try:
+        # Delete previous final results
+        KMeansFinalResult.query.delete()
+        db.session.commit()
+        
+        # Get cluster details from the result
+        details = KMeansClusterDetail.query.filter_by(kmeans_result_id=kmeans_result_id).all()
+        
+        if not details:
+            print(f'No cluster details found for kmeans_result_id={kmeans_result_id}')
+            return False
+        
+        # Save each detail to final result table
+        for detail in details:
+            final_result = KMeansFinalResult(
+                kmeans_result_id=kmeans_result_id,
+                cluster_id=detail.cluster_id,
+                kategori=detail.kategori,
+                size_range=detail.size,
+                jumlah_terjual=detail.jumlah_terjual
+            )
+            db.session.add(final_result)
+        
+        db.session.commit()
+        print(f'✓ Saved {len(details)} records to kmeans_final_result')
+        return True
+        
+    except Exception as e:
+        db.session.rollback()
+        print(f'Error saving K-Means final result: {str(e)}')
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def get_kmeans_final_results():
+    """Get all final K-Means results from database"""
+    try:
+        results = KMeansFinalResult.query.order_by(
+            KMeansFinalResult.cluster_id, 
+            KMeansFinalResult.kategori
+        ).all()
+        
+        if not results:
+            return None
+        
+        return [{
+            'id': r.id,
+            'kmeans_result_id': r.kmeans_result_id,
+            'cluster_id': r.cluster_id,
+            'kategori': r.kategori,
+            'size_range': r.size_range,
+            'jumlah_terjual': r.jumlah_terjual,
+            'created_at': r.created_at.strftime('%d-%m-%Y %H:%M:%S') if r.created_at else None
+        } for r in results]
+        
+    except Exception as e:
+        print(f'Error getting K-Means final results: {str(e)}')
         return None
 
 

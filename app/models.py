@@ -90,3 +90,18 @@ class KMedoidsClusterDetail(db.Model):
     total_harga = db.Column(db.Numeric(18, 0))
     distance_to_medoid = db.Column(db.Float)
     is_medoid = db.Column(db.Boolean)
+
+
+class KMeansFinalResult(db.Model):
+    __tablename__ = 'kmeans_final_result'
+
+    id = db.Column(db.Integer, primary_key=True)
+    kmeans_result_id = db.Column(db.Integer, db.ForeignKey('kmeans_result.id'), nullable=False)
+    cluster_id = db.Column(db.Integer, nullable=False)
+    kategori = db.Column(db.String(100))
+    size_range = db.Column(db.String(50))
+    jumlah_terjual = db.Column(db.Integer)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationship
+    kmeans_result = db.relationship('KMeansResult', backref='final_results')

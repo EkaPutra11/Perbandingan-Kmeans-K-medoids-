@@ -1,3 +1,5 @@
+let finalMedoids = null;  // Store final iteration medoids for tier ranking
+
 document.getElementById('run-btn').addEventListener('click', async function() {
     const k = document.getElementById('k-value').value;
     const spinner = document.getElementById('spinner');
@@ -41,11 +43,10 @@ document.getElementById('run-btn').addEventListener('click', async function() {
                 parseFloat(data.davies_bouldin).toFixed(3);
             document.getElementById('metrics-container').classList.remove('d-none');
 
-            // Show results
-            displayFinalResults(data.analysis);
-            document.getElementById('final-results-container').classList.remove('d-none');
+            // Store analysis data temporarily
+            window.tempAnalysisData = data.analysis;
 
-            // Load and display iterations
+            // Load iterations first (to get medoids), then display results
             await loadAndDisplayIterations();
 
             // Change status container color to success
@@ -126,12 +127,15 @@ function displayFinalResults(analysis) {
 
     // Process Standard
     if (analysis.standard) {
-        Object.entries(analysis.standard).forEach(([range, data]) => {
+        Object.entries(analysis.standard).forEach(([key, data]) => {
             const dominantCluster = data.dominant_cluster !== undefined ? data.dominant_cluster : '-';
+            const kategori = data.kategori || 'Standard';
+            const size_range = data.size_range || key;
+            
             html += `
                 <tr>
-                    <td>Standard</td>
-                    <td>${range}</td>
+                    <td>${kategori}</td>
+                    <td>${size_range}</td>
                     <td style="text-align: right;">${data.total_terjual.toFixed(0)}</td>
                     <td style="text-align: center;">
                         <span class="cluster-badge c${dominantCluster}">C${dominantCluster}</span>
@@ -139,27 +143,25 @@ function displayFinalResults(analysis) {
                 </tr>
             `;
             if (dominantCluster !== '-') {
-                clusterData[dominantCluster].count += data.items ? data.items.length : 1;
+                // Each entry is one kategori+size combination, count as 1
+                clusterData[dominantCluster].count += 1;
                 clusterData[dominantCluster].total += data.total_terjual;
-                clusterData[dominantCluster].sizeRanges++;
+                clusterData[dominantCluster].sizeRanges += 1;
             }
         });
     }
 
     // Process Non-Standard
     if (analysis.non_standard) {
-        Object.entries(analysis.non_standard).forEach(([range, data]) => {
+        Object.entries(analysis.non_standard).forEach(([key, data]) => {
             const dominantCluster = data.dominant_cluster !== undefined ? data.dominant_cluster : '-';
-            // Extract kategori from first item if available
-            let kategori = 'Non-Standard';
-            if (data.items && data.items.length > 0) {
-                kategori = data.items[0].kategori;
-            }
+            const kategori = data.kategori || 'Non-Standard';
+            const size_range = data.size_range || key;
             
             html += `
                 <tr>
                     <td>${kategori}</td>
-                    <td>${range}</td>
+                    <td>${size_range}</td>
                     <td style="text-align: right;">${data.total_terjual.toFixed(0)}</td>
                     <td style="text-align: center;">
                         <span class="cluster-badge c${dominantCluster}">C${dominantCluster}</span>
@@ -167,31 +169,53 @@ function displayFinalResults(analysis) {
                 </tr>
             `;
             if (dominantCluster !== '-') {
-                clusterData[dominantCluster].count += data.items ? data.items.length : 1;
+                // Each entry is one kategori+size combination, count as 1
+                clusterData[dominantCluster].count += 1;
                 clusterData[dominantCluster].total += data.total_terjual;
-                clusterData[dominantCluster].sizeRanges++;
+                clusterData[dominantCluster].sizeRanges += 1;
             }
         });
     }
 
     tbody.innerHTML = html;
 
-    // Determine tier based on cluster totals
+    // Determine tier based on FINAL MEDOID values from last iteration
     const tierByTotal = {};
-    const clusterTotals = [];
     
-    for (let i = 0; i <= 2; i++) {
-        clusterTotals.push({
-            cluster: i,
-            total: clusterData[i].total
-        });
+    if (finalMedoids && finalMedoids.length === 3) {
+        // Calculate composite score for each cluster (jumlah_terjual + total_harga)
+        const clusterScores = finalMedoids.map((medoid) => ({
+            cluster: medoid.cluster_id,
+            score: medoid.jumlah_terjual + medoid.total_harga,
+            jumlah: medoid.jumlah_terjual,
+            harga: medoid.total_harga
+        }));
+        
+        console.log('Medoid Scores:', clusterScores);  // Debug log
+        
+        // Sort by composite score (descending) - highest = Terlaris
+        clusterScores.sort((a, b) => b.score - a.score);
+        
+        console.log('Sorted (Highest to Lowest):', clusterScores);  // Debug log
+        
+        // Assign tiers based on medoid ranking
+        tierByTotal[clusterScores[0].cluster] = { name: 'Terlaris ⭐', icon: '⭐' };
+        tierByTotal[clusterScores[1].cluster] = { name: 'Sedang 📊', icon: '📊' };
+        tierByTotal[clusterScores[2].cluster] = { name: 'Kurang Laris 📉', icon: '📉' };
+    } else {
+        // Fallback: use item count if medoids not available
+        const clusterTotals = [];
+        for (let i = 0; i <= 2; i++) {
+            clusterTotals.push({
+                cluster: i,
+                total: clusterData[i].sizeRanges
+            });
+        }
+        clusterTotals.sort((a, b) => b.total - a.total);
+        tierByTotal[clusterTotals[0].cluster] = { name: 'Terlaris ⭐', icon: '⭐' };
+        tierByTotal[clusterTotals[1].cluster] = { name: 'Sedang 📊', icon: '📊' };
+        tierByTotal[clusterTotals[2].cluster] = { name: 'Kurang Laris 📉', icon: '📉' };
     }
-    
-    clusterTotals.sort((a, b) => b.total - a.total);
-    
-    tierByTotal[clusterTotals[0].cluster] = { name: 'Terlaris ⭐', icon: '⭐' };
-    tierByTotal[clusterTotals[1].cluster] = { name: 'Sedang 📊', icon: '📊' };
-    tierByTotal[clusterTotals[2].cluster] = { name: 'Kurang Laris 📉', icon: '📉' };
     
     const tierColors = { 
         'Terlaris ⭐': '#198754',
@@ -199,7 +223,7 @@ function displayFinalResults(analysis) {
         'Kurang Laris 📉': '#dc3545'
     };
 
-    // Display Summary Stats as Table
+    // Display Summary Stats as Table - SORTED BY TIER (Terlaris → Sedang → Kurang Laris)
     let summaryHtml = `
         <div class="table-responsive" style="margin-top: 1rem;">
             <table class="table table-hover" style="border: 1px solid #dee2e6; border-radius: 6px;">
@@ -213,20 +237,31 @@ function displayFinalResults(analysis) {
                 <tbody>
     `;
     
+    // Sort clusters by tier: Terlaris → Sedang → Kurang Laris
+    const tierOrder = { 'Terlaris ⭐': 1, 'Sedang 📊': 2, 'Kurang Laris 📉': 3 };
+    const sortedClusters = [];
     for (let i = 0; i <= 2; i++) {
         const tierInfo = tierByTotal[i];
-        const tierName = tierInfo.name;
-        const bgColor = tierColors[tierName];
-        const data = clusterData[i];
-        
+        sortedClusters.push({
+            clusterId: i,
+            tierName: tierInfo.name,
+            tierOrder: tierOrder[tierInfo.name],
+            bgColor: tierColors[tierInfo.name],
+            data: clusterData[i]
+        });
+    }
+    sortedClusters.sort((a, b) => a.tierOrder - b.tierOrder);
+    
+    // Display in sorted order
+    sortedClusters.forEach(cluster => {
         summaryHtml += `
             <tr style="border-bottom: 1px solid #dee2e6;">
-                <td style="padding: 0.75rem; font-weight: 600; color: ${bgColor};">C${i}</td>
-                <td style="padding: 0.75rem; text-align: right; font-weight: 500;">${data.total.toFixed(0)}</td>
-                <td style="padding: 0.75rem;">${tierName}</td>
+                <td style="padding: 0.75rem; font-weight: 600; color: ${cluster.bgColor};">C${cluster.clusterId}</td>
+                <td style="padding: 0.75rem; text-align: right; font-weight: 500;">${cluster.data.sizeRanges}</td>
+                <td style="padding: 0.75rem;">${cluster.tierName}</td>
             </tr>
         `;
-    }
+    });
     
     summaryHtml += `
                 </tbody>
@@ -246,8 +281,20 @@ async function loadAndDisplayIterations() {
             const iterations = data.iterations || [];
             
             if (iterations.length > 0) {
+                // Store final iteration medoids for tier ranking
+                const lastIteration = iterations[iterations.length - 1];
+                if (lastIteration.medoid_points) {
+                    finalMedoids = lastIteration.medoid_points;
+                }
                 renderIterations(iterations);
                 document.getElementById('iterations-container').classList.remove('d-none');
+                
+                // NOW display final results AFTER medoids are loaded
+                if (window.tempAnalysisData) {
+                    displayFinalResults(window.tempAnalysisData);
+                    document.getElementById('final-results-container').classList.remove('d-none');
+                    window.tempAnalysisData = null;  // Clean up
+                }
             }
         }
     } catch (error) {

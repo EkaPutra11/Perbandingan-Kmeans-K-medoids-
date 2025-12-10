@@ -291,13 +291,17 @@ def analyze_clustering_results(data, labels, medoid_indices):
 
 
 def analyze_clustering_results_aggregated(df_aggregated, labels, medoid_indices):
-    """Analyze clustering results from aggregated data (already grouped by 5cm size ranges)"""
+    """Analyze clustering results from aggregated data (already grouped by 5cm size ranges)
+    
+    Returns data grouped by kategori+size_range with their cluster assignments
+    """
     analysis = {
         'standard': {},
         'non_standard': {}
     }
 
     # Process aggregated data with cluster labels
+    # Each row is already a unique kategori+size_range combination
     for i, (idx, row) in enumerate(df_aggregated.iterrows()):
         cluster_id = int(labels[i])
         kategori = row.get('kategori', 'Unknown')
@@ -312,28 +316,24 @@ def analyze_clustering_results_aggregated(df_aggregated, labels, medoid_indices)
         # Determine category type
         category_type = 'standard' if kategori.lower() in ['standar', 'standard'] else 'non_standard'
 
-        # Initialize size range if not exists
-        if size_range not in analysis[category_type]:
-            analysis[category_type][size_range] = {
-                'total_terjual': 0,
-                'total_harga': 0,
-                'items': [],
-                'dominant_cluster': cluster_id,
-                'cluster_id': cluster_id
+        # Create unique key for this kategori+size_range combination
+        unique_key = f"{kategori}_{size_range}"
+        
+        # Store each kategori+size_range as separate entry
+        if unique_key not in analysis[category_type]:
+            analysis[category_type][unique_key] = {
+                'kategori': kategori,
+                'size_range': size_range,
+                'total_terjual': jumlah,
+                'total_harga': total_harga,
+                'cluster_id': cluster_id,
+                'dominant_cluster': cluster_id
             }
-
-        # Add to total
-        analysis[category_type][size_range]['total_terjual'] += jumlah
-        analysis[category_type][size_range]['total_harga'] += total_harga
-        analysis[category_type][size_range]['dominant_cluster'] = cluster_id
-        analysis[category_type][size_range]['cluster_id'] = cluster_id
-        analysis[category_type][size_range]['items'].append({
-            'cluster': cluster_id,
-            'kategori': kategori,
-            'size_range': size_range,
-            'jumlah_terjual': jumlah,
-            'total_harga': total_harga
-        })
+        else:
+            # If somehow there's duplicate (shouldn't happen with aggregated data)
+            # Just update the totals
+            analysis[category_type][unique_key]['total_terjual'] += jumlah
+            analysis[category_type][unique_key]['total_harga'] += total_harga
 
     return analysis
 

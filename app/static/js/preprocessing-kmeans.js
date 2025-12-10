@@ -1,4 +1,5 @@
 let clusterChart = null;
+let finalCentroids = null;  // Store final iteration centroids for tier ranking
 
 document.getElementById('run-btn').addEventListener('click', async function() {
     const k = document.getElementById('k-value').value;
@@ -43,13 +44,10 @@ document.getElementById('run-btn').addEventListener('click', async function() {
                 parseFloat(data.davies_bouldin).toFixed(3);
             document.getElementById('metrics-container').classList.remove('d-none');
 
-            // Display final results from clustering response
-            if (data.analysis) {
-                displayFinalResults(data.analysis);
-                document.getElementById('final-results-container').classList.remove('d-none');
-            }
+            // Store analysis data temporarily
+            window.tempAnalysisData = data.analysis;
 
-            // Load and display iterations
+            // Load iterations first (to get centroids), then display results
             await loadAndDisplayIterations();
 
             // Change status container color to success
@@ -128,12 +126,15 @@ function displayFinalResults(analysis) {
 
     // Process Standard
     if (analysis.standard) {
-        Object.entries(analysis.standard).forEach(([range, data]) => {
+        Object.entries(analysis.standard).forEach(([key, data]) => {
             const dominantCluster = data.dominant_cluster !== undefined ? data.dominant_cluster : '-';
+            const kategori = data.kategori || 'Standard';
+            const size_range = data.size_range || key;
+            
             html += `
                 <tr>
-                    <td>Standard</td>
-                    <td>${range}</td>
+                    <td>${kategori}</td>
+                    <td>${size_range}</td>
                     <td style="text-align: right;">${data.total_terjual.toFixed(0)}</td>
                     <td style="text-align: center;">
                         <span class="cluster-badge c${dominantCluster}">C${dominantCluster}</span>
@@ -141,27 +142,25 @@ function displayFinalResults(analysis) {
                 </tr>
             `;
             if (dominantCluster !== '-') {
-                clusterData[dominantCluster].count += data.items ? data.items.length : 1;
+                // Each entry is one kategori+size combination, count as 1
+                clusterData[dominantCluster].count += 1;
                 clusterData[dominantCluster].total += data.total_terjual;
-                clusterData[dominantCluster].sizeRanges++;
+                clusterData[dominantCluster].sizeRanges += 1;
             }
         });
     }
 
     // Process Non-Standard
     if (analysis.non_standard) {
-        Object.entries(analysis.non_standard).forEach(([range, data]) => {
+        Object.entries(analysis.non_standard).forEach(([key, data]) => {
             const dominantCluster = data.dominant_cluster !== undefined ? data.dominant_cluster : '-';
-            // Extract kategori from first item if available
-            let kategori = 'Non-Standard';
-            if (data.items && data.items.length > 0) {
-                kategori = data.items[0].kategori;
-            }
+            const kategori = data.kategori || 'Non-Standard';
+            const size_range = data.size_range || key;
             
             html += `
                 <tr>
                     <td>${kategori}</td>
-                    <td>${range}</td>
+                    <td>${size_range}</td>
                     <td style="text-align: right;">${data.total_terjual.toFixed(0)}</td>
                     <td style="text-align: center;">
                         <span class="cluster-badge c${dominantCluster}">C${dominantCluster}</span>
@@ -169,34 +168,55 @@ function displayFinalResults(analysis) {
                 </tr>
             `;
             if (dominantCluster !== '-') {
-                clusterData[dominantCluster].count += data.items ? data.items.length : 1;
+                // Each entry is one kategori+size combination, count as 1
+                clusterData[dominantCluster].count += 1;
                 clusterData[dominantCluster].total += data.total_terjual;
-                clusterData[dominantCluster].sizeRanges++;
+                clusterData[dominantCluster].sizeRanges += 1;
             }
         });
     }
 
     tbody.innerHTML = html;
 
-    // Determine tier based on actual cluster totals
+    // Determine tier based on FINAL CENTROID values from last iteration
     const tierByTotal = {};
-    const clusterTotals = [];
     
-    // Collect cluster totals
-    for (let i = 0; i <= 2; i++) {
-        clusterTotals.push({
-            cluster: i,
-            total: clusterData[i].total
-        });
+    if (finalCentroids && finalCentroids.length === 3) {
+        // Calculate composite score for each cluster (jumlah_terjual + total_harga)
+        const clusterScores = finalCentroids.map((centroid) => ({
+            cluster: centroid.cluster_id,  // Use cluster_id from centroid object!
+            score: centroid.jumlah_terjual + centroid.total_harga,
+            jumlah: centroid.jumlah_terjual,
+            harga: centroid.total_harga
+        }));
+        
+        console.log('Centroid Scores:', clusterScores);  // Debug log
+        
+        // Sort by composite score (descending) - highest = Terlaris
+        clusterScores.sort((a, b) => b.score - a.score);
+        
+        console.log('Sorted (Highest to Lowest):', clusterScores);  // Debug log
+        
+        // Assign tiers based on centroid ranking
+        tierByTotal[clusterScores[0].cluster] = { name: 'Terlaris ⭐', icon: '⭐', emoji: '⭐' };
+        tierByTotal[clusterScores[1].cluster] = { name: 'Sedang 📊', icon: '📊', emoji: '📊' };
+        tierByTotal[clusterScores[2].cluster] = { name: 'Kurang Laris 📉', icon: '📉', emoji: '📉' };
+        
+        console.log('Tier Assignment:', tierByTotal);  // Debug log
+    } else {
+        // Fallback: use item count if centroids not available
+        const clusterTotals = [];
+        for (let i = 0; i <= 2; i++) {
+            clusterTotals.push({
+                cluster: i,
+                total: clusterData[i].sizeRanges
+            });
+        }
+        clusterTotals.sort((a, b) => b.total - a.total);
+        tierByTotal[clusterTotals[0].cluster] = { name: 'Terlaris ⭐', icon: '⭐', emoji: '⭐' };
+        tierByTotal[clusterTotals[1].cluster] = { name: 'Sedang 📊', icon: '📊', emoji: '📊' };
+        tierByTotal[clusterTotals[2].cluster] = { name: 'Kurang Laris 📉', icon: '📉', emoji: '📉' };
     }
-    
-    // Sort by total (descending)
-    clusterTotals.sort((a, b) => b.total - a.total);
-    
-    // Assign tiers based on ranking
-    tierByTotal[clusterTotals[0].cluster] = { name: 'Terlaris ⭐', icon: '⭐', emoji: '⭐' };
-    tierByTotal[clusterTotals[1].cluster] = { name: 'Sedang 📊', icon: '📊', emoji: '📊' };
-    tierByTotal[clusterTotals[2].cluster] = { name: 'Kurang Laris 📉', icon: '📉', emoji: '📉' };
     
     const tierColors = { 
         'Terlaris ⭐': '#198754',
@@ -204,7 +224,7 @@ function displayFinalResults(analysis) {
         'Kurang Laris 📉': '#dc3545'
     };
 
-    // Display Summary Stats as Table
+    // Display Summary Stats as Table - SORTED BY TIER (Terlaris → Sedang → Kurang Laris)
     let summaryHtml = `
         <div class="table-responsive" style="margin-top: 1rem;">
             <table class="table table-hover" style="border: 1px solid #dee2e6; border-radius: 6px;">
@@ -218,23 +238,31 @@ function displayFinalResults(analysis) {
                 <tbody>
     `;
     
+    // Sort clusters by tier: Terlaris → Sedang → Kurang Laris
+    const tierOrder = { 'Terlaris ⭐': 1, 'Sedang 📊': 2, 'Kurang Laris 📉': 3 };
+    const sortedClusters = [];
     for (let i = 0; i <= 2; i++) {
         const tierInfo = tierByTotal[i];
-        const tierName = tierInfo.name;
-        const bgColor = tierColors[tierName];
-        const data = clusterData[i];
-        
-        // Extract description (without emoji)
-        const desc = tierName.split(' ')[0]; // 'Terlaris', 'Sedang', or 'Kurang Laris'
-        
+        sortedClusters.push({
+            clusterId: i,
+            tierName: tierInfo.name,
+            tierOrder: tierOrder[tierInfo.name],
+            bgColor: tierColors[tierInfo.name],
+            data: clusterData[i]
+        });
+    }
+    sortedClusters.sort((a, b) => a.tierOrder - b.tierOrder);
+    
+    // Display in sorted order
+    sortedClusters.forEach(cluster => {
         summaryHtml += `
             <tr style="border-bottom: 1px solid #dee2e6;">
-                <td style="padding: 0.75rem; font-weight: 600; color: ${bgColor};">C${i}</td>
-                <td style="padding: 0.75rem; text-align: right; font-weight: 500;">${data.total.toFixed(0)}</td>
-                <td style="padding: 0.75rem;">${tierName}</td>
+                <td style="padding: 0.75rem; font-weight: 600; color: ${cluster.bgColor};">C${cluster.clusterId}</td>
+                <td style="padding: 0.75rem; text-align: right; font-weight: 500;">${cluster.data.sizeRanges}</td>
+                <td style="padding: 0.75rem;">${cluster.tierName}</td>
             </tr>
         `;
-    }
+    });
     
     summaryHtml += `
                 </tbody>
@@ -459,8 +487,22 @@ async function loadAndDisplayIterations() {
         const data = await response.json();
 
         if (data.status === 'success') {
+            // Store final iteration centroids for tier ranking
+            if (data.iterations && data.iterations.length > 0) {
+                const lastIteration = data.iterations[data.iterations.length - 1];
+                if (lastIteration.centroids) {
+                    finalCentroids = lastIteration.centroids;
+                }
+            }
             displayIterations(data.iterations);
             document.getElementById('iterations-container').classList.remove('d-none');
+            
+            // NOW display final results AFTER centroids are loaded
+            if (window.tempAnalysisData) {
+                displayFinalResults(window.tempAnalysisData);
+                document.getElementById('final-results-container').classList.remove('d-none');
+                window.tempAnalysisData = null;  // Clean up
+            }
         }
     } catch (error) {
         console.error('Error loading iterations:', error);

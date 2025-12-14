@@ -1,4 +1,4 @@
-import pandas as pd
+﻿import pandas as pd
 import numpy as np
 from app.models import db, Penjualan, KMeansResult, KMeansClusterDetail, KMeansFinalResult
 
@@ -135,6 +135,71 @@ def davies_bouldin_index_manual(X, labels, centroids):
     return db_index / n_clusters
 
 
+def assign_tiers_by_percentile(df_aggregated, cluster_labels):
+    """
+    ✨ FITUR BARU: Assign tier labels based on PERCENTILE instead of cluster ID
+    
+    This ensures more balanced distribution:
+    - Terlaris: Top 30% (P70-P100)
+    - Sedang: Middle 40% (P30-P70)  
+    - Kurang Laris: Bottom 30% (P0-P30)
+    
+    KOLOM TAMBAHAN YANG DIHITUNG:
+    1. performance_score: Skor performa (60% jumlah_terjual + 40% total_harga)
+    2. avg_price_per_unit: Harga rata-rata per unit terjual
+    3. relative_performance: Performa relatif terhadap rata-rata
+    """
+    df = df_aggregated.copy()
+    
+    # KOLOM 1: Performance Score (weighted combination)
+    # Normalize each feature to 0-1 range
+    jumlah_min, jumlah_max = df['jumlah_terjual'].min(), df['jumlah_terjual'].max()
+    harga_min, harga_max = df['total_harga'].min(), df['total_harga'].max()
+    
+    jumlah_norm = (df['jumlah_terjual'] - jumlah_min) / (jumlah_max - jumlah_min + 1e-8)
+    harga_norm = (df['total_harga'] - harga_min) / (harga_max - harga_min + 1e-8)
+    
+    # Weighted score: prioritas lebih ke jumlah terjual (60%) vs harga (40%)
+    df['performance_score'] = 0.6 * jumlah_norm + 0.4 * harga_norm
+    
+    # KOLOM 2: Average price per unit
+    df['avg_price_per_unit'] = df['total_harga'] / (df['jumlah_terjual'] + 1e-8)
+    
+    # KOLOM 3: Relative performance (dibanding mean)
+    mean_score = df['performance_score'].mean()
+    df['relative_performance'] = (df['performance_score'] / mean_score) * 100
+    
+    # Calculate percentile thresholds
+    p30 = df['performance_score'].quantile(0.30)
+    p70 = df['performance_score'].quantile(0.70)
+    
+    print(f"\n📊 PERCENTILE-BASED TIER ASSIGNMENT:")
+    print(f"   P30 (threshold Sedang): {p30:.4f}")
+    print(f"   P70 (threshold Terlaris): {p70:.4f}")
+    
+    # Assign tier labels based on percentile
+    tier_labels = []
+    tier_counts = {0: 0, 1: 0, 2: 0}
+    
+    for score in df['performance_score']:
+        if score >= p70:
+            tier_labels.append(0)  # Terlaris (Top 30%)
+            tier_counts[0] += 1
+        elif score >= p30:
+            tier_labels.append(1)  # Sedang (Middle 40%)
+            tier_counts[1] += 1
+        else:
+            tier_labels.append(2)  # Kurang Laris (Bottom 30%)
+            tier_counts[2] += 1
+    
+    print(f"\n✅ DISTRIBUSI TIER (LEBIH MASUK AKAL):")
+    print(f"   Terlaris: {tier_counts[0]} produk ({tier_counts[0]/len(df)*100:.1f}%)")
+    print(f"   Sedang: {tier_counts[1]} produk ({tier_counts[1]/len(df)*100:.1f}%)")
+    print(f"   Kurang Laris: {tier_counts[2]} produk ({tier_counts[2]/len(df)*100:.1f}%)")
+    
+    return np.array(tier_labels), df
+
+
 def get_size_range(harga):
     """Categorize price into size category"""
     try:
@@ -263,17 +328,28 @@ def analyze_clustering_results(data, labels, medoid_indices):
 def analyze_clustering_results_aggregated(df_aggregated, labels, centroids):
     """Analyze clustering results from aggregated data (already grouped by 5cm size ranges)
     
-    Returns data grouped by kategori+size_range with their cluster assignments
+    Returns data grouped by kategori+size_range with their tier assignments
     """
     analysis = {
         'standard': {},
         'non_standard': {}
     }
 
-    # Process aggregated data with cluster labels
+    # Map tier labels (now integers: 0, 1, 2) to standardized format
+    tier_names_map = {
+        0: 'terlaris',
+        1: 'sedang',
+        2: 'kurang_laris'
+    }
+
+    # Process aggregated data with tier labels
     # Each row is already a unique kategori+size_range combination
     for i, (idx, row) in enumerate(df_aggregated.iterrows()):
-        cluster_id = int(labels[i])
+        # labels[i] is now an integer (0, 1, or 2) from percentile assignment
+        tier_id = int(labels[i])  # Ensure it's integer
+        tier_normalized = tier_names_map.get(tier_id, 'kurang_laris')
+        cluster_id = tier_id  # cluster_id = tier_id for frontend (0=Terlaris, 1=Sedang, 2=Kurang Laris)
+        
         kategori = row.get('kategori', 'Unknown')
         size_range = row.get('size_range', 'Unknown')
         jumlah = float(row.get('jumlah_terjual', 0)) if row.get('jumlah_terjual') else 0
@@ -296,8 +372,9 @@ def analyze_clustering_results_aggregated(df_aggregated, labels, centroids):
                 'size_range': size_range,
                 'total_terjual': jumlah,
                 'total_harga': total_harga,
-                'cluster_id': cluster_id,
-                'dominant_cluster': cluster_id
+                'tier': tier_normalized,
+                'cluster_id': cluster_id,  # Add integer cluster ID for frontend
+                'dominant_cluster': cluster_id  # Use cluster_id for compatibility
             }
         else:
             # If somehow there's duplicate (shouldn't happen with aggregated data)
@@ -342,10 +419,20 @@ def process_kmeans_manual(k=3):
         # Perform KMeans with optimized parameters
         kmeans = KMeansManual(k=k, max_iterations=10, random_state=42)
         kmeans.fit(X_normalized)
-        labels = kmeans.labels
+        cluster_labels = kmeans.labels
 
-        # Calculate metrics
-        davies_bouldin = davies_bouldin_index_manual(X_normalized, labels, kmeans.centroids)
+        # ✨ NEW: Assign tiers based on PERCENTILE (not cluster ID)
+        # This makes distribution more balanced and meaningful
+        tier_labels, df_with_scores = assign_tiers_by_percentile(df_aggregated, cluster_labels)
+        
+        # Use tier_labels for final analysis (but keep cluster_labels for DBI calculation)
+        labels = tier_labels  # Override with percentile-based tiers
+        
+        # Update df_aggregated with new columns
+        df_aggregated = df_with_scores
+
+        # Calculate metrics (using original cluster for DBI)
+        davies_bouldin = davies_bouldin_index_manual(X_normalized, cluster_labels, kmeans.centroids)
 
         # Create analysis from aggregated data with labels
         analysis = analyze_clustering_results_aggregated(df_aggregated, labels, kmeans.centroids)
@@ -356,6 +443,7 @@ def process_kmeans_manual(k=3):
         return {
             'kmeans': kmeans,
             'labels': labels,
+            'cluster_labels': cluster_labels,  # Keep original cluster labels for distance calculations
             'inertia': float(kmeans.inertia),
             'davies_bouldin': float(davies_bouldin),
             'n_iter': kmeans.n_iter,  # Use actual iterations instead of max
@@ -390,14 +478,19 @@ def save_kmeans_manual_result(result):
 
         # Save result
         kmeans_result = result['kmeans']
-        labels = result['labels']
+        tier_labels = result['labels']  # Tier labels for final output
+        cluster_labels = result['cluster_labels']  # Original cluster labels for indexing
         data = result['data']
         data_aggregated = result.get('data_aggregated', data)  # Use aggregated data if available
         analysis = result['analysis']
 
-        cluster_dist = {}
-        for i in range(result['kmeans'].k):
-            cluster_dist[f'cluster_{i}'] = int(np.sum(labels == i))  # Explicitly convert to int
+        # Count tier distribution
+        tier_counts = {
+            'terlaris': int(np.sum(tier_labels == 'Terlaris')),
+            'sedang': int(np.sum(tier_labels == 'Sedang')),
+            'kurang_laris': int(np.sum(tier_labels == 'Kurang Laris'))
+        }
+        cluster_dist = tier_counts
 
         result_record = KMeansResult(
             k_value=kmeans_result.k,
@@ -423,14 +516,17 @@ def save_kmeans_manual_result(result):
 
         # Save cluster details with distance to centroid - iterate using aggregated data
         for idx, item in enumerate(data_aggregated.itertuples()):
-            # Calculate distance from point to its centroid
+            # Calculate distance from point to its centroid using cluster labels
             point = X_normalized[idx]
-            centroid = centroids[labels[idx]]
+            centroid = centroids[cluster_labels[idx]]
             distance = np.sqrt(np.sum((point - centroid) ** 2))
+            
+            # tier_labels[idx] is already an integer (0, 1, or 2) from percentile assignment
+            cluster_id = int(tier_labels[idx])  # Use directly as integer
             
             detail = KMeansClusterDetail(
                 kmeans_result_id=result_record.id,
-                cluster_id=int(labels[idx]),
+                cluster_id=cluster_id,
                 jumlah_terjual=int(item.jumlah_terjual) if item.jumlah_terjual else 0,
                 total_harga=float(item.total_harga) if item.total_harga else 0,
                 kategori=item.kategori,

@@ -29,51 +29,23 @@ def index():
     
     # Get clustering results from kmeans_final_result
     clustering_results = []
-    tier_mapping = {}  # Map cluster_id to tier name
+    
+    # Direct tier mapping: cluster_id now directly represents tier (from percentile assignment)
+    tier_mapping = {
+        0: 'Terlaris',
+        1: 'Sedang', 
+        2: 'Kurang Laris'
+    }
     
     try:
         # Check if there's any data in kmeans_final_result
         has_final_results = KMeansFinalResult.query.first() is not None
         
         if has_final_results:
-            # Get latest kmeans result to determine tier mapping
+            # Get latest kmeans result
             latest_kmeans = KMeansResult.query.order_by(KMeansResult.created_at.desc()).first()
             
             if latest_kmeans:
-                # Calculate tier from cluster details (normalized data)
-                cluster_details = KMeansClusterDetail.query.filter_by(
-                    kmeans_result_id=latest_kmeans.id
-                ).all()
-                
-                # Calculate average for each cluster to determine tier
-                cluster_totals = {}
-                cluster_counts = {}
-                
-                for detail in cluster_details:
-                    cid = detail.cluster_id
-                    if cid not in cluster_totals:
-                        cluster_totals[cid] = 0
-                        cluster_counts[cid] = 0
-                    cluster_totals[cid] += detail.jumlah_terjual
-                    cluster_counts[cid] += 1
-                
-                # Calculate average and rank
-                cluster_scores = []
-                for cid in cluster_totals:
-                    avg = cluster_totals[cid] / cluster_counts[cid] if cluster_counts[cid] > 0 else 0
-                    cluster_scores.append({'cluster_id': cid, 'score': avg})
-                
-                # Sort by score descending
-                cluster_scores.sort(key=lambda x: x['score'], reverse=True)
-                
-                # Assign tiers
-                if len(cluster_scores) >= 3:
-                    tier_mapping[cluster_scores[0]['cluster_id']] = 'Terlaris'
-                    tier_mapping[cluster_scores[1]['cluster_id']] = 'Sedang'
-                    tier_mapping[cluster_scores[2]['cluster_id']] = 'Kurang Laris'
-                
-                print(f"Tier mapping: {tier_mapping}")
-                
                 # Get final results with tier
                 final_results = KMeansFinalResult.query.filter_by(
                     kmeans_result_id=latest_kmeans.id
@@ -82,6 +54,7 @@ def index():
                 print(f"Found {len(final_results)} records in kmeans_final_result")
                 
                 for result in final_results:
+                    # cluster_id now directly maps to tier (from percentile-based assignment)
                     tier = tier_mapping.get(result.cluster_id, 'Unknown')
                     clustering_results.append({
                         'kategori': result.kategori,
@@ -213,20 +186,15 @@ def process_kmeans():
             if latest_result:
                 save_kmeans_final_result(latest_result.id)
             
-            # Get cluster distribution from result directly
-            labels = result.get('labels', [])
-            import numpy as np
-            cluster_dist = {}
-            for i in range(k):
-                count = int(np.sum(labels == i)) if hasattr(labels, '__iter__') else 0
-                cluster_dist[str(i)] = count
+            # Get tier distribution from saved result (already calculated in save function)
+            tier_distribution = latest_result.cluster_distribution if latest_result else {}
             
             return jsonify({
                 'status': 'success',
                 'inertia': float(result.get('inertia', 0)),
                 'davies_bouldin': float(result.get('davies_bouldin', 0)),
                 'analysis': result.get('analysis', {}),
-                'cluster_distribution': cluster_dist
+                'cluster_distribution': tier_distribution
             })
         return jsonify({'status': 'error', 'error': 'Failed to process data'})
     except Exception as e:
@@ -386,20 +354,16 @@ def process_kmedoids():
         if result:
             save_kmedoids_manual_result(result)
             
-            # Get cluster distribution from result directly
-            labels = result.get('labels', [])
-            import numpy as np
-            cluster_dist = {}
-            for i in range(k):
-                count = int(np.sum(labels == i)) if hasattr(labels, '__iter__') else 0
-                cluster_dist[str(i)] = count
+            # Get tier distribution from saved result (already calculated in save function)
+            latest_result = KMedoidsResult.query.order_by(KMedoidsResult.created_at.desc()).first()
+            tier_distribution = latest_result.cluster_distribution if latest_result else {}
             
             return jsonify({
                 'status': 'success',
                 'cost': float(result.get('cost', 0)),
                 'davies_bouldin': float(result.get('davies_bouldin', 0)),
                 'analysis': result.get('analysis', {}),
-                'cluster_distribution': cluster_dist
+                'cluster_distribution': tier_distribution
             })
         return jsonify({'status': 'error', 'error': 'Failed to process data'})
     except Exception as e:

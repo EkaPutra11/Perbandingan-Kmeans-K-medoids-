@@ -228,7 +228,8 @@ def kmeans_iterations():
         df_aggregated = aggregate_data_by_size_range(df)
         
         # Prepare features for clustering (aggregated data)
-        X = df_aggregated[['jumlah_terjual', 'total_harga']].values.astype(float)
+        # ✨ CLUSTERING HANYA BERDASARKAN VOLUME PENJUALAN (jumlah_terjual)
+        X = df_aggregated[['jumlah_terjual']].values.astype(float)
         
         # Normalize data
         X_mean = X.mean(axis=0)
@@ -256,8 +257,7 @@ def kmeans_iterations():
                 for c_id, centroid in enumerate(centroids):
                     centroids_formatted.append({
                         'cluster_id': int(c_id),
-                        'jumlah_terjual': float(centroid[0]),  # First feature
-                        'total_harga': float(centroid[1])      # Second feature
+                        'jumlah_terjual': float(centroid[0])  # Only one feature now
                     })
                 
                 cluster_assignments = []
@@ -271,7 +271,6 @@ def kmeans_iterations():
                         'kategori': row['kategori'],
                         'size_range': row['size_range'],
                         'jumlah_terjual': int(row['jumlah_terjual']),
-                        'total_harga': float(row['total_harga']),
                         'distances': distances,
                         'assigned_cluster': f"C{int(labels[idx])}"
                     })
@@ -397,7 +396,8 @@ def kmedoids_iterations():
         df_aggregated = aggregate_data_by_size_range(df)
         
         # Prepare features for clustering (aggregated data)
-        X = df_aggregated[['jumlah_terjual', 'total_harga']].values.astype(float)
+        # ✨ CLUSTERING HANYA BERDASARKAN VOLUME PENJUALAN (jumlah_terjual)
+        X = df_aggregated[['jumlah_terjual']].values.astype(float)
         
         # Normalize data
         X_mean = X.mean(axis=0)
@@ -421,8 +421,7 @@ def kmedoids_iterations():
                 for c_id, medoid in enumerate(medoid_points):
                     medoids_formatted.append({
                         'cluster_id': int(c_id),
-                        'jumlah_terjual': float(medoid[0]),  # First feature
-                        'total_harga': float(medoid[1])      # Second feature
+                        'jumlah_terjual': float(medoid[0])  # Only one feature now
                     })
                 
                 cluster_assignments = []
@@ -436,7 +435,6 @@ def kmedoids_iterations():
                         'kategori': row['kategori'],
                         'size_range': row['size_range'],
                         'jumlah_terjual': int(row['jumlah_terjual']),
-                        'total_harga': float(row['total_harga']),
                         'distances': distances,
                         'assigned_cluster': f"C{int(labels[idx])}"
                     })

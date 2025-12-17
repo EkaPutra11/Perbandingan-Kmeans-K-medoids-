@@ -34,7 +34,8 @@ def get_clustering_data():
         df = aggregate_data_by_size_range(df)
         
         # Prepare features for clustering
-        X = df[['jumlah_terjual', 'total_harga']].values.astype(float)
+        # ✨ CLUSTERING HANYA BERDASARKAN VOLUME PENJUALAN (jumlah_terjual)
+        X = df[['jumlah_terjual']].values.astype(float)
         
         # Normalize
         X_mean = X.mean(axis=0)

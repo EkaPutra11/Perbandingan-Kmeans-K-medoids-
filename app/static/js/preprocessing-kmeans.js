@@ -182,17 +182,16 @@ function displayFinalResults(analysis) {
     const tierByTotal = {};
     
     if (finalCentroids && finalCentroids.length === 3) {
-        // Calculate composite score for each cluster (jumlah_terjual + total_harga)
+        // Calculate score based on jumlah_terjual only (volume-based clustering)
         const clusterScores = finalCentroids.map((centroid) => ({
             cluster: centroid.cluster_id,  // Use cluster_id from centroid object!
-            score: centroid.jumlah_terjual + centroid.total_harga,
-            jumlah: centroid.jumlah_terjual,
-            harga: centroid.total_harga
+            score: centroid.jumlah_terjual,  // Only volume matters now
+            jumlah: centroid.jumlah_terjual
         }));
         
         console.log('Centroid Scores:', clusterScores);  // Debug log
         
-        // Sort by composite score (descending) - highest = Terlaris
+        // Sort by jumlah_terjual score (descending) - highest = Terlaris
         clusterScores.sort((a, b) => b.score - a.score);
         
         console.log('Sorted (Highest to Lowest):', clusterScores);  // Debug log
@@ -558,9 +557,6 @@ function displayIterations(iterations) {
                         </div>
                         <div class="centroid-value">${centroid.jumlah_terjual.toFixed(2)}</div>
                         <div class="centroid-label-small">Jumlah Terjual</div>
-                        <div style="margin-top: 0.5rem;"></div>
-                        <div class="centroid-value">${centroid.total_harga.toFixed(2)}</div>
-                        <div class="centroid-label-small">Total Harga</div>
                     </div>
                 `;
             });

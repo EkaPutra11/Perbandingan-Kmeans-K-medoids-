@@ -145,25 +145,19 @@ def assign_tiers_by_percentile(df_aggregated, cluster_labels):
     - Kurang Laris: Bottom 30% (P0-P30)
     
     KOLOM TAMBAHAN YANG DIHITUNG:
-    1. performance_score: Skor performa (60% jumlah_terjual + 40% total_harga)
-    2. avg_price_per_unit: Harga rata-rata per unit terjual
-    3. relative_performance: Performa relatif terhadap rata-rata
+    1. performance_score: Skor performa (100% jumlah_terjual - volume based only)
+    2. relative_performance: Performa relatif terhadap rata-rata
     """
     df = df_aggregated.copy()
     
-    # KOLOM 1: Performance Score (weighted combination)
-    # Normalize each feature to 0-1 range
+    # KOLOM 1: Performance Score (100% based on volume)
+    # Normalize jumlah_terjual to 0-1 range
     jumlah_min, jumlah_max = df['jumlah_terjual'].min(), df['jumlah_terjual'].max()
-    harga_min, harga_max = df['total_harga'].min(), df['total_harga'].max()
     
     jumlah_norm = (df['jumlah_terjual'] - jumlah_min) / (jumlah_max - jumlah_min + 1e-8)
-    harga_norm = (df['total_harga'] - harga_min) / (harga_max - harga_min + 1e-8)
     
-    # Weighted score: prioritas lebih ke jumlah terjual (60%) vs harga (40%)
-    df['performance_score'] = 0.6 * jumlah_norm + 0.4 * harga_norm
-    
-    # KOLOM 2: Average price per unit
-    df['avg_price_per_unit'] = df['total_harga'] / (df['jumlah_terjual'] + 1e-8)
+    # Performance score 100% dari volume penjualan
+    df['performance_score'] = jumlah_norm
     
     # KOLOM 3: Relative performance (dibanding mean)
     mean_score = df['performance_score'].mean()
@@ -353,7 +347,6 @@ def analyze_clustering_results_aggregated(df_aggregated, labels, centroids):
         kategori = row.get('kategori', 'Unknown')
         size_range = row.get('size_range', 'Unknown')
         jumlah = float(row.get('jumlah_terjual', 0)) if row.get('jumlah_terjual') else 0
-        total_harga = float(row.get('total_harga', 0)) if row.get('total_harga') else 0
 
         # Skip if size is Unknown
         if size_range == 'Unknown':
@@ -371,7 +364,6 @@ def analyze_clustering_results_aggregated(df_aggregated, labels, centroids):
                 'kategori': kategori,
                 'size_range': size_range,
                 'total_terjual': jumlah,
-                'total_harga': total_harga,
                 'tier': tier_normalized,
                 'cluster_id': cluster_id,  # Add integer cluster ID for frontend
                 'dominant_cluster': cluster_id  # Use cluster_id for compatibility
@@ -380,7 +372,6 @@ def analyze_clustering_results_aggregated(df_aggregated, labels, centroids):
             # If somehow there's duplicate (shouldn't happen with aggregated data)
             # Just update the totals
             analysis[category_type][unique_key]['total_terjual'] += jumlah
-            analysis[category_type][unique_key]['total_harga'] += total_harga
 
     return analysis
 
@@ -409,7 +400,8 @@ def process_kmeans_manual(k=3):
         df_aggregated = aggregate_data_by_size_range(df)
         
         # Prepare features for clustering (use aggregated data)
-        X = df_aggregated[['jumlah_terjual', 'total_harga']].values.astype(float)
+        # ✨ CLUSTERING HANYA BERDASARKAN VOLUME PENJUALAN (jumlah_terjual)
+        X = df_aggregated[['jumlah_terjual']].values.astype(float)
 
         # Normalize data
         X_mean = X.mean(axis=0)
@@ -511,7 +503,7 @@ def save_kmeans_manual_result(result):
         db.session.flush()
 
         # Prepare data for distance calculation
-        X_normalized = result['X_normalized'] if 'X_normalized' in result else (result['data_aggregated'][['jumlah_terjual', 'total_harga']].values.astype(float) - result['X_mean']) / (result['X_std'] + 1e-8)
+        X_normalized = result['X_normalized'] if 'X_normalized' in result else (result['data_aggregated'][['jumlah_terjual']].values.astype(float) - result['X_mean']) / (result['X_std'] + 1e-8)
         centroids = result['centroids']
 
         # Save cluster details with distance to centroid - iterate using aggregated data

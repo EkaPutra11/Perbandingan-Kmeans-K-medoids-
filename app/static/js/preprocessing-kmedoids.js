@@ -183,17 +183,16 @@ function displayFinalResults(analysis) {
     const tierByTotal = {};
     
     if (finalMedoids && finalMedoids.length === 3) {
-        // Calculate composite score for each cluster (jumlah_terjual + total_harga)
+        // Calculate score based on jumlah_terjual only (volume-based clustering)
         const clusterScores = finalMedoids.map((medoid) => ({
             cluster: medoid.cluster_id,
-            score: medoid.jumlah_terjual + medoid.total_harga,
-            jumlah: medoid.jumlah_terjual,
-            harga: medoid.total_harga
+            score: medoid.jumlah_terjual,  // Only volume matters now
+            jumlah: medoid.jumlah_terjual
         }));
         
-        console.log('Medoid Scores:', clusterScores);  // Debug log
+        console.log('Medoid Scores:', clusterScores);
         
-        // Sort by composite score (descending) - highest = Terlaris
+        // Sort by jumlah_terjual score (descending) - highest = Terlaris
         clusterScores.sort((a, b) => b.score - a.score);
         
         console.log('Sorted (Highest to Lowest):', clusterScores);  // Debug log
@@ -344,13 +343,9 @@ function renderIterations(iterations) {
                         <div style="font-size: 1.25rem; font-weight: 700; color: ${tierColor}; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 2px solid ${tierColor}; text-align: center;">
                             C${clusterId}
                         </div>
-                        <div style="margin-bottom: 1.5rem;">
+                        <div>
                             <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 0.4rem;">Jumlah Terjual</div>
                             <div style="font-size: 1.5rem; font-weight: 700; color: ${tierColor}; font-family: 'Courier New', monospace;">${parseFloat(medoidPoint.jumlah_terjual).toFixed(2)}</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 0.4rem;">Total Harga</div>
-                            <div style="font-size: 1.5rem; font-weight: 700; color: ${tierColor}; font-family: 'Courier New', monospace;">${parseFloat(medoidPoint.total_harga).toFixed(2)}</div>
                         </div>
                     </div>
                 `;

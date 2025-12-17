@@ -1,0 +1,622 @@
+================================================================================
+DAFTAR METODE, ALGORITMA, DAN PERHITUNGAN
+Sistem Clustering Penjualan Arwana
+================================================================================
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                      1. ALGORITMA CLUSTERING                              ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+1.1. K-MEANS CLUSTERING
+--------------------------------------------------------------------------------
+Algoritma: K-Means (Lloyd's Algorithm)
+File: app/processing_kmeans.py
+Fungsi: process_kmeans_manual()
+
+Deskripsi:
+- Algoritma partitioning clustering berbasis centroid
+- Membagi data menjadi K cluster berdasarkan jarak terdekat ke centroid
+
+Langkah-langkah:
+1. Inisialisasi: Pilih K centroid awal secara random
+2. Assignment: Assign setiap data point ke centroid terdekat
+3. Update: Hitung centroid baru (rata-rata dari semua point di cluster)
+4. Iterasi: Ulangi langkah 2-3 sampai convergence
+
+Formula Centroid Baru:
+    μk = (1/|Ck|) * Σ(xi) untuk semua xi ∈ Ck
+    
+    dimana:
+    - μk = centroid cluster k
+    - |Ck| = jumlah data di cluster k
+    - xi = data point ke-i
+
+Kriteria Convergence:
+- Centroid tidak berubah (perubahan < threshold)
+- Atau maksimal iterasi tercapai (default: 100)
+
+Parameter:
+- n_clusters = 3 (Terlaris, Sedang, Kurang Laris)
+- max_iter = 100
+- random_state = 42 (untuk reproducibility)
+
+
+1.2. K-MEDOIDS CLUSTERING (PAM - Partitioning Around Medoids)
+--------------------------------------------------------------------------------
+Algoritma: K-Medoids (PAM Algorithm)
+File: app/processing_kmedoids.py
+Fungsi: process_kmedoids_manual()
+
+Deskripsi:
+- Algoritma partitioning clustering berbasis medoid
+- Medoid = data point aktual yang paling representatif di cluster
+- Lebih robust terhadap outliers dibanding K-Means
+
+Langkah-langkah:
+1. Inisialisasi: Pilih K medoid awal secara random
+2. Assignment: Assign setiap data point ke medoid terdekat
+3. Update: Untuk setiap medoid, coba swap dengan non-medoid
+4. Evaluasi: Hitung total cost/distance
+5. Swap: Jika cost berkurang, terima swap; jika tidak, tolak
+6. Iterasi: Ulangi sampai tidak ada improvement
+
+Formula Total Cost:
+    Cost = Σ d(xi, medoid_cluster_xi)
+    
+    dimana:
+    - d(xi, medoid) = jarak Euclidean antara xi dan medoid clusternya
+
+Kriteria Convergence:
+- Tidak ada swap yang mengurangi total cost
+- Atau maksimal iterasi tercapai (default: 100)
+
+Parameter:
+- n_clusters = 3
+- max_iter = 100
+- random_state = 42
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                    2. METODE PERHITUNGAN JARAK                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+2.1. EUCLIDEAN DISTANCE
+--------------------------------------------------------------------------------
+Metode: Euclidean Distance (L2 Norm)
+Implementasi: Digunakan oleh sklearn.cluster.KMeans dan scipy
+
+Formula:
+    d(x, y) = √(Σ(xi - yi)²)
+    
+    untuk 2 fitur:
+    d(x, y) = √[(x1 - y1)² + (x2 - y2)²]
+
+Contoh dengan data ternormalisasi:
+    Data A: [jumlah_norm=0.5, harga_norm=0.3]
+    Data B: [jumlah_norm=0.8, harga_norm=0.6]
+    
+    d(A, B) = √[(0.5-0.8)² + (0.3-0.6)²]
+            = √[0.09 + 0.09]
+            = √0.18
+            = 0.424
+
+Digunakan untuk:
+- Menghitung jarak data ke centroid (K-Means)
+- Menghitung jarak data ke medoid (K-Medoids)
+- Menghitung jarak antar centroid (untuk DBI)
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                    3. METODE NORMALISASI DATA                             ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+3.1. Z-SCORE NORMALIZATION (STANDARDIZATION)
+--------------------------------------------------------------------------------
+Metode: Z-Score Standardization
+File: app/processing_kmeans.py, app/processing_kmedoids.py
+Implementasi: sklearn.preprocessing.StandardScaler
+
+Deskripsi:
+- Mengubah data agar memiliki mean=0 dan standard deviation=1
+- Mencegah feature dengan skala besar mendominasi clustering
+
+Formula:
+    z = (x - μ) / σ
+    
+    dimana:
+    - x = nilai asli
+    - μ = mean (rata-rata)
+    - σ = standard deviation (simpangan baku)
+
+Contoh:
+    Data jumlah_terjual: [1, 3, 5, 10, 20, 100]
+    μ = 23.17
+    σ = 37.44
+    
+    Normalized:
+    1  → (1-23.17)/37.44  = -0.592
+    3  → (3-23.17)/37.44  = -0.539
+    100 → (100-23.17)/37.44 = 2.051
+
+Keuntungan:
+- Feature dengan skala berbeda (jumlah: 1-1000, harga: jutaan-miliaran) 
+  menjadi comparable
+- Clustering lebih fair dan tidak bias ke feature dengan nilai besar
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                  4. METODE EVALUASI CLUSTERING                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+4.1. DAVIES-BOULDIN INDEX (DBI)
+--------------------------------------------------------------------------------
+Metode: Davies-Bouldin Index
+File: app/dbi_calculator.py
+Fungsi: calculate_dbi()
+
+Deskripsi:
+- Mengukur kualitas clustering berdasarkan separation dan compactness
+- Semakin KECIL nilai DBI, semakin BAIK clusteringnya
+- Range: [0, ∞), optimal mendekati 0
+
+Formula:
+    DBI = (1/K) * Σ max{Rij} untuk i=1 sampai K
+    
+    dimana:
+    Rij = (Si + Sj) / Mij
+    
+    Si  = average distance dari semua point di cluster i ke centroid i
+    Sj  = average distance dari semua point di cluster j ke centroid j  
+    Mij = distance antara centroid i dan centroid j
+
+Step-by-step Perhitungan:
+1. Hitung Si untuk setiap cluster i:
+   Si = (1/|Ci|) * Σ d(x, μi) untuk semua x ∈ Ci
+
+2. Hitung Mij untuk setiap pasangan cluster:
+   Mij = d(μi, μj)
+
+3. Hitung Rij untuk setiap pasangan:
+   Rij = (Si + Sj) / Mij
+
+4. Untuk setiap cluster i, ambil Rij maksimum:
+   Ri = max{Rij} untuk j ≠ i
+
+5. Rata-ratakan semua Ri:
+   DBI = (1/K) * Σ Ri
+
+Interpretasi:
+- DBI < 0.5  : Excellent clustering
+- DBI 0.5-1.0: Good clustering
+- DBI 1.0-2.0: Fair clustering
+- DBI > 2.0  : Poor clustering
+
+
+4.2. SILHOUETTE SCORE
+--------------------------------------------------------------------------------
+Metode: Silhouette Coefficient
+Implementasi: sklearn.metrics.silhouette_score
+
+Deskripsi:
+- Mengukur seberapa mirip object dengan clusternya sendiri vs cluster lain
+- Range: [-1, 1]
+- Semakin BESAR nilai, semakin BAIK
+
+Formula:
+    s(i) = (b(i) - a(i)) / max{a(i), b(i)}
+    
+    dimana:
+    a(i) = average distance dari data i ke semua data lain di cluster yang sama
+    b(i) = minimum average distance dari data i ke semua data di cluster lain
+
+Interpretasi:
+- s(i) mendekati +1: Data sangat cocok dengan clusternya
+- s(i) mendekati 0: Data di boundary antara 2 cluster
+- s(i) mendekati -1: Data mungkin salah cluster
+
+
+4.3. ELBOW METHOD
+--------------------------------------------------------------------------------
+Metode: Elbow Method
+File: app/elbow_method.py
+Fungsi: calculate_elbow()
+
+Deskripsi:
+- Menentukan jumlah cluster optimal (K)
+- Mencari "siku" pada grafik K vs Inertia/WCSS
+
+Metric: Within-Cluster Sum of Squares (WCSS/Inertia)
+Formula:
+    WCSS = Σ Σ ||xi - μk||² untuk semua cluster k dan data xi ∈ k
+    
+Langkah-langkah:
+1. Jalankan K-Means untuk K = 1, 2, 3, ..., 10
+2. Hitung WCSS untuk setiap K
+3. Plot grafik K vs WCSS
+4. Cari "elbow point" dimana penurunan WCSS mulai landai
+
+Interpretasi:
+- Elbow point = jumlah cluster optimal
+- Setelah elbow, penambahan cluster tidak signifikan mengurangi WCSS
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              5. METODE TIER ASSIGNMENT (LABELING)                         ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+5.1. PERCENTILE-BASED TIER ASSIGNMENT
+--------------------------------------------------------------------------------
+Metode: Percentile-based Tier Assignment
+File: app/processing_kmeans.py, app/processing_kmedoids.py
+Fungsi: assign_tiers_by_percentile()
+
+Deskripsi:
+- Assign tier berdasarkan persentil performance score
+- Menjamin distribusi seimbang: 30% Terlaris, 40% Sedang, 30% Kurang Laris
+- Mengatasi masalah data skewed
+
+Langkah-langkah:
+1. Hitung Performance Score:
+   performance_score = 0.6 * jumlah_normalized + 0.4 * harga_normalized
+
+2. Hitung threshold persentil:
+   P30 = percentile ke-30 dari performance_score
+   P70 = percentile ke-70 dari performance_score
+
+3. Assign tier:
+   - performance_score >= P70  → Terlaris (tier 2, cluster_id 0)
+   - P30 <= performance_score < P70 → Sedang (tier 1, cluster_id 1)
+   - performance_score < P30   → Kurang Laris (tier 0, cluster_id 2)
+
+Formula Performance Score:
+    score = w1 * (jumlah - μ_jumlah) / σ_jumlah + 
+            w2 * (harga - μ_harga) / σ_harga
+    
+    dimana:
+    - w1 = 0.6 (weight jumlah_terjual)
+    - w2 = 0.4 (weight total_harga)
+
+Contoh:
+    P30 = 0.0306
+    P70 = 0.1265
+    
+    Produk A: score = 0.150 → 0.150 >= 0.1265 → Terlaris
+    Produk B: score = 0.080 → 0.0306 <= 0.080 < 0.1265 → Sedang
+    Produk C: score = 0.020 → 0.020 < 0.0306 → Kurang Laris
+
+Keuntungan:
+- Distribusi terkontrol dan seimbang
+- Adil untuk semua kategori produk
+- Mengatasi data skewed (85% data terjual 0-5 unit)
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                  6. METODE AGREGASI DATA                                  ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+6.1. AGGREGATION BY KATEGORI + SIZE RANGE
+--------------------------------------------------------------------------------
+Metode: SQL GROUP BY Aggregation
+File: app/processing_kmeans.py, app/processing_kmedoids.py
+Query: SELECT ... GROUP BY kategori, size_range
+
+Deskripsi:
+- Menggabungkan transaksi berdasarkan kategori dan ukuran ikan
+- Mengurangi dimensi data dari 1358 transaksi → ~90 produk agregat
+
+Formula Agregasi:
+    jumlah_terjual = SUM(jumlah_ikan)
+    total_harga = SUM(total_harga)
+    
+    untuk setiap (kategori, size_range)
+
+Contoh:
+    Input (transaksi individual):
+    - Standard, 10-14cm, 50 unit, Rp 50jt
+    - Standard, 10-14cm, 30 unit, Rp 30jt
+    - Standard, 10-14cm, 20 unit, Rp 20jt
+    
+    Output (agregat):
+    - Standard, 10-14cm, 100 unit, Rp 100jt
+
+Analytical Columns:
+Setelah agregasi, dihitung:
+- avg_price = total_harga / jumlah_terjual
+- performance_score = weighted normalized score
+- jumlah_normalized = z-score(jumlah_terjual)
+- harga_normalized = z-score(total_harga)
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                  7. METODE KONVERGENSI                                    ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+7.1. CONVERGENCE CHECK - K-MEANS
+--------------------------------------------------------------------------------
+Kriteria: Centroid Stability
+File: app/processing_kmeans.py
+
+Kondisi Convergence:
+1. Centroid tidak berubah posisi (atau perubahan < threshold)
+2. Atau iterasi mencapai max_iter (100)
+
+Implementasi:
+- Sklearn.cluster.KMeans secara otomatis check convergence
+- Threshold default: tol=1e-4
+
+Formula Check:
+    |μk_new - μk_old| < tol untuk semua k
+
+
+7.2. CONVERGENCE CHECK - K-MEDOIDS
+--------------------------------------------------------------------------------
+Kriteria: No Cost Improvement
+File: app/processing_kmedoids.py
+
+Kondisi Convergence:
+1. Tidak ada swap medoid yang mengurangi total cost
+2. Atau iterasi mencapai max_iter (100)
+
+Implementasi:
+    if new_cost >= current_cost:
+        # Tidak ada improvement
+        break
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                  8. METODE STATISTIK                                      ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+8.1. MEAN (RATA-RATA)
+--------------------------------------------------------------------------------
+Formula:
+    μ = (1/n) * Σ xi
+    
+Digunakan untuk:
+- Centroid K-Means
+- Z-score normalization
+- Perhitungan Si dalam DBI
+
+
+8.2. STANDARD DEVIATION (SIMPANGAN BAKU)
+--------------------------------------------------------------------------------
+Formula:
+    σ = √[(1/n) * Σ(xi - μ)²]
+    
+Digunakan untuk:
+- Z-score normalization
+
+
+8.3. PERCENTILE
+--------------------------------------------------------------------------------
+Formula: np.percentile(data, q)
+    
+    dimana q = persentase (0-100)
+
+Digunakan untuk:
+- Tier assignment (P30, P70)
+
+Contoh:
+    Data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    P30 = 3.7 (30% data ≤ 3.7)
+    P70 = 7.3 (70% data ≤ 7.3)
+
+
+8.4. WEIGHTED AVERAGE
+--------------------------------------------------------------------------------
+Formula:
+    weighted_score = w1*x1 + w2*x2 + ... + wn*xn
+    
+    dimana Σwi = 1
+
+Digunakan untuk:
+- Performance score: 0.6*jumlah_norm + 0.4*harga_norm
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              9. METODE VISUALISASI & REPORTING                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+9.1. ELBOW CURVE VISUALIZATION
+--------------------------------------------------------------------------------
+Library: Matplotlib
+File: app/elbow_method.py
+
+Grafik: K (x-axis) vs Inertia/WCSS (y-axis)
+Type: Line plot dengan markers
+
+
+9.2. ITERATION CONVERGENCE TRACKING
+--------------------------------------------------------------------------------
+Metode: Store iteration history
+Data: centroids, cluster assignments, inertia per iterasi
+
+Structure:
+    {
+        'iteration': i,
+        'centroids': [...],
+        'inertia': value,
+        'changes': count
+    }
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              10. METODE DATABASE & STORAGE                                ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+10.1. DATABASE SCHEMA
+--------------------------------------------------------------------------------
+Database: MySQL
+ORM: SQLAlchemy (Flask-SQLAlchemy)
+
+Tables:
+1. penjualan - Raw transaction data
+2. kmeans_result - K-Means metadata
+3. kmeans_final_result - K-Means detailed results
+4. kmedoids_result - K-Medoids metadata
+5. kmedoids_final_result - K-Medoids detailed results
+
+Foreign Key Constraints:
+- kmeans_final_result.kmeans_result_id → kmeans_result.id
+- kmedoids_final_result.kmedoids_result_id → kmedoids_result.id
+
+
+10.2. DATA PERSISTENCE
+--------------------------------------------------------------------------------
+Metode: ORM Model Mapping
+
+Save Flow:
+1. Create metadata record (kmeans_result/kmedoids_result)
+2. db.session.add() dan commit → get ID
+3. Create detail records dengan foreign key
+4. Bulk insert: db.session.bulk_save_objects()
+5. db.session.commit()
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              11. KOMPLEKSITAS ALGORITMA                                   ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+11.1. K-MEANS TIME COMPLEXITY
+--------------------------------------------------------------------------------
+    O(n * K * i * d)
+    
+    dimana:
+    - n = jumlah data points
+    - K = jumlah clusters
+    - i = jumlah iterasi
+    - d = jumlah dimensi (features)
+
+Untuk sistem ini:
+    - n = 90 (data agregat)
+    - K = 3 (clusters)
+    - i = ~2-10 (convergence cepat)
+    - d = 2 (jumlah_terjual, total_harga)
+    
+    Complexity: ~O(540) - sangat cepat
+
+
+11.2. K-MEDOIDS TIME COMPLEXITY
+--------------------------------------------------------------------------------
+    O(K * (n-K)² * i * d)
+    
+    Lebih lambat dari K-Means karena harus evaluate setiap possible swap
+
+Untuk sistem ini:
+    - Complexity: ~O(22,707) per iterasi
+    - Biasanya 5-15 iterasi
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              12. PARAMETER & KONFIGURASI                                  ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+CLUSTERING PARAMETERS:
+---------------------
+n_clusters = 3
+max_iter = 100
+random_state = 42
+tol = 1e-4 (K-Means tolerance)
+
+TIER ASSIGNMENT PARAMETERS:
+--------------------------
+weight_jumlah = 0.6
+weight_harga = 0.4
+percentile_low = 30 (P30)
+percentile_high = 70 (P70)
+
+NORMALIZATION:
+-------------
+method = 'zscore'
+with_mean = True
+with_std = True
+
+DATABASE:
+--------
+engine = 'mysql+pymysql'
+pool_size = 10
+max_overflow = 20
+
+ELBOW METHOD:
+------------
+k_range = range(1, 11)
+n_init = 10
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              13. LIBRARIES & DEPENDENCIES                                 ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+CORE LIBRARIES:
+--------------
+- numpy: Operasi array dan matematika
+- pandas: Data manipulation dan aggregation
+- scikit-learn: Clustering algorithms, normalization, metrics
+- scipy: Statistical functions, distance calculations
+- sqlalchemy: ORM dan database operations
+- flask: Web framework
+- pymysql: MySQL connector
+
+SKLEARN MODULES USED:
+--------------------
+- sklearn.cluster.KMeans
+- sklearn.preprocessing.StandardScaler
+- sklearn.metrics.davies_bouldin_score
+- sklearn.metrics.silhouette_score
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║              14. FORMULA REFERENCE SUMMARY                                ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+1. EUCLIDEAN DISTANCE:
+   d(x,y) = √(Σ(xi - yi)²)
+
+2. Z-SCORE NORMALIZATION:
+   z = (x - μ) / σ
+
+3. K-MEANS CENTROID UPDATE:
+   μk = (1/|Ck|) * Σ(xi) untuk xi ∈ Ck
+
+4. DAVIES-BOULDIN INDEX:
+   DBI = (1/K) * Σ max{(Si + Sj)/Mij}
+
+5. SILHOUETTE SCORE:
+   s(i) = (b(i) - a(i)) / max{a(i), b(i)}
+
+6. WCSS (INERTIA):
+   WCSS = Σ Σ ||xi - μk||²
+
+7. PERFORMANCE SCORE:
+   score = 0.6 * jumlah_norm + 0.4 * harga_norm
+
+8. PERCENTILE:
+   Pq = nilai dimana q% data ≤ Pq
+
+9. WEIGHTED AVERAGE:
+   avg = Σ(wi * xi) / Σwi
+
+10. STANDARD DEVIATION:
+    σ = √[(1/n) * Σ(xi - μ)²]
+
+
+================================================================================
+KESIMPULAN
+================================================================================
+
+Sistem ini menggunakan kombinasi dari:
+✓ Machine Learning: K-Means & K-Medoids clustering
+✓ Statistika: Z-score, percentile, weighted scoring
+✓ Evaluasi: DBI, Silhouette, Elbow Method
+✓ Data Processing: Aggregation, normalization
+✓ Database: Relational schema dengan foreign keys
+✓ Web Framework: Flask untuk UI dan API
+
+Total Metode: 14+ metode berbeda
+Total Formula: 10+ formula matematis
+Complexity: O(n*K*i*d) untuk K-Means, O(K*(n-K)²*i*d) untuk K-Medoids
+
+================================================================================
+File Created: December 14, 2025
+System: Clustering Penjualan Arwana - CV Putra Rizky Aroindo
+================================================================================

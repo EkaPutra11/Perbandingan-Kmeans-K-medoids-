@@ -193,6 +193,8 @@ def process_kmeans():
                 'status': 'success',
                 'inertia': float(result.get('inertia', 0)),
                 'davies_bouldin': float(result.get('davies_bouldin', 0)),
+                'n_iter': int(result.get('n_iter', 0)),
+                'max_iterations': int(result.get('max_iterations', 10)),
                 'analysis': result.get('analysis', {}),
                 'cluster_distribution': tier_distribution
             })
@@ -361,6 +363,9 @@ def process_kmedoids():
                 'status': 'success',
                 'cost': float(result.get('cost', 0)),
                 'davies_bouldin': float(result.get('davies_bouldin', 0)),
+                'n_iter': int(result.get('n_iter', 0)),
+                'max_iterations': int(result.get('max_iterations', 10)),
+                'medoids': result.get('medoids', []).tolist() if hasattr(result.get('medoids', []), 'tolist') else result.get('medoids', []),
                 'analysis': result.get('analysis', {}),
                 'cluster_distribution': tier_distribution
             })

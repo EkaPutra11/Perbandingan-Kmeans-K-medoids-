@@ -463,6 +463,7 @@ def process_kmedoids_manual(k=3):
             'cost': float(kmedoids.cost),
             'davies_bouldin': float(davies_bouldin),
             'n_iter': kmedoids.n_iter,  # Use actual iterations instead of max
+            'max_iterations': kmedoids.max_iterations,  # Maximum iterations configured
             'n_samples': len(df_aggregated),
             'medoids': kmedoids.medoids,
             'data': df,

@@ -439,6 +439,7 @@ def process_kmeans_manual(k=3):
             'inertia': float(kmeans.inertia),
             'davies_bouldin': float(davies_bouldin),
             'n_iter': kmeans.n_iter,  # Use actual iterations instead of max
+            'max_iterations': kmeans.max_iterations,  # Maximum iterations configured
             'n_samples': len(df_aggregated),
             'centroids': kmeans.centroids,
             'data': df,

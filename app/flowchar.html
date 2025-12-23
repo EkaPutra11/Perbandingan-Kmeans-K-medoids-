@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowchart K-Means Clustering</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            width: 100%;
+        }
+        h2 {
+            color: #333333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+        }
+        .shape {
+            min-width: 260px;
+            max-width: 420px;
+            padding: 10px 18px;
+            text-align: center;
+            border: 2px solid #000000;
+            background-color: #ffffff;
+            font-size: 14px;
+        }
+        .oval {
+            border-radius: 999px;
+        }
+        .diamond {
+            position: relative;
+            padding: 18px 26px;
+            background-color: #ffffff;
+            border: none;
+        }
+        .diamond::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            width: 120px;
+            height: 120px;
+            border: 2px solid #000000;
+            background-color: #ffffff;
+            z-index: -1;
+        }
+        .diamond span {
+            display: inline-block;
+            max-width: 140px;
+        }
+        .arrow {
+            width: 2px;
+            height: 24px;
+            background-color: #000000;
+            position: relative;
+        }
+        .arrow::after {
+            content: "";
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid #000000;
+        }
+        .loop-note {
+            font-size: 12px;
+            margin-top: 6px;
+            text-align: center;
+            color: #555555;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Flowchart Algoritma K-Means Clustering</h2>
+
+        <div class="flowchart">
+            <div class="shape oval">Mulai</div>
+            <div class="arrow"></div>
+
+            <div class="shape">Menentukan jumlah pusat cluster (K)</div>
+            <div class="arrow"></div>
+
+            <div class="shape">Inisialisasi pusat cluster awal (centroid)</div>
+            <div class="arrow"></div>
+
+            <div class="shape">Menghitung jarak dan menempatkan setiap objek ke pusat cluster terdekat</div>
+            <div class="arrow"></div>
+
+            <div class="shape">Menghitung ulang pusat cluster baru (centroid) berdasarkan anggota cluster</div>
+            <div class="arrow"></div>
+
+            <div class="shape">Membentuk cluster berdasarkan jarak terkecil ke masing-masing centroid</div>
+            <div class="arrow"></div>
+
+            <div class="shape diamond">
+                <span>Apakah masih ada objek yang berpindah cluster?</span>
+            </div>
+            <div class="arrow"></div>
+
+            <div class="shape oval">Output / Hasil Cluster</div>
+
+            <div class="loop-note">Jika "Ya", proses kembali ke langkah penempatan objek ke pusat cluster terdekat.</div>
+        </div>
+    </div>
+
+</body>
+</html>

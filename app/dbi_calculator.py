@@ -30,7 +30,7 @@ def get_clustering_data():
             'kota_tujuan': d.kota_tujuan
         } for d in data])
         
-        # AGGREGATE DATA BY 5CM SIZE RANGE (like processing_kmeans.py does)
+        # AGREGASI DATA BERDASARKAN RENTANG UKURAN PER 5CM (seperti di processing_kmeans.py)
         df = aggregate_data_by_size_range(df)
         
         # Prepare features for clustering

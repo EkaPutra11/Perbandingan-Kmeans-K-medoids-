@@ -230,8 +230,8 @@ def kmeans_iterations():
         df_aggregated = aggregate_data_by_size_range(df)
         
         # Prepare features for clustering (aggregated data)
-        # ✨ CLUSTERING HANYA BERDASARKAN VOLUME PENJUALAN (jumlah_terjual)
-        X = df_aggregated[['jumlah_terjual']].values.astype(float)
+        # ✨ CLUSTERING DENGAN 2 FITUR: jumlah_terjual dan jumlah_transaksi
+        X = df_aggregated[['jumlah_terjual', 'jumlah_transaksi']].values.astype(float)
         
         # Normalize data
         X_mean = X.mean(axis=0)
@@ -259,7 +259,8 @@ def kmeans_iterations():
                 for c_id, centroid in enumerate(centroids):
                     centroids_formatted.append({
                         'cluster_id': int(c_id),
-                        'jumlah_terjual': float(centroid[0])  # Only one feature now
+                        'jumlah_terjual': float(centroid[0]),
+                        'jumlah_transaksi': float(centroid[1])
                     })
                 
                 cluster_assignments = []
@@ -401,8 +402,8 @@ def kmedoids_iterations():
         df_aggregated = aggregate_data_by_size_range(df)
         
         # Prepare features for clustering (aggregated data)
-        # ✨ CLUSTERING HANYA BERDASARKAN VOLUME PENJUALAN (jumlah_terjual)
-        X = df_aggregated[['jumlah_terjual']].values.astype(float)
+        # ✨ CLUSTERING DENGAN 2 FITUR: jumlah_terjual dan jumlah_transaksi
+        X = df_aggregated[['jumlah_terjual', 'jumlah_transaksi']].values.astype(float)
         
         # Normalize data
         X_mean = X.mean(axis=0)
@@ -426,7 +427,8 @@ def kmedoids_iterations():
                 for c_id, medoid in enumerate(medoid_points):
                     medoids_formatted.append({
                         'cluster_id': int(c_id),
-                        'jumlah_terjual': float(medoid[0])  # Only one feature now
+                        'jumlah_terjual': float(medoid[0]),
+                        'jumlah_transaksi': float(medoid[1])
                     })
                 
                 cluster_assignments = []

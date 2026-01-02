@@ -201,19 +201,22 @@ def assign_tiers_by_percentile(df_aggregated, cluster_labels):
     - Kurang Laris: Bottom 30% (P0-P30)
     
     KOLOM TAMBAHAN YANG DIHITUNG:
-    1. performance_score: Skor performa (100% jumlah_terjual - volume based only)
+    1. performance_score: Skor performa (jumlah_terjual + jumlah_transaksi)
     2. relative_performance: Performa relatif terhadap rata-rata
     """
     df = df_aggregated.copy()
     
-    # KOLOM 1: Performance Score (100% based on volume)
+    # KOLOM 1: Performance Score (combined score dari 2 fitur)
     # Normalize jumlah_terjual to 0-1 range
     jumlah_min, jumlah_max = df['jumlah_terjual'].min(), df['jumlah_terjual'].max()
-    
     jumlah_norm = (df['jumlah_terjual'] - jumlah_min) / (jumlah_max - jumlah_min + 1e-8)
     
-    # Performance score 100% dari volume penjualan
-    df['performance_score'] = jumlah_norm
+    # Normalize jumlah_transaksi to 0-1 range
+    transaksi_min, transaksi_max = df['jumlah_transaksi'].min(), df['jumlah_transaksi'].max()
+    transaksi_norm = (df['jumlah_transaksi'] - transaksi_min) / (transaksi_max - transaksi_min + 1e-8)
+    
+    # Performance score: kombinasi dari kedua fitur (equal weight)
+    df['performance_score'] = (jumlah_norm + transaksi_norm) / 2
     
     # KOLOM 3: Relative performance (dibanding mean)
     mean_score = df['performance_score'].mean()
@@ -261,8 +264,12 @@ def aggregate_data_by_size_range(df):
     # Aggregate by kategori and size_range
     aggregated = df.groupby(['kategori', 'size_range']).agg({
         'jumlah_terjual': 'sum',
-        'total_harga': 'sum'
+        'total_harga': 'sum',
+        'id': 'count'
     }).reset_index()
+    
+    # Rename 'id' count to 'jumlah_transaksi'
+    aggregated.rename(columns={'id': 'jumlah_transaksi'}, inplace=True)
     
     # Keep track of original indices for later reference
     aggregated['original_rows'] = aggregated.apply(
@@ -377,6 +384,7 @@ def analyze_clustering_results_aggregated(df_aggregated, labels, medoid_indices)
         kategori = row.get('kategori', 'Unknown')
         size_range = row.get('size_range', 'Unknown')
         jumlah = float(row.get('jumlah_terjual', 0)) if row.get('jumlah_terjual') else 0
+        total_harga = float(row.get('total_harga', 0)) if row.get('total_harga') else 0
 
         # Skip if size is Unknown
         if size_range == 'Unknown':
@@ -394,6 +402,7 @@ def analyze_clustering_results_aggregated(df_aggregated, labels, medoid_indices)
                 'kategori': kategori,
                 'size_range': size_range,
                 'total_terjual': jumlah,
+                'total_harga': total_harga,
                 'tier': tier_normalized,
                 'cluster_id': cluster_id,  # Add integer cluster ID for frontend
                 'dominant_cluster': cluster_id  # Use cluster_id for compatibility
@@ -431,8 +440,8 @@ def process_kmedoids_manual(k=3):
         df_aggregated = aggregate_data_by_size_range(df)
         
         # Prepare features for clustering (use aggregated data)
-        # ✨ CLUSTERING HANYA BERDASARKAN VOLUME PENJUALAN (jumlah_terjual)
-        X = df_aggregated[['jumlah_terjual']].values.astype(float)
+        # ✨ CLUSTERING DENGAN 2 FITUR: jumlah_terjual dan jumlah_transaksi
+        X = df_aggregated[['jumlah_terjual', 'jumlah_transaksi']].values.astype(float)
 
         # Normalize data
         X_mean = X.mean(axis=0)
@@ -548,6 +557,7 @@ def save_kmedoids_manual_result(result):
                 kmedoids_result_id=result_record.id,
                 cluster_id=cluster_id,
                 jumlah_terjual=int(agg_row['jumlah_terjual']) if agg_row['jumlah_terjual'] else 0,
+                jumlah_transaksi=int(agg_row['jumlah_transaksi']) if 'jumlah_transaksi' in agg_row and agg_row['jumlah_transaksi'] else 0,
                 total_harga=float(agg_row['total_harga']) if agg_row['total_harga'] else 0,
                 kategori=agg_row['kategori'],
                 size=agg_row['size_range'],

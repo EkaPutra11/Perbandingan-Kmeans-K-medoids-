@@ -74,6 +74,7 @@ class KMeansClusterDetail(db.Model):
     kategori = db.Column(db.String(100))
     size = db.Column(db.String(50))
     jumlah_terjual = db.Column(db.Integer)
+    jumlah_transaksi = db.Column(db.Integer)
     total_harga = db.Column(db.Numeric(18, 0))
     distance_to_centroid = db.Column(db.Float)
 
@@ -87,6 +88,7 @@ class KMedoidsClusterDetail(db.Model):
     kategori = db.Column(db.String(100))
     size = db.Column(db.String(50))
     jumlah_terjual = db.Column(db.Integer)
+    jumlah_transaksi = db.Column(db.Integer)  # NEW: transaction count per group
     total_harga = db.Column(db.Numeric(18, 0))
     distance_to_medoid = db.Column(db.Float)
     is_medoid = db.Column(db.Boolean)
@@ -101,6 +103,7 @@ class KMeansFinalResult(db.Model):
     kategori = db.Column(db.String(100))
     size_range = db.Column(db.String(50))
     jumlah_terjual = db.Column(db.Integer)
+    jumlah_transaksi = db.Column(db.Integer)  # NEW: transaction count per group
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     # Relationship

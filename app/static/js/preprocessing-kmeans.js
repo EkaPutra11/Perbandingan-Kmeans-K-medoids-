@@ -37,11 +37,6 @@ document.getElementById('run-btn').addEventListener('click', async function() {
             statusText.textContent = 'Clustering Berhasil!';
             statusMessage.textContent = `Hasil disimpan dengan Inertia: ${parseFloat(data.inertia).toFixed(2)}`;
             
-            // Display Clustering Information
-            document.getElementById('display-k').value = k;
-            document.getElementById('display-iterations').value = `${data.n_iter || 0} / ${data.max_iterations || 10}`;
-            document.getElementById('clustering-info').classList.remove('d-none');
-            
             // Show metrics
             document.getElementById('inertia-value').textContent = 
                 parseFloat(data.inertia).toFixed(2);
